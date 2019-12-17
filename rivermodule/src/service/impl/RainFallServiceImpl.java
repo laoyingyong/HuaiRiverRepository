@@ -46,4 +46,11 @@ public class RainFallServiceImpl implements RainFallService
         int i = dao.conditionalFindAllCount(condition);
         return i;
     }
+
+    @Override
+    public boolean updateRainFallInfo(RainFall rainFall)
+    {
+        boolean b = dao.updateRainFallInfo(rainFall);
+        return b;
+    }
 }

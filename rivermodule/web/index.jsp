@@ -34,7 +34,7 @@
 
 
     <!--导航条-->
-    <nav class="navbar navbar-default  navbar-fixed-top" style="background:silver">
+    <nav class="navbar navbar-default  navbar-fixed-top">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -55,12 +55,12 @@
 
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><p class="navbar-text">当前时间：<span id="time_sp" style="color: #bce8f1"></span></p></li>
+                    <li><p class="navbar-text">当前时间：<span id="time_sp" style="color:dodgerblue"></span></p></li>
                     <c:if test="${user!=null}">
-                        <li><p class="navbar-text" style="color: yellow"><span>当前用户：</span>${user.username}</p></li>
+                        <li><p class="navbar-text"><span>当前用户：</span>${user.username}</p></li>
                     </c:if>
                     <c:if test="${user==null}">
-                        <li><p class="navbar-text" style="color: yellow"><span>当前用户：</span>未登录</p></li>
+                        <li><p class="navbar-text"><span>当前用户：</span>未登录</p></li>
                     </c:if>
                     <c:if test="${user!=null}">
                         <li><p class="navbar-text"><a href="${pageContext.request.contextPath}/LogoutServlet">注销</a></p></li>

@@ -95,6 +95,7 @@
                         '                <td style="text-align: center">'+precipitation+'</td>\n' +
                         '                <td style="text-align: center">'+month+'</td>\n' +
                         '                <td style="text-align: center">'+releaseDate+'</td>\n' +
+                        '                <td style="text-align: center"><input type="button" onclick="update('+id+');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n' +
                         '            </tr>');
                 }
 
@@ -182,6 +183,7 @@
                     '                <th style="text-align: center">降雨量（mm）</th>\n' +
                     '                <th style="text-align: center">月份</th>\n' +
                     '                <th style="text-align: center">发布日期</th>\n' +
+                    '                <th style="text-align: center">操作</th>\n' +
                     '            </tr>';
                 var array=data.list;//具体内容的对象数组
                 for(var i=0;i<array.length;i++)//遍历数对象组
@@ -199,6 +201,7 @@
                         '                <td style="text-align: center">'+precipitation+'</td>\n' +
                         '                <td style="text-align: center">'+month+'</td>\n' +
                         '                <td style="text-align: center">'+releaseDate+'</td>\n' +
+                        '                <td style="text-align: center"><input type="button" onclick="update('+id+');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n' +
                         '            </tr>';
 
                     tableStr=tableStr+oneRecord;//表格字符串的追加，每遍历一条记录，就会追加一行
@@ -276,12 +279,70 @@
             });
         }
 
-
+        //返回一览表的回调函数
         function fuwei()
         {
             window.location.href='viewRainInfo.jsp';
 
         }
+
+        //更新按钮的回调函数
+        function update(id)
+        {
+            var divStr='<table class="table table-bordered table-hover" id="xiugai_table">\n' +
+                '                <caption style="text-align: center;font-size: 24px">修改信息</caption>\n' +
+                '                <tr class="success">\n' +
+                '                    <th style="text-align: center">id</th>\n' +
+                '                    <th style="text-align: center">地区</th>\\\n' +
+                '                    <th style="text-align: center">降雨量（mm）</th>\n' +
+                '                    <th style="text-align: center">月份</th>\n' +
+                '                    <th style="text-align: center">发布日期</th>\n' +
+                '                    <th style="text-align: center">操作</th>\n' +
+                '                </tr>\n' +
+                '              \n' +
+                '                <tr class="info">\\n\' +\n' +
+                '                    <td style="text-align: center"><input type="text" readonly style="width: 120px" value="'+id+'"></td>\n' +
+                '                    <td style="text-align: center"><select id="diqu2"><option>--请选择--</option><option value="淮河流域">淮河流域</option><option value="淮河水系">淮河水系</option><option value="沂沭泗水系">沂沭泗水系</option></select></td>\n' +
+                '                    <td style="text-align: center"><input type="number" step="0.01" min="0" id="precipitation2" name="precipitation" placeholder="48.70" style="width: 120px"></td>\n' +
+                '                    <td style="text-align: center"><input type="number" step="1" min="1" max="12" id="MyMonth" placeholder="1~12" style="width: 120px"></td>\n' +
+                '                    <td style="text-align: center"><input id="releaseDate2" type="date" name="releaseDate" style="width: 140px"></td>\n' +
+                '                    <td style="text-align: center"><input type="button" onclick="confirmUpdate('+id+');" value="确认修改" class="btn btn-info"></td>\n' +
+                '                </tr>\n' +
+                '                \n' +
+                '                \n' +
+                '            </table>';
+
+            $("#xiugai_div").html(divStr);
+
+        }
+
+
+        //确认修改的回调函数
+        function confirmUpdate(id)
+        {
+            var month=$("#MyMonth").val();
+            var precipitation=$("#precipitation2").val();
+            var releaseDate=$("#releaseDate2").val();
+            $.post("../UpdateRainFallInfoServlet",{id:id,area:diqu2,precipitation:precipitation,month:month,releaseDate:releaseDate},function (data)
+            {
+                alert(data.msg);
+
+            });
+
+        }
+
+        var diqu2;
+        $(function ()
+        {
+            $("#diqu2").change(function ()
+            {
+                diqu2=$("#diqu2").val();
+                alert(diqu2);
+
+            });
+        });
+
+
 
     </script>
 </head>
@@ -320,7 +381,7 @@
 
         </div>
     </div>
-    <div class="row" id="particles-js">
+    <div class="row">
 
         <table class="table table-bordered table-hover" id="rain_table">
             <caption style="text-align: center;font-size: 24px">降雨信息一览</caption>
@@ -330,6 +391,15 @@
                 <th style="text-align: center">降雨量（mm）</th>
                 <th style="text-align: center">月份</th>
                 <th style="text-align: center">发布日期</th>
+                <th style="text-align: center">操作</th>
+            </tr>
+            <tr class="info">
+                <td style="text-align: center">id</td>
+                <td style="text-align: center">地区</td>
+                <td style="text-align: center">降雨量（mm）</td>
+                <td style="text-align: center">月份</td>
+                <td style="text-align: center">发布日期</td>
+                <td style="text-align: center"><input type="button" onclick="update(1);" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele(1);" type="button" value="删除" class="btn btn-info"></td>
             </tr>
         </table>
 
@@ -352,11 +422,13 @@
         </nav>
 
 
+    </div><%-->row的结尾--%>
+    <div class="row">
+        <div class="col-sm-12" id="xiugai_div">
+        </div>
 
     </div>
 
 </div>
-<script src="../js/animation/particles.js"></script>
-<script src="../js/animation/app.js"></script>
 </body>
 </html>

@@ -93,7 +93,8 @@
                             <option value="11">11月</option>
                             <option value="12">12月</option>
 
-                        </select></td>
+                        </select>
+                        </td>
                         <td><input id="releaseDate" type="date" name="releaseDate"></td>
 
                     </tr>

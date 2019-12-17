@@ -12,5 +12,6 @@ public interface RainFallService
     public abstract boolean addRainFallInfo(RainFall rainFall);
     public abstract PageBean<RainFall> conditonalQueryByPage(int currentPage, int pageSize, Map<String,String[]> condition);
     public abstract int conditionalFindAllCount(Map<String, String[]> condition);
+    public abstract boolean updateRainFallInfo(RainFall rainFall);
 
 }

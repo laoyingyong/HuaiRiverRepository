@@ -138,4 +138,25 @@ public class RainFallDaoImpl implements RainFallDao
         return integer;
 
     }
+
+    @Override
+    public boolean updateRainFallInfo(RainFall rainFall)
+    {
+        int update=0;
+        try {
+            String sql="update rain_fall set area=?,precipitation=?,month=?,releaseDate=? where id=?";
+            update = template.update(sql, rainFall.getId(), rainFall.getPrecipitation(), rainFall.getMonth(), rainFall.getReleaseDate(), rainFall.getId());
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        if(update!=0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
 }
