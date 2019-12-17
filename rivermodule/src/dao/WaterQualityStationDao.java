@@ -16,4 +16,6 @@ public interface WaterQualityStationDao
     public abstract WaterQualityStation findIntroById(int id);
     public abstract List<WaterQualityStation> conditonalQueryByPage(int start, int pageSize, Map<String,String[]> condition);
     public abstract int conditionalFindAllCount(Map<String, String[]> condition);
+    public abstract boolean update(WaterQualityStation station);
+    public abstract boolean delete(int id);
 }

@@ -54,4 +54,68 @@ public class WaterQualityDaoImpl implements WaterQualityDao
         }
 
     }
+
+    @Override
+    public boolean update(WaterQuality waterQuality)
+    {
+        int update=0;
+        try
+        {
+            String sql="update water_quality" +
+                    " set belongStation=?," +
+                    "ph=?," +
+                    "oxygen=?," +
+                    "nitrogen=?," +
+                    "permangan=?," +
+                    "orgacarbon=?," +
+                    "phquality=?," +
+                    "date=?," +
+                    "time=? where id=?";
+
+            update = template.update(sql,
+                    waterQuality.getBelongStation(),
+                    waterQuality.getPh(),
+                    waterQuality.getOxygen(),
+                    waterQuality.getNitrogen(),
+                    waterQuality.getPermangan(),
+                    waterQuality.getOrgacarbon(),
+                    waterQuality.getPhquality(),
+                    waterQuality.getDate(),
+                    waterQuality.getTime(),
+                    waterQuality.getId());
+        } catch (DataAccessException e)
+        {
+            System.out.println(e);
+        }
+        if(update!=0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete(int id)
+    {
+        int update=0;
+        try
+        {
+            String sql="delete from water_quality where id=?";
+            update = template.update(sql, id);
+        } catch (DataAccessException e)
+        {
+            System.out.println(e);
+        }
+        if(update!=0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

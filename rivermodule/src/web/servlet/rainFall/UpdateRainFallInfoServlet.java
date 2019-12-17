@@ -23,6 +23,7 @@ public class UpdateRainFallInfoServlet extends HttpServlet
         String id = request.getParameter("id");
         System.out.println(id);
         String area = request.getParameter("area");
+        System.out.println(area);
         String month = request.getParameter("month");
         System.out.println(month);
         String precipitation = request.getParameter("precipitation");

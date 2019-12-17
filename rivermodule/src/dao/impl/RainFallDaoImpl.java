@@ -145,9 +145,9 @@ public class RainFallDaoImpl implements RainFallDao
         int update=0;
         try {
             String sql="update rain_fall set area=?,precipitation=?,month=?,releaseDate=? where id=?";
-            update = template.update(sql, rainFall.getId(), rainFall.getPrecipitation(), rainFall.getMonth(), rainFall.getReleaseDate(), rainFall.getId());
+            update = template.update(sql, rainFall.getArea(), rainFall.getPrecipitation(), rainFall.getMonth(), rainFall.getReleaseDate(), rainFall.getId());
         } catch (DataAccessException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         if(update!=0)
         {
@@ -158,5 +158,25 @@ public class RainFallDaoImpl implements RainFallDao
             return false;
         }
 
+    }
+
+    @Override
+    public boolean deleteInfo(int id)
+    {
+        int update=0;
+        try {
+            String sql="delete from rain_fall where id=?";
+            update = template.update(sql, id);
+        } catch (DataAccessException e) {
+            System.out.println(e);
+        }
+        if(update!=0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

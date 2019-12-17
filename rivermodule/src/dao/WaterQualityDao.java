@@ -9,4 +9,6 @@ public interface WaterQualityDao
 {
     public abstract List<WaterQuality> findAllByStationName(String stationName);
     public abstract boolean addWaterQualityInfo(WaterQuality waterQuality);
+    public abstract boolean update(WaterQuality waterQuality);
+    public abstract boolean delete(int id);
 }

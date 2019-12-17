@@ -80,4 +80,18 @@ public class WaterQualityStationServiceImpl implements WaterQualityStationServic
         int i = dao.conditionalFindAllCount(condition);
         return i;
     }
+
+    @Override
+    public boolean update(WaterQualityStation station)
+    {
+        boolean b = dao.update(station);
+        return b;
+    }
+
+    @Override
+    public boolean delete(int id)
+    {
+        boolean b = dao.delete(id);
+        return b;
+    }
 }

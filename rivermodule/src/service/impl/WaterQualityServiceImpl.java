@@ -24,4 +24,18 @@ public class WaterQualityServiceImpl implements WaterQualityService
     {
         return dao.addWaterQualityInfo(waterQuality);
     }
+
+    @Override
+    public boolean update(WaterQuality waterQuality)
+    {
+        boolean b = dao.update(waterQuality);
+        return b;
+    }
+
+    @Override
+    public boolean delete(int id)
+    {
+        boolean flag = dao.delete(id);
+        return flag;
+    }
 }

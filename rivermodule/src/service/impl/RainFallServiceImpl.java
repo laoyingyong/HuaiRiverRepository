@@ -53,4 +53,11 @@ public class RainFallServiceImpl implements RainFallService
         boolean b = dao.updateRainFallInfo(rainFall);
         return b;
     }
+
+    @Override
+    public boolean deleteInfo(int id)
+    {
+        boolean b = dao.deleteInfo(id);
+        return b;
+    }
 }

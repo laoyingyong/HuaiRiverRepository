@@ -15,4 +15,6 @@ public interface WaterQualityStationService
     public abstract WaterQualityStation findIntroById(int id);
     public abstract PageBean<WaterQualityStation> conditonalQueryByPage(int currentPage, int pageSize, Map<String,String[]> condition);
     public abstract int conditionalFindAllCount(Map<String, String[]> condition);
+    public abstract boolean update(WaterQualityStation station);
+    public abstract boolean delete(int id);
 }

@@ -183,4 +183,50 @@ public class WaterQualityStationDaoImpl implements WaterQualityStationDao
 
         return integer;
     }
+
+    @Override
+    public boolean update(WaterQualityStation station)
+    {
+        int update=0;
+        try {
+            String sql="update water_quality_station set stationName=?,section=?,introduction=? where id=?";
+            update = template.update(sql,
+                    station.getStationName(),
+                    station.getSection(),
+                    station.getIntroduction(),
+                    station.getId());
+        } catch (DataAccessException e) {
+            System.out.println(e);
+        }
+        if(update!=0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete(int id)
+    {
+        int update=0;
+        try {
+            String sql="delete from water_quality_station where id=?";
+            update = template.update(sql, id);
+        } catch (DataAccessException e)
+        {
+            System.out.println(e);
+        }
+        if(update!=0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
 }

@@ -85,11 +85,19 @@
                     var obj = array[i];
                     var id = obj.id;
                     var stationName = obj.stationName;
+                    var section = obj.section;
+                    var introduction = obj.introduction;
+                    
 
                     var oneRecord='<tr class="info">\n' +
                         '                    <td style="text-align: center">'+id+'</td>\n' +
                         '                    <td style="text-align: center">'+stationName+'</td>\n' +
-                        '                    <td style="text-align: center"><input type="button" class="btn btn-info" value="查看监测数据" onclick="viewWaterQualityInfo(\''+stationName+'\');">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-info" value="查看简介" onclick="intro('+id+')"></td>\n' +
+                        '                    <td style="text-align: center">\n' +
+                        '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="update('+id+',\''+stationName+'\',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="dele('+id+');" type="button" class="btn btn-info btn-xs" value="删除">\n' +
+                        '                    </td>\n' +
                         '                </tr>';
 
                     tableStr+=oneRecord;
@@ -190,11 +198,18 @@
                     var obj = array[i];
                     var id = obj.id;
                     var stationName = obj.stationName;
+                    var section = obj.section;
+                    var introduction = obj.introduction;
 
-                    var oneRecord=' <tr class="info">\n' +
+                    var oneRecord='<tr class="info">\n' +
                         '                    <td style="text-align: center">'+id+'</td>\n' +
                         '                    <td style="text-align: center">'+stationName+'</td>\n' +
-                        '                    <td style="text-align: center"><input type="button" class="btn btn-info" value="查看监测数据" onclick="viewWaterQualityInfo(\''+stationName+'\');">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-info" value="查看简介" onclick="intro('+id+');"></td>\n' +
+                        '                    <td style="text-align: center">\n' +
+                        '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="update('+id+',\''+stationName+'\',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="dele('+id+');" type="button" class="btn btn-info btn-xs" value="删除">\n' +
+                        '                    </td>\n' +
                         '                </tr>';
 
                     tableStr+=oneRecord;
@@ -234,12 +249,14 @@
                 '                    <th style="text-align: center">水质类别</th>\n' +
                 '                    <th style="text-align: center">日期</th>\n' +
                 '                    <th style="text-align: center">更新时间</th>\n' +
+                '                    <th style="text-align: center">操作</th>\n' +
                 '                </tr>';
             $.post("../ViewWaterQulityInfoServlet",{stationName:stationName},function (data)
             {
                 for(var i=0;i<data.length;i++)
                 {
                     var obj = data[i];
+                    var id=obj.id;
                     var belongStation = obj.belongStation;
                     var ph = obj.ph;
                     var oxygen=obj.oxygen;
@@ -260,7 +277,9 @@
                         '                    <td style="text-align: center">'+phquality+'</td>\n' +
                         '                    <td style="text-align: center">'+date+'</td>\n' +
                         '                    <td style="text-align: center">'+time+'</td>\n' +
-                        '\n' +
+                        '                    <td style="text-align: center">' +
+                        '<input type="button" onclick="updateQuality('+id+',\''+belongStation+'\','+ph+','+oxygen+','+nitrogen+','+permangan+','+orgacarbon+',\''+phquality+'\',\''+date+'\',\''+time+'\');" class="btn btn-info btn-xs" value="修改">&nbsp;' +
+                        '<input type="button" class="btn btn-info btn-xs" value="删除" onclick="deleQuality('+id+');"></td>\n' +
                         '\n' +
                         '                </tr>';
 
@@ -311,7 +330,7 @@
                     var itemStr='<tr class="info">\n' +
                         '                    <td style="text-align: center">'+id+'</td>\n' +
                         '                    <td style="text-align: center">'+stationName+'</td>\n' +
-                        '                    <td style="text-align: center"><input type="button" class="btn btn-info" value="查看监测数据" onclick="viewWaterQualityInfo(\''+stationName+'\');">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-info" value="查看简介" onclick="intro('+id+');"></td>\n' +
+                        '                    <td style="text-align: center"><input type="button" class="btn btn-info btn-xs" value="查看监测数据" onclick="viewWaterQualityInfo(\''+stationName+'\');">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-info btn-xs" value="查看简介" onclick="intro('+id+');"></td>\n' +
                         '                </tr>';
                     waterQuality_table_str+=itemStr;
                 }
@@ -332,6 +351,137 @@
         {
             window.location.href='viewWaterQualityData.jsp';
 
+        }
+
+        //更新按钮的回调函数
+        function update(id,stationName,section,introduction)
+        {
+            var tableStr='<table class="table table-bordered table-hover" id="update_table">\n' +
+                '                <caption style="text-align: center;font-size: 24px">修改测站信息</caption>\n' +
+                '                <tr class="success">\n' +
+                '                    <th style="text-align: center">id</th>\n' +
+                '                    <th style="text-align: center">监测站名称</th>\n' +
+                '                    <th style="text-align: center">所属断面</th>\n' +
+                '                    <th style="text-align: center">简介</th>\n' +
+                '                    <th style="text-align: center">操作</th>\n' +
+                '                </tr>\n' +
+                '                <tr class="info">\n' +
+                '                    <td style="text-align: center"><input id="stationId" type="text" readonly="readonly" value="'+id+'" style="width: 120px"></td>\n' +
+                '                    <td style="text-align: center"><input id="StationName" type="text" value="'+stationName+'" placeholder="请输入测站名称" style="width: 120px"></td>\n' +
+                '                    <td style="text-align: center"><input id="Section" type="text" value="'+section+'" style="width: 120px" placeholder="请输入断面名称"></td>\n' +
+                '                    <td style="text-align: center"><textarea id="jianjie" cols="20"  rows="5" placeholder="请输入简介">'+introduction+'</textarea></td>\n' +
+                '                    <td style="text-align: center">\n' +
+                '                        <input onclick="confirmUpdate('+id+');" type="button" class="btn btn-info btn-xs" value="确认修改">\n' +
+                '                    </td>\n' +
+                '                </tr>\n' +
+                '            </table>';
+            $("#update_div").html(tableStr);
+
+        }
+
+        function confirmUpdate(id) //确认更新按钮的回调函数
+        {
+            var id=$("#stationId").val();
+            var stationName=$("#StationName").val();
+            var section=$("#Section").val();
+            var introduction=$("#jianjie").val();
+
+            $.post("../UpdateStationInfoServlet",{id:id,stationName:stationName,section:section,introduction:introduction},function (data)
+            {
+                alert(data.msg);
+                window.location.href="viewWaterQualityData.jsp";
+
+            });
+
+        }
+
+
+        //删除按钮的回调函数
+        function dele(id)
+        {
+            var b = window.confirm("您确定要删除吗？");
+            if(b)
+            {
+                $.post("../DeleteStationServlet",{id:id},function (data)
+                {
+                    alert(data.msg);
+                    window.location.href="viewWaterQualityData.jsp";
+
+                });
+
+            }
+        }
+
+        //更新水质信息按钮的回调函数
+        function updateQuality(id,belongStation,ph,oxygen,nitrogen,permangan,orgacarbon,phquality,date,time)
+        {
+            var tableStr=' <table class="table table-bordered">\n' +
+                '                <caption style="text-align: center;font-size: 24px">修改水质信息</caption>\n' +
+                '                <tr class="success">\n' +
+                '                    <th>所属测站</th>\n' +
+                '                    <th>ph</th>\n' +
+                '                    <th>溶解氧</th>\n' +
+                '                    <th>氨氮</th>\n' +
+                '                    <th>高锰酸钾指数</th>\n' +
+                '                    <th>总有机碳</th>\n' +
+                '                    <th>水质类别</th>\n' +
+                '                    <th>日期</th>\n' +
+                '                    <th>更新时间</th>\n' +
+                '                    <th>操作</th>\n' +
+                '                </tr>\n' +
+                '                <tr class="info">\n' +
+                '                    <td><input id="BelongStation" readonly="readonly" type="text" style="width: 150px" value="'+belongStation+'"></td>\n' +
+                '                    <td><input id="PH" type="number" step="0.01" min="0" style="width: 50px" value="'+ph+'"></td>\n' +
+                '                    <td><input id="Oxygen" type="number" step="0.01" min="0" style="width: 50px" value="'+oxygen+'"></td>\n' +
+                '                    <td><input id="Nitrogen" type="number" step="0.01" min="0" style="width: 50px" value="'+nitrogen+'"></td>\n' +
+                '                    <td><input id="Permangan" type="number" step="0.01" min="0" style="width: 50px" value="'+permangan+'"></td>\n' +
+                '                    <td><input id="Orgacarbon" type="number" step="0.01" min="0" style="width: 50px" value="'+orgacarbon+'"></td>\n' +
+                '                    <td><input id="PhQuality" type="text" style="width: 50px" value="'+phquality+'"></td>\n' +
+                '                    <td><input id="Date" type="date" style="width: 145px" value="'+date+'"></td>\n' +
+                '                    <td><input id="Time" type="time" style="width: 100px;width: 120px" step="1" value="'+time+'"></td>\n' +
+                '                    <td><input type="button" class="btn btn-xs btn-info" value="确认修改" onclick="confirmUpdateQuality('+id+')"></td>\n' +
+                '                </tr>\n' +
+                '            </table>';
+            $("#update_div").html(tableStr);
+
+        }
+
+        //确认更新水质信息的回调函数
+        function confirmUpdateQuality(id)
+        {
+            var belongStation=$("#BelongStation").val();
+            var ph=$("#PH").val();
+            var oxygen=$("#Oxygen").val();
+            var nitrogen=$("#Nitrogen").val();
+            var permangan=$("#Permangan").val();
+            var orgacarbon=$("#Orgacarbon").val();
+            var phquality=$("#PhQuality").val();
+            var date=$("#Date").val();
+            var time=$("#Time").val();
+
+            $.post("../UpdateWaterQualityInfoServlet",
+                {id:id,belongStation:belongStation,ph:ph,oxygen:oxygen,nitrogen:nitrogen,
+                    permangan:permangan,orgacarbon:orgacarbon,phquality:phquality,date:date,time:time},function (data)
+                {
+                    alert(data.msg);
+                    window.location.href="viewWaterQualityData.jsp";
+
+                });
+        }
+
+        function deleQuality(id) //删除水质信息按钮的回调函数
+        {
+            var b = window.confirm("您确定要删除吗？");
+            if(b)
+            {
+                $.post("../DeleteWaterQualityInfoServlet",{id:id},function (data)
+                {
+                    alert(data.msg);
+                    window.location.href="viewWaterQualityData.jsp";
+
+                });
+
+            }
         }
 
 
@@ -365,7 +515,12 @@
                 <tr class="info">
                     <td style="text-align: center">id</td>
                     <td style="text-align: center">监测站名称</td>
-                    <td style="text-align: center"><input type="button" class="btn btn-info" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-info" value="查看简介"></td>
+                    <td style="text-align: center">
+                        <input onclick="viewWaterQualityInfo(stationName);" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input onclick="intro(id);" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input onclick="update(id)" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input onclick="dele(id);" type="button" class="btn btn-info btn-xs" value="删除">
+                    </td>
                 </tr>
 
             </table>
@@ -396,6 +551,16 @@
         </div>
 
     </div><%--row end--%>
+    <div class="row">
+        <hr style="background-color: silver;border: none;height: 2px">
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-8" id="update_div">
+        </div>
+
+    </div>
 
 </div>
 <script src="../js/customizeAlertDialog/customizeAlert.js"></script>

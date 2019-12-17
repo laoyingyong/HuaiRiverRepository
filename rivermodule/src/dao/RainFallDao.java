@@ -12,6 +12,7 @@ public interface RainFallDao
     public abstract List<RainFall> conditonalQueryByPage(int start, int pageSize, Map<String,String[]> condition);
     public abstract int conditionalFindAllCount(Map<String, String[]> condition);
     public abstract boolean updateRainFallInfo(RainFall rainFall);
+    public abstract boolean deleteInfo(int id);
 
 
 }
