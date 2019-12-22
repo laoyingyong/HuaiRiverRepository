@@ -95,7 +95,7 @@
                         '                <td style="text-align: center">'+precipitation+'</td>\n' +
                         '                <td style="text-align: center">'+month+'</td>\n' +
                         '                <td style="text-align: center">'+releaseDate+'</td>\n' +
-                        '                <td style="text-align: center"><input type="button" onclick="update('+id+');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n' +
+                        '                <td style="text-align: center"><input type="button" onclick="update('+id+',\''+area+'\','+precipitation+','+month+',\''+releaseDate+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n' +
                         '            </tr>');
                 }
 
@@ -201,7 +201,7 @@
                         '                <td style="text-align: center">'+precipitation+'</td>\n' +
                         '                <td style="text-align: center">'+month+'</td>\n' +
                         '                <td style="text-align: center">'+releaseDate+'</td>\n' +
-                        '                <td style="text-align: center"><input type="button" onclick="update('+id+');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n' +
+                        '                <td style="text-align: center"><input type="button" onclick="update('+id+',\''+area+'\','+precipitation+','+month+',\''+releaseDate+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n' +
                         '            </tr>';
 
                     tableStr=tableStr+oneRecord;//表格字符串的追加，每遍历一条记录，就会追加一行
@@ -268,7 +268,7 @@
                         '                <td style="text-align: center">'+precipitation+'</td>\n' +
                         '                <td style="text-align: center">'+month+'</td>\n' +
                         '                <td style="text-align: center">'+releaseDate+'</td>\n' +
-                        '                <td style="text-align: center"><input type="button" onclick="update('+id+');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n' +
+                        '                <td style="text-align: center"><input type="button" onclick="update('+id+',\''+area+'\','+precipitation+','+month+',\''+releaseDate+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n' +
                         '            </tr>';
                     rain_table_Str+=itemStr;
 
@@ -293,27 +293,102 @@
         }
 
         //更新按钮的回调函数
-        function update(id)
+        function update(id,area,precipitation,month,releaseDate)
         {
-            var divStr='<table class="table table-bordered table-hover" id="xiugai_table">\n' +
-                '            <caption style="text-align: center;font-size: 24px">修改信息</caption>\n' +
-                '                <tr class="success">\n' +
-                '                    <th style="text-align: center">id</th>\n' +
-                '                    <th style="text-align: center">地区</th>\n' +
-                '                    <th style="text-align: center">降雨量</th>\n' +
-                '                    <th style="text-align: center">月份</th>\n' +
-                '                    <th style="text-align: center">发布日期</th>\n' +
-                '                    <th style="text-align: center">操作</th>\n' +
-                '                </tr>\n' +
-                '                <tr class="info">\n' +
-                '                    <td style="text-align: center"><input type="text" readonly style="width: 120px" value="'+id+'"></td>\n' +
-                '                    <td style="text-align: center"><select id="diqu2" onchange="getValue();"><option>--请选择--</option><option value="淮河流域">淮河流域</option><option value="淮河水系">淮河水系</option><option value="沂沭泗水系">沂沭泗水系</option></select></td>\n' +
-                '                    <td style="text-align: center"><input type="number" step="0.01" min="0" id="precipitation2" name="precipitation" placeholder="48.70" style="width: 120px"></td>\n' +
-                '                    <td style="text-align: center"><input type="number" step="1" min="1" max="12" id="MyMonth" placeholder="1~12" style="width: 120px"></td>\n' +
-                '                    <td style="text-align: center"><input id="releaseDate2" type="date" name="releaseDate" style="width: 140px"></td>\n' +
-                '                    <td style="text-align: center"><input type="button" onclick="confirmUpdate('+id+');" value="确认修改" class="btn btn-info"></td>\n' +
-                '                </tr>\n' +
-                '            </table>';
+            if(area==="淮河流域")
+            {
+                var divStr='<table class="table table-bordered table-hover" id="xiugai_table">\n' +
+                    '            <caption style="text-align: center;font-size: 24px">修改信息</caption>\n' +
+                    '                <tr class="success">\n' +
+                    '                    <th style="text-align: center">id</th>\n' +
+                    '                    <th style="text-align: center">地区</th>\n' +
+                    '                    <th style="text-align: center">降雨量</th>\n' +
+                    '                    <th style="text-align: center">月份</th>\n' +
+                    '                    <th style="text-align: center">发布日期</th>\n' +
+                    '                    <th style="text-align: center">操作</th>\n' +
+                    '                </tr>\n' +
+                    '                <tr class="info">\n' +
+                    '                    <td style="text-align: center"><input type="text" readonly style="width: 120px" value="'+id+'"></td>\n' +
+                    '                    <td style="text-align: center"><select id="diqu2" onchange="getValue();"><option>--请选择--</option><option value="淮河流域" selected>淮河流域</option><option value="淮河水系">淮河水系</option><option value="沂沭泗水系">沂沭泗水系</option></select></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+precipitation+'" type="number" step="0.01" min="0" id="precipitation2" name="precipitation" placeholder="48.70" style="width: 120px"></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+month+'" type="number" step="1" min="1" max="12" id="MyMonth" placeholder="1~12" style="width: 120px"></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+releaseDate+'" id="releaseDate2" type="date" name="releaseDate" style="width: 145px"></td>\n' +
+                    '                    <td style="text-align: center"><input type="button" onclick="confirmUpdate('+id+');" value="确认修改" class="btn btn-info"></td>\n' +
+                    '                </tr>\n' +
+                    '            </table>';
+
+            }
+            else if(area==="淮河水系")
+            {
+                var divStr='<table class="table table-bordered table-hover" id="xiugai_table">\n' +
+                    '            <caption style="text-align: center;font-size: 24px">修改信息</caption>\n' +
+                    '                <tr class="success">\n' +
+                    '                    <th style="text-align: center">id</th>\n' +
+                    '                    <th style="text-align: center">地区</th>\n' +
+                    '                    <th style="text-align: center">降雨量</th>\n' +
+                    '                    <th style="text-align: center">月份</th>\n' +
+                    '                    <th style="text-align: center">发布日期</th>\n' +
+                    '                    <th style="text-align: center">操作</th>\n' +
+                    '                </tr>\n' +
+                    '                <tr class="info">\n' +
+                    '                    <td style="text-align: center"><input type="text" readonly style="width: 120px" value="'+id+'"></td>\n' +
+                    '                    <td style="text-align: center"><select id="diqu2" onchange="getValue();"><option>--请选择--</option><option value="淮河流域">淮河流域</option><option value="淮河水系" selected>淮河水系</option><option value="沂沭泗水系">沂沭泗水系</option></select></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+precipitation+'" type="number" step="0.01" min="0" id="precipitation2" name="precipitation" placeholder="48.70" style="width: 120px"></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+month+'" type="number" step="1" min="1" max="12" id="MyMonth" placeholder="1~12" style="width: 120px"></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+releaseDate+'" id="releaseDate2" type="date" name="releaseDate" style="width: 145px"></td>\n' +
+                    '                    <td style="text-align: center"><input type="button" onclick="confirmUpdate('+id+');" value="确认修改" class="btn btn-info"></td>\n' +
+                    '                </tr>\n' +
+                    '            </table>';
+
+            }
+            else if(area==="沂沭泗水系")
+            {
+                var divStr='<table class="table table-bordered table-hover" id="xiugai_table">\n' +
+                    '            <caption style="text-align: center;font-size: 24px">修改信息</caption>\n' +
+                    '                <tr class="success">\n' +
+                    '                    <th style="text-align: center">id</th>\n' +
+                    '                    <th style="text-align: center">地区</th>\n' +
+                    '                    <th style="text-align: center">降雨量</th>\n' +
+                    '                    <th style="text-align: center">月份</th>\n' +
+                    '                    <th style="text-align: center">发布日期</th>\n' +
+                    '                    <th style="text-align: center">操作</th>\n' +
+                    '                </tr>\n' +
+                    '                <tr class="info">\n' +
+                    '                    <td style="text-align: center"><input type="text" readonly style="width: 120px" value="'+id+'"></td>\n' +
+                    '                    <td style="text-align: center"><select id="diqu2" onchange="getValue();"><option>--请选择--</option><option value="淮河流域">淮河流域</option><option value="淮河水系">淮河水系</option><option value="沂沭泗水系" selected>沂沭泗水系</option></select></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+precipitation+'" type="number" step="0.01" min="0" id="precipitation2" name="precipitation" placeholder="48.70" style="width: 120px"></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+month+'" type="number" step="1" min="1" max="12" id="MyMonth" placeholder="1~12" style="width: 120px"></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+releaseDate+'" id="releaseDate2" type="date" name="releaseDate" style="width: 145px"></td>\n' +
+                    '                    <td style="text-align: center"><input type="button" onclick="confirmUpdate('+id+');" value="确认修改" class="btn btn-info"></td>\n' +
+                    '                </tr>\n' +
+                    '            </table>';
+
+            }
+
+            else
+            {
+                var divStr='<table class="table table-bordered table-hover" id="xiugai_table">\n' +
+                    '            <caption style="text-align: center;font-size: 24px">修改信息</caption>\n' +
+                    '                <tr class="success">\n' +
+                    '                    <th style="text-align: center">id</th>\n' +
+                    '                    <th style="text-align: center">地区</th>\n' +
+                    '                    <th style="text-align: center">降雨量</th>\n' +
+                    '                    <th style="text-align: center">月份</th>\n' +
+                    '                    <th style="text-align: center">发布日期</th>\n' +
+                    '                    <th style="text-align: center">操作</th>\n' +
+                    '                </tr>\n' +
+                    '                <tr class="info">\n' +
+                    '                    <td style="text-align: center"><input type="text" readonly style="width: 120px" value="'+id+'"></td>\n' +
+                    '                    <td style="text-align: center"><select id="diqu2" onchange="getValue();"><option>--请选择--</option><option value="淮河流域">淮河流域</option><option value="淮河水系">淮河水系</option><option value="沂沭泗水系">沂沭泗水系</option></select></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+precipitation+'" type="number" step="0.01" min="0" id="precipitation2" name="precipitation" placeholder="48.70" style="width: 120px"></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+month+'" type="number" step="1" min="1" max="12" id="MyMonth" placeholder="1~12" style="width: 120px"></td>\n' +
+                    '                    <td style="text-align: center"><input value="'+releaseDate+'" id="releaseDate2" type="date" name="releaseDate" style="width: 145px"></td>\n' +
+                    '                    <td style="text-align: center"><input type="button" onclick="confirmUpdate('+id+');" value="确认修改" class="btn btn-info"></td>\n' +
+                    '                </tr>\n' +
+                    '            </table>';
+
+            }
+
 
             $("#xiugai_div").html(divStr);
 
@@ -426,6 +501,10 @@
 
 
     </div><%-->row的结尾--%>
+    <div class="row">
+        <hr style="border: none;height: 2px;background-color: silver"/>
+
+    </div>
     <div class="row">
         <div class="col-sm-12" id="xiugai_div">
         </div>

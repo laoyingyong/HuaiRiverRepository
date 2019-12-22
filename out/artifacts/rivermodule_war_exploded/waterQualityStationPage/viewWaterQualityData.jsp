@@ -325,12 +325,18 @@
                     var obj = array[i];
                     var id = obj.id;
                     var stationName= obj.stationName;
-
+                    var section = obj.section;
+                    var introduction = obj.introduction;
 
                     var itemStr='<tr class="info">\n' +
                         '                    <td style="text-align: center">'+id+'</td>\n' +
                         '                    <td style="text-align: center">'+stationName+'</td>\n' +
-                        '                    <td style="text-align: center"><input type="button" class="btn btn-info btn-xs" value="查看监测数据" onclick="viewWaterQualityInfo(\''+stationName+'\');">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="btn btn-info btn-xs" value="查看简介" onclick="intro('+id+');"></td>\n' +
+                        '                    <td style="text-align: center">\n' +
+                        '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="update('+id+',\''+stationName+'\',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="dele('+id+');" type="button" class="btn btn-info btn-xs" value="删除">\n' +
+                        '                    </td>\n' +
                         '                </tr>';
                     waterQuality_table_str+=itemStr;
                 }

@@ -108,7 +108,7 @@
                         '                    <td style="text-align: center">'+over+'</td>\n' +
                         '                    <td style="text-align: center">'+status+'</td>\n' +
                         '                    <td style="text-align: center">'+collectionDate+'</td>\n' +
-                        '<td style="text-align: center"><input type="button" onclick="update('+id+');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
+                        '<td style="text-align: center"><input type="button" onclick="update('+id+',\''+name+'\',\''+waterLevel+'\',\''+over+'\',\''+status+'\',\''+collectionDate+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
                         '                </tr>';
 
                     tableStr=tableStr+tableItem;
@@ -215,7 +215,7 @@
                         '                    <td style="text-align: center">'+over+'</td>\n' +
                         '                    <td style="text-align: center">'+status+'</td>\n' +
                         '                    <td style="text-align: center">'+collectionDate+'</td>\n' +
-                        '<td style="text-align: center"><input type="button" onclick="update('+id+');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
+                        '<td style="text-align: center"><input type="button" onclick="update('+id+',\''+name+'\',\''+waterLevel+'\',\''+over+'\',\''+status+'\',\''+collectionDate+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
                         '                </tr>';
 
                     tableStr=tableStr+tableItem;
@@ -228,7 +228,7 @@
         }//回调函数的结尾
 
         //更新按钮的回调函数
-        function update(id)
+        function update(id,name,waterLevel,over,status,collectionDate)
         {
             var str=' <form id="confirmUpdateForm">\n' +
                 '            <table class="table table-bordered table-hover">\n' +
@@ -244,11 +244,11 @@
                 '                </tr>\n' +
                 '                <tr class="info">\n' +
                 '                    <td style="text-align: center"><input id="id" name="id" style="width:120px" readonly value="'+id+'"></td>\n' +
-                '                    <td style="text-align: center"><input id="name" name" placeholder="王家坝控制站" style="width:120px"></td>\n' +
-                '                    <td style="text-align: center"><input id="shuiwei" type="number" step="0.01" name="shuiwei" placeholder="21.43" style="width:120px" ></td>\n' +
-                '                    <td style="text-align: center"><input id="chaoguo" type="number" step="0.01" name="chaoguo" placeholder="0" style="width:120px"></td>\n' +
-                '                    <td style="text-align: center"><input id="zhuangtai" name="zhuangtai" placeholder="OK" style="width:120px"></td>\n' +
-                '                    <td style="text-align: center"><input id="caijiriqi" name="caijiriqi" type="date"></td>\n' +
+                '                    <td style="text-align: center"><input value="'+name+'" id="name" name" placeholder="王家坝控制站" style="width:120px"></td>\n' +
+                '                    <td style="text-align: center"><input value="'+waterLevel+'" id="shuiwei" type="number" step="0.01" name="shuiwei" placeholder="21.43" style="width:120px" ></td>\n' +
+                '                    <td style="text-align: center"><input value="'+over+'" id="chaoguo" type="number" step="0.01" name="chaoguo" placeholder="0" style="width:120px"></td>\n' +
+                '                    <td style="text-align: center"><input value="'+status+'" id="zhuangtai" name="zhuangtai" placeholder="OK" style="width:120px"></td>\n' +
+                '                    <td style="text-align: center"><input value="'+collectionDate+'" id="caijiriqi" name="caijiriqi" type="date"></td>\n' +
                 '                    <td style="text-align: center"><input type="button" onclick="updateInfo()" value="确认修改" class="btn btn-info"></td>\n' +
                 '                </tr>\n' +
                 '            </table>\n' +
@@ -269,6 +269,7 @@
             $.get("../UpdateWaterLevelData",{id:id,name:name,shuiwei:shuiwei,chaoguo:chaoguo,zhuangtai:zhuangtai,caijiriqi:caijiriqi} ,function (data)
             {
                 alert(data.msg);
+                window.location.href="viewWaterLevelInfo.jsp";
 
             });
         }
@@ -334,7 +335,7 @@
                         '                    <td style="text-align: center">'+over+'</td>\n' +
                         '                    <td style="text-align: center">'+status+'</td>\n' +
                         '                    <td style="text-align: center">'+collectionDate+'</td>\n' +
-                        '                    <td style="text-align: center"><input type="button" onclick="update('+id+');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n' +
+                        '<td style="text-align: center"><input type="button" onclick="update('+id+',\''+name+'\',\''+waterLevel+'\',\''+over+'\',\''+status+'\',\''+collectionDate+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
                         '                </tr>';
 
                     tableStr+=item;
@@ -425,6 +426,11 @@
             </nav>
 
         </div>
+
+    </div>
+
+    <div class="row">
+        <hr style="background-color: silver;border: none;height: 2px">
 
     </div>
 
