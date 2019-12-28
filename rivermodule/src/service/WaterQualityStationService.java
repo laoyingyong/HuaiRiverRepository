@@ -8,6 +8,8 @@ import java.util.Map;
 
 public interface WaterQualityStationService
 {
+    public abstract List<WaterQualityStation> findAll();
+    public abstract WaterQualityStation findByName(String stationName);
     public abstract int findTotalCount();
     public abstract WaterQualityStation findIntroByName(String name);
     public abstract boolean addWaterQualityStation(WaterQualityStation station);

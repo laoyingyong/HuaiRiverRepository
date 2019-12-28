@@ -21,6 +21,10 @@ public class UpdateStationInfoServlet extends HttpServlet
         request.setCharacterEncoding("utf-8");
         String id = request.getParameter("id");
         String stationName = request.getParameter("stationName");
+        String longitude = request.getParameter("longitude");
+        System.out.println(longitude);
+        String latitude = request.getParameter("latitude");
+        System.out.println(latitude);
         String section = request.getParameter("section");
         String introduction = request.getParameter("introduction");
 
@@ -29,6 +33,8 @@ public class UpdateStationInfoServlet extends HttpServlet
         {
             station.setId(Integer.parseInt(id));
             station.setStationName(stationName);
+            station.setLongitude(Double.parseDouble(longitude));
+            station.setLatitude(Double.parseDouble(latitude));
             station.setSection(section);
             station.setIntroduction(introduction);
         } catch (Exception e)

@@ -15,6 +15,7 @@
     <script src="js/GoogleMapSource.js"></script>
     <script src="js/GoogleMapLayer.js"></script>
     <script src="js/jquery-ui.min.js"></script>
+    <script src="js/echarts.min.js"></script>
     <link href="css/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
     <%--<link href="css/ol.css" rel="stylesheet">--%>
     <link rel="stylesheet" href="css/jquery-ui.min.css"/>
@@ -23,7 +24,7 @@
             height: 30px;
             right: 0px;
             top: 0px;
-            position: absolute;
+            /*position: absolute;*/
             background-color: #F5F5F5;
             width: 120px;
             border: 1px solid;
@@ -32,51 +33,28 @@
             font-family:"微软雅黑";
         }
 
-        #mapType{   /*地图类型选择*/
-            color:gray;
-            right: 130px;
-            top:5px;
-            position: absolute;
-            z-index: 2000;
-        }
 
         #zoom_in{
             left: 5px;
-            top: 10px;
+            top: 90px;
             position: absolute;
             z-index: 2000;
         }
         #zoom_out{
             left: 5px;
-            top: 60px;
+            top: 140px;
             position: absolute;
             z-index: 2000;
         }
 
         #reset{
             left: 5px;
-            top: 150px;
+            top: 230px;
             position: absolute;
             z-index: 2000;
         }
 
 
-
-        #map{
-            width:100%;
-            height:100%;
-        }
-
-
-        #menu
-        {
-            width:300px;
-            height:45px;
-            left:50px;
-            top: 10px;
-            z-index: 2000;
-            position: absolute;
-        }
 
 
         /* 鼠标位置控件层样式设置 */
@@ -91,10 +69,80 @@
         }
 
 
-
+        .ol-popup {
+            position: absolute;
+            background-color: white;
+            -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #cccccc;
+            bottom: 12px;
+            left: -50px;
+        }
+        .ol-popup:after, .ol-popup:before {
+            top: 100%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+        .ol-popup:after {
+            border-top-color: white;
+            border-width: 10px;
+            left: 48px;
+            margin-left: -10px;
+        }
+        .ol-popup:before {
+            border-top-color: #cccccc;
+            border-width: 11px;
+            left: 48px;
+            margin-left: -11px;
+        }
+        .ol-popup-closer {
+            text-decoration: none;
+            position: absolute;
+            top: 2px;
+            right: 8px;
+        }
+        .ol-popup-closer:after {
+            content: "✖";
+        }
+        #popup-content{
+            font-size:14px;
+            font-family:"微软雅黑";
+        }
+        #popup-content .markerInfo {
+            font-weight:bold;
+        }
 
     </style>
     <script>
+        $(function ()
+        {
+            $.post("FindAlllStationServlet",function (data)
+            {
+                for(var i=0;i<data.length;i++)
+                {
+                    var obj = data[i];
+                    var stationName=obj.stationName;
+                    $("#waterQualitySelect").append('<option value="'+stationName+'">'+stationName+'</option>');
+
+                }
+
+            });
+
+        });
+
+
+
+
+
+
+
+
 
 
 
@@ -103,13 +151,28 @@
 <body>
 <div class="container-fluid">
     <div class="row">
+        <div class="col-sm-1 col-sm-offset-1">
+            <!-- Single button -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    热区功能 <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li> <button id="showReg" class="btn btn-success btn-sm" title="加载热区后请用鼠标移动到热区范围显示其信息">显示热区</button></li>
+                    <li role="separator" class="divider"></li>
+                    <li><button id="drawReg" class="btn btn-success btn-sm" title="单击绘制热区按钮后请用鼠标在地图上绘制热区">绘制热区</button></li>
+                    <li role="separator" class="divider"></li>
+                    <li><button id="deleteReg" class="btn btn-success btn-sm" title="单击删除热区按钮后请用鼠标在地图上选中删除要素操作">删除热区</button></li>
 
-
-        <div id="map"><%--地图容器--%>
-            <span id="mapType" >地图类型:</span>
-            <span id="zoom_in"><button class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></span>
-            <span id="zoom_out"><button class="btn btn-info btn-sm"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></span>
-            <span id="reset"><button class="btn btn-info btn-sm"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></span>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm-1">
+            <select class="layerSwitcherDiv" id="waterQualitySelect" onchange="findByName();">
+                <option>--水质监测站--</option>
+            </select>
+        </div>
+        <div class="col-sm-1 col-sm-offset-1">
             <!-- 地图底图切换列表 -->
             <select class="layerSwitcherDiv" id="layerSwitcherBtn" onchange="onlayerSwitcherBtn()">
                 <option value="terrain">谷歌地形图</option>
@@ -118,14 +181,28 @@
                 <option value="road">谷歌交通图</option>
             </select>
 
+        </div>
 
 
-            <div id="menu">
-                <%--<label class="title" > 热区功能：</label>--%>
-                <button id="showReg" class="btn btn-primary btn-sm" title="加载热区后请用鼠标移动到热区范围显示其信息">显示热区</button>
-                <button id="drawReg" class="btn btn-primary btn-sm" title="单击绘制热区按钮后请用鼠标在地图上绘制热区">绘制热区</button>
-                <button id="deleteReg" class="btn btn-primary btn-sm" title="单击删除热区按钮后请用鼠标在地图上选中删除要素操作">删除热区</button>
+    </div>
+    <div class="row">
+        <div id="map"><%--地图容器--%>
+
+            <div id="main" style="width: 400px;height:400px;right: 5px;bottom: 5px;position: absolute;z-index: 2000"></div>
+
+            <span id="zoom_in"><button class="btn btn-info btn-sm"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button></span>
+            <span id="zoom_out"><button class="btn btn-info btn-sm"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button></span>
+            <span id="reset"><button class="btn btn-info btn-sm"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></span>
+
+
+            <!-- Popup -->
+            <div id="popup2" class="ol-popup" >
+                <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                <div id="popup-content">
+                </div>
             </div>
+
+
 
             <div id="dialog-confirm" title="图形属性信息设置">
                 <label>信息类别(infoType):警戒区域</label><br />
@@ -140,7 +217,7 @@
             </div>
 
             <!-- Popup -->
-            <div id="popup" class="ol-popup" ></div>
+            <div id="popup"></div>
 
             <div id="mouse-position" class="bg-info">
             </div>
@@ -149,7 +226,6 @@
 
         </div><%--地图容器end--%>
 
-
     </div><%--row end--%>
 
 </div><%--container end--%>
@@ -157,6 +233,288 @@
 
 
 <script>
+
+
+    //水质监测站下拉列表状态发生改变时的回调函数
+    function findByName()
+    {
+        var value=$("#waterQualitySelect").val();//获取下拉列表的值
+
+        $.post("ViewWaterQulityInfoServlet",{stationName:value},function (data)
+        {
+            for(var i=0;i<data.length;i++)
+            {
+                var obj = data[i];
+                var belongStation=obj.belongStation;
+                var date=obj.date;
+                var ph=obj.ph;
+                var phquaity=obj.phquality;
+                var oxygen=obj.oxygen;
+                var oxygenquality=obj.oxygenquality;
+                var nitrogen=obj.nitrogen;
+                var nitrogenquality=obj.nitrogenquality;
+                var permangan=obj.permangan;
+                var permanganquality=obj.permanganquality;
+                var orgacarbon=obj.orgacarbon;
+                var orgacarbonquality=obj.orgacarbonquality;
+
+
+
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('main'));
+
+                // 指定图表的配置项和数据
+                var option =
+                {
+                    title:
+                    {
+                        x:'center',
+                        y: 'bottom',
+                        text: belongStation+":"+date
+                    },
+                    series:
+                    {
+                        type: 'sunburst',
+                        data:
+                        [
+                        {
+                            name: 'PH',
+                            children:
+                            [{
+                                value: 1,
+                                name: ph
+                            },
+                            {
+                                value: 1,
+                                name: phquaity
+                            }
+                            ]
+                        },
+                        {
+                            name: '溶解氧',
+                            children: [{
+                                name: oxygen,
+                                value: 1
+                            }, {
+                                name: oxygenquality,
+                                value: 1
+                            }]
+                        },  {
+                            name: '氨氮',
+                            children: [{
+                                name: nitrogen,
+                                value: 1
+                            }, {
+                                name: nitrogenquality,
+                                value: 1
+                            }]
+                        },
+                            {
+                                name: '高锰酸钾',
+                                children: [{
+                                    name: permangan,
+                                    value: 1
+                                }, {
+                                    name: permanganquality,
+                                    value: 1
+                                }]
+                            },
+                            {
+                                name: '总有机碳',
+                                children: [{
+                                    name: orgacarbon,
+                                    value: 1
+                                }, {
+                                    name: orgacarbonquality,
+                                    value: 1
+                                }]
+                            }
+                        ]
+                    }
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+
+            }
+
+        });
+
+        $.post("FindLocationByNameServlet",{stationName:value},function (data)//发送ajax请求
+        {
+            var longitude = data.longitude;//经度
+            var latitude = data.latitude;//纬度
+            var stationName=data.stationName;//测站名
+            var introduction=data.introduction;//简述
+
+            var stationPosition = ol.proj.fromLonLat([longitude, latitude]);
+            //示例标注点的信息对象
+            var featuerInfo =
+                {
+                    geo: stationPosition,
+                    att:
+                        {
+                            title: stationName, //标注信息的标题内容
+                            titleURL: "http://www.openlayers.org/", //标注详细信息链接
+                            text:introduction, //标注内容简介
+                            imgURL: "img/bangbu.png" //标注的图片
+                        }
+                }
+
+
+            /**
+             * 创建标注样式函数,设置image为图标ol.style.Icon
+             * @param {ol.Feature} feature 要素
+             */
+            var createLabelStyle = function (feature)
+            {
+                return new ol.style.Style({
+                    image: new ol.style.Icon(/** @type {olx.style.IconOptions} */({
+                        anchor: [0.5, 60],
+                        anchorOrigin: 'top-right',
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'pixels',
+                        offsetOrigin: 'top-right',
+                        // offset:[0,10],
+                        // scale:0.5,  //图标缩放比例
+                        opacity: 0.75,  //透明度
+                        src: 'img/blueIcon.png' //图标的url
+                    })),
+                    text: new ol.style.Text({
+                        textAlign: 'center', //位置
+                        textBaseline: 'middle', //基准线
+                        font: 'normal 14px 微软雅黑',  //文字样式
+                        text: feature.get('name'),  //文本内容
+                        fill: new ol.style.Fill({ color: '#aa3300' }), //文本填充样式（即文字颜色）
+                        stroke: new ol.style.Stroke({ color: '#ffcc33', width: 2 })
+                    })
+                });
+            }
+
+            //实例化Vector要素，通过矢量图层添加到地图容器中
+            var iconFeature = new ol.Feature({
+                geometry: new ol.geom.Point(stationPosition),
+                name: stationName,  //名称属性
+                population: 2115 //大概人口数（万）
+            });
+            iconFeature.setStyle(createLabelStyle(iconFeature));
+            //矢量标注的数据源
+            var vectorSource = new ol.source.Vector({
+                features: [iconFeature]
+            });
+            //矢量标注图层
+            var vectorLayer = new ol.layer.Vector({
+                source: vectorSource
+            });
+            map.addLayer(vectorLayer);
+
+            /**
+             * 实现popup的html元素
+             */
+            var container = document.getElementById('popup2');
+            var content = document.getElementById('popup-content');
+            var closer = document.getElementById('popup-closer');
+
+            /**
+             * 在地图容器中创建一个Overlay
+             */
+            var popup2 = new ol.Overlay(/** @type {olx.OverlayOptions} */({
+                element: container,
+                autoPan: true,
+                positioning: 'bottom-center',
+                stopEvent: false,
+                autoPanAnimation:
+                    {
+                        duration: 250
+                    }
+            }));
+            map.addOverlay(popup2);
+
+            /**
+             * 添加关闭按钮的单击事件（隐藏popup）
+             * @return {boolean} Don't follow the href.
+             */
+            closer.onclick = function ()
+            {
+                popup2.setPosition(undefined);  //未定义popup位置
+                closer.blur(); //失去焦点
+                return false;
+            };
+
+            /**
+             * 动态创建popup的具体内容
+             * @param {string} title
+             */
+            function addFeatrueInfo(info)
+            {
+                //新增a元素
+                var elementA = document.createElement('a');
+                elementA.className = "markerInfo";
+                elementA.href = info.att.titleURL;
+                //elementA.innerText = info.att.title;
+                setInnerText(elementA, info.att.title);
+                content.appendChild(elementA); // 新建的div元素添加a子节点
+                //新增div元素
+                var elementDiv = document.createElement('div');
+                elementDiv.className = "markerText";
+                //elementDiv.innerText = info.att.text;
+                setInnerText(elementDiv, info.att.text);
+                content.appendChild(elementDiv); // 为content添加div子节点
+                //新增img元素
+                var elementImg = document.createElement('img');
+                elementImg.className = "markerImg";
+                elementImg.src = info.att.imgURL;
+                content.appendChild(elementImg); // 为content添加img子节点
+            }
+            /**
+             * 动态设置元素文本内容（兼容）
+             */
+            function setInnerText(element, text)
+            {
+                if (typeof element.textContent == "string")
+                {
+                    element.textContent = text;
+                } else
+                {
+                    element.innerText = text;
+                }
+            }
+
+            /**
+             * 为map添加点击事件监听，渲染弹出popup
+             */
+            map.on('click', function (evt)
+            {
+                var coordinate = evt.coordinate;
+                //判断当前单击处是否有要素，捕获到要素时弹出popup
+                var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) { return feature; });
+                if (feature)
+                {
+                    content.innerHTML = ''; //清空popup的内容容器
+                    addFeatrueInfo(featuerInfo); //在popup中加载当前要素的具体信息
+                    if (popup2.getPosition() === undefined)
+                    {
+                        popup2.setPosition(coordinate); //设置popup的位置
+                    }
+                }
+            });
+            /**
+             * 为map添加鼠标移动事件监听，当指向标注时改变鼠标光标状态
+             */
+            map.on('pointermove', function (e)
+            {
+                var pixel = map.getEventPixel(e.originalEvent);
+                var hit = map.hasFeatureAtPixel(pixel);
+                map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+            });
+
+        });
+
+    }
+
+
+
+
 
     //实例化鼠标位置控件（MousePosition）
     var mousePositionControl = new ol.control.MousePosition({
@@ -262,6 +620,10 @@
         }).extend([mousePositionControl])//加载鼠标位置控件
 
         });
+
+
+
+
 
 
 
@@ -490,12 +852,15 @@
                 $(".ui-dialog-titlebar-close", $(this).parent()).hide(); //隐藏默认的关闭按钮
             },
             //对话框功能按钮
-            buttons: {
-                "提交": function () {
+            buttons:
+            {
+                "提交": function ()
+                {
                     submitData(); //提交几何与属性信息到后台处理
                     $(this).dialog('close'); //关闭对话框
                 },
-                "取消": function () {
+                "取消": function ()
+                {
                     $(this).dialog('close'); //关闭对话框
                     vectLayer.getSource().removeFeature(currentFeature); //删除当前绘制图形
                 }
@@ -513,11 +878,13 @@
         map.getTargetElement().style.cursor = hit ? 'pointer' : '';
         //当前鼠标位置选中要素
         var feature = map.forEachFeatureAtPixel(e.pixel,
-            function (feature, layer) {
+            function (feature, layer)
+            {
                 return feature;
             });
         //如果当前存在热区要素
-        if (feature) {
+        if (feature)
+        {
             $("#dialog-delete").dialog("open"); //打开删除要素设置对话框
             currentFeature = feature; //当前绘制的要素
         }
@@ -547,16 +914,20 @@
             modal: true,  // 创建模式对话框
             autoOpen: false, //默认隐藏对话框
             //对话框打开时默认设置
-            open: function (event, ui) {
+            open: function (event, ui)
+            {
                 $(".ui-dialog-titlebar-close", $(this).parent()).hide(); //隐藏默认的关闭按钮
             },
             //对话框功能按钮
-            buttons: {
-                "删除": function () {
+            buttons:
+            {
+                "删除": function ()
+                {
                     deleteData(currentFeature);  //通过后台删除数据库中的热区要素数据并同时删除前端绘图
                     $(this).dialog('close'); //关闭对话框
                 },
-                "取消": function () {
+                "取消": function ()
+                {
                     $(this).dialog('close'); //关闭对话框
 
                 }
@@ -600,8 +971,6 @@
         map.un('singleclick', singleclickFun, this); //移除鼠标单击事件监听
         map.on('singleclick', singleclickFun, this); //添加鼠标单击事件监听
     };
-
-
 
 
 

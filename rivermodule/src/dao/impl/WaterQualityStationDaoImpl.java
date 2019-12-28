@@ -26,6 +26,21 @@ public class WaterQualityStationDaoImpl implements WaterQualityStationDao
     }
 
     @Override
+    public WaterQualityStation findByName(String stationName)
+    {
+        WaterQualityStation station = null;
+        try
+        {
+            String sql="select * from water_quality_station where stationName=?";
+            station = template.queryForObject(sql, new BeanPropertyRowMapper<WaterQualityStation>(WaterQualityStation.class), stationName);
+        } catch (DataAccessException e)
+        {
+            System.out.println(e);
+        }
+        return station;
+    }
+
+    @Override
     public WaterQualityStation findIntroByName(String name) {
         String sql="select * from water_quality_station where stationName=?";
         WaterQualityStation waterQualityStation = template.queryForObject(sql, new BeanPropertyRowMapper<WaterQualityStation>(WaterQualityStation.class),name);
@@ -37,8 +52,8 @@ public class WaterQualityStationDaoImpl implements WaterQualityStationDao
     {
         int update = 0;
         try {
-            String sql="insert into water_quality_station values(null,?,?,?)";
-            update = template.update(sql,station.getStationName(),station.getSection(),station.getIntroduction());
+            String sql="insert into water_quality_station values(null,?,?,?,?,?)";
+            update = template.update(sql,station.getStationName(),station.getLongitude(),station.getLatitude(),station.getSection(),station.getIntroduction());
         } catch (DataAccessException e) {
             System.out.println(e);;
         }
@@ -189,9 +204,11 @@ public class WaterQualityStationDaoImpl implements WaterQualityStationDao
     {
         int update=0;
         try {
-            String sql="update water_quality_station set stationName=?,section=?,introduction=? where id=?";
+            String sql="update water_quality_station set stationName=?,longitude=?,latitude=?,section=?,introduction=? where id=?";
             update = template.update(sql,
                     station.getStationName(),
+                    station.getLongitude(),
+                    station.getLatitude(),
                     station.getSection(),
                     station.getIntroduction(),
                     station.getId());

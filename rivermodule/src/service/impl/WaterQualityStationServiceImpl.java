@@ -13,6 +13,18 @@ public class WaterQualityStationServiceImpl implements WaterQualityStationServic
 {
     WaterQualityStationDao dao=new WaterQualityStationDaoImpl();
 
+    @Override
+    public List<WaterQualityStation> findAll()
+    {
+        return dao.findAll();
+    }
+
+    @Override
+    public WaterQualityStation findByName(String stationName)
+    {
+        return dao.findByName(stationName);
+    }
+
     /**
      * 查询所有水质监测站
      * @return

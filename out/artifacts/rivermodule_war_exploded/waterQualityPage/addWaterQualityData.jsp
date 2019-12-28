@@ -59,23 +59,27 @@
 <body style="background: url('../img/img01.jpg') repeat-x;">
 <div class="container">
     <div class="row">
-        <div class="col-sm-8 col-sm-offset-2">
+        <div class="col-sm-8">
             <form id="stationForm" action="AddWaterQualityDataServlet" method="post">
             <table class="table table-bordered">
                 <caption style="text-align: center;font-size: 24px">添加水质监测站</caption>
                 <tr class="success">
                     <th  style="text-align: center">监测站名称</th>
+                    <th  style="text-align: center">经度</th>
+                    <th  style="text-align: center">纬度</th>
                     <th  style="text-align: center">所属断面</th>
                     <th  style="text-align: center">简介</th>
                 </tr>
                 <tr class="info">
                     <td><input name="stationName" placeholder="安徽宿州杨庄"></td>
+                    <td><input name="longitude" placeholder="经度"></td>
+                    <td><input name="latitude" placeholder="纬度"></td>
                     <td><input name="section" placeholder="苏-皖省界"></td>
                     <td><textarea rows="5" cols="20" name="introduction" placeholder="安徽宿州杨庄水质自动监测站位于宿州市杨庄乡伊桥村。点位坐标北纬34度03分43秒，东经117度13分12秒。属淮河流域，奎河（苏-皖省界）。由安徽省宿州环境监测站管理。距水站77公里。建于2006年12月。"></textarea></td>
                 </tr>
                 <tr class="info">
-                    <td style="text-align: center"><input id="addStation_Btn" type="submit" value="添加" class="btn btn-info"></td>
-                    <td colspan="2"> <div id="msg_div"></div></td>
+                    <td colspan="2" style="text-align: center"><input id="addStation_Btn" type="submit" value="添加" class="btn btn-info"></td>
+                    <td colspan="3"> <div id="msg_div"></div></td>
                 </tr>
 
             </table>

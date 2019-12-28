@@ -9,6 +9,7 @@ import java.util.Map;
 public interface WaterQualityStationDao
 {
     public abstract List<WaterQualityStation> findAll();
+    public abstract WaterQualityStation findByName(String stationName);
     public abstract WaterQualityStation findIntroByName(String name);
     public abstract boolean addWaterQualityStation(WaterQualityStation station);
     public abstract List<WaterQualityStation> findByPage(int start,int pageSize);

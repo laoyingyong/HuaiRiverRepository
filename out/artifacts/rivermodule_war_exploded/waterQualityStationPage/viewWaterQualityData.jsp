@@ -85,6 +85,8 @@
                     var obj = array[i];
                     var id = obj.id;
                     var stationName = obj.stationName;
+                    var longitude= obj.longitude;
+                    var latitude= obj.latitude;
                     var section = obj.section;
                     var introduction = obj.introduction;
                     
@@ -95,7 +97,7 @@
                         '                    <td style="text-align: center">\n' +
                         '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
                         '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
-                        '                        <input onclick="update('+id+',\''+stationName+'\',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="update('+id+',\''+stationName+'\','+longitude+','+latitude+',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
                         '                        <input onclick="dele('+id+');" type="button" class="btn btn-info btn-xs" value="删除">\n' +
                         '                    </td>\n' +
                         '                </tr>';
@@ -198,6 +200,9 @@
                     var obj = array[i];
                     var id = obj.id;
                     var stationName = obj.stationName;
+                    var longitude = obj.longitude;
+                    var latitude = obj.latitude;
+
                     var section = obj.section;
                     var introduction = obj.introduction;
 
@@ -207,7 +212,7 @@
                         '                    <td style="text-align: center">\n' +
                         '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
                         '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
-                        '                        <input onclick="update('+id+',\''+stationName+'\',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="update('+id+',\''+stationName+'\','+longitude+','+latitude+',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
                         '                        <input onclick="dele('+id+');" type="button" class="btn btn-info btn-xs" value="删除">\n' +
                         '                    </td>\n' +
                         '                </tr>';
@@ -325,6 +330,8 @@
                     var obj = array[i];
                     var id = obj.id;
                     var stationName= obj.stationName;
+                    var longitude = obj.longitude;
+                    var latitude = obj.latitude;
                     var section = obj.section;
                     var introduction = obj.introduction;
 
@@ -334,7 +341,7 @@
                         '                    <td style="text-align: center">\n' +
                         '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
                         '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
-                        '                        <input onclick="update('+id+',\''+stationName+'\',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="update('+id+',\''+stationName+'\','+longitude+','+latitude+',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
                         '                        <input onclick="dele('+id+');" type="button" class="btn btn-info btn-xs" value="删除">\n' +
                         '                    </td>\n' +
                         '                </tr>';
@@ -360,13 +367,15 @@
         }
 
         //更新按钮的回调函数
-        function update(id,stationName,section,introduction)
+        function update(id,stationName,longitude,latitude,section,introduction)
         {
             var tableStr='<table class="table table-bordered table-hover" id="update_table">\n' +
                 '                <caption style="text-align: center;font-size: 24px">修改测站信息</caption>\n' +
                 '                <tr class="success">\n' +
                 '                    <th style="text-align: center">id</th>\n' +
                 '                    <th style="text-align: center">监测站名称</th>\n' +
+                '                    <th style="text-align: center">经度</th>\n' +
+                '                    <th style="text-align: center">纬度</th>\n' +
                 '                    <th style="text-align: center">所属断面</th>\n' +
                 '                    <th style="text-align: center">简介</th>\n' +
                 '                    <th style="text-align: center">操作</th>\n' +
@@ -374,6 +383,8 @@
                 '                <tr class="info">\n' +
                 '                    <td style="text-align: center"><input id="stationId" type="text" readonly="readonly" value="'+id+'" style="width: 120px"></td>\n' +
                 '                    <td style="text-align: center"><input id="StationName" type="text" value="'+stationName+'" placeholder="请输入测站名称" style="width: 120px"></td>\n' +
+                '                    <td style="text-align: center"><input id="longitude" type="text" value="'+longitude+'" placeholder="请输入经度" style="width: 120px"></td>\n' +
+                '                    <td style="text-align: center"><input id="latitude" type="text" value="'+latitude+'" placeholder="请输入纬度" style="width: 120px"></td>\n' +
                 '                    <td style="text-align: center"><input id="Section" type="text" value="'+section+'" style="width: 120px" placeholder="请输入断面名称"></td>\n' +
                 '                    <td style="text-align: center"><textarea id="jianjie" cols="20"  rows="5" placeholder="请输入简介">'+introduction+'</textarea></td>\n' +
                 '                    <td style="text-align: center">\n' +
@@ -389,10 +400,12 @@
         {
             var id=$("#stationId").val();
             var stationName=$("#StationName").val();
+            var longitude=$("#longitude").val();
+            var latitude=$("#latitude").val();
             var section=$("#Section").val();
             var introduction=$("#jianjie").val();
 
-            $.post("../UpdateStationInfoServlet",{id:id,stationName:stationName,section:section,introduction:introduction},function (data)
+            $.post("../UpdateStationInfoServlet",{id:id,stationName:stationName,longitude:longitude,latitude:latitude,section:section,introduction:introduction},function (data)
             {
                 alert(data.msg);
                 window.location.href="viewWaterQualityData.jsp";

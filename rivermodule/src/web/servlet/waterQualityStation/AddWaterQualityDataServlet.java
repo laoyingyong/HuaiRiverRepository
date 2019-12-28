@@ -20,13 +20,23 @@ public class AddWaterQualityDataServlet extends HttpServlet
     {
         request.setCharacterEncoding("utf-8");
         String stationName = request.getParameter("stationName");
+        String longitude = request.getParameter("longitude");
+        String latitude = request.getParameter("latitude");
         String section = request.getParameter("section");
         String introduction = request.getParameter("introduction");
         WaterQualityStation station=new WaterQualityStation();
         //封装对象
-        station.setStationName(stationName);
-        station.setSection(section);
-        station.setIntroduction(introduction);
+        try
+        {
+            station.setStationName(stationName);
+            station.setLongitude(Double.parseDouble(longitude));
+            station.setLatitude(Double.parseDouble(latitude));
+            station.setSection(section);
+            station.setIntroduction(introduction);
+        } catch (NumberFormatException e)
+        {
+            System.out.println(e);
+        }
 
         WaterQualityStationService service=new WaterQualityStationServiceImpl();
         boolean flag = service.addWaterQualityStation(station);
