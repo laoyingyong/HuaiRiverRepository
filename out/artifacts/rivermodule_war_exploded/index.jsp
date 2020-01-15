@@ -123,7 +123,7 @@
                     <dl>
                         <dt><span class="glyphicon glyphicon-user"></span>&nbsp;用户管理<img src="img/select_xl01.png"/></dt>
                         <dd><a href="updatepassword.jsp" target="myframe" style="color: white">修改当前用户密码</a></dd>
-                        <dd  id="findAllUser">管理所有用户信息</dd>
+                        <dd ><a href="findUserByPageServlet" style="color: white">管理所有用户信息</a></dd>
                     </dl>
 
             </div><%--侧边栏的结尾--%>
@@ -162,14 +162,6 @@
         $("#time_sp").html(getCurrentTime());
     }
     window.setInterval(f,1000);
-
-    $("#findAllUser").click(function ()
-    {
-        window.location.href="${pageContext.request.contextPath}/findUserByPageServlet";
-
-    });
-
-
 
 </script>
 

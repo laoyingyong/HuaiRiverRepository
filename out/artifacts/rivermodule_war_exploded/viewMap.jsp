@@ -14,23 +14,31 @@
     <script src="js/ol-debug.js"></script>
     <script src="js/GoogleMapSource.js"></script>
     <script src="js/GoogleMapLayer.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
     <script src="js/echarts.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-select.js"></script>
     <link href="css/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
     <%--<link href="css/ol.css" rel="stylesheet">--%>
     <link rel="stylesheet" href="css/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-select.css">
     <style>
         .layerSwitcherDiv{
             height: 30px;
-            right: 0px;
-            top: 0px;
+            magin-right:10px;
             /*position: absolute;*/
             background-color: #F5F5F5;
-            width: 120px;
+            /*width: 120px;*/
             border: 1px solid;
             z-index: 2000;/*处在图层的上面*/
             font-size:14px;
             font-family:"微软雅黑";
+        }
+
+        #mapSelect{
+            right: 0px;
+            top: 45px;
+            z-index: 2000;
+            position: absolute;
         }
 
 
@@ -151,40 +159,41 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-1 col-sm-offset-1">
-            <!-- Single button -->
-            <div class="btn-group">
-                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    热区功能 <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li> <button id="showReg" class="btn btn-success btn-sm" title="加载热区后请用鼠标移动到热区范围显示其信息">显示热区</button></li>
-                    <li role="separator" class="divider"></li>
-                    <li><button id="drawReg" class="btn btn-success btn-sm" title="单击绘制热区按钮后请用鼠标在地图上绘制热区">绘制热区</button></li>
-                    <li role="separator" class="divider"></li>
-                    <li><button id="deleteReg" class="btn btn-success btn-sm" title="单击删除热区按钮后请用鼠标在地图上选中删除要素操作">删除热区</button></li>
-
-                </ul>
-            </div>
-        </div>
-        <div class="col-sm-1">
+        <div class="col-sm-1" >
             <select class="layerSwitcherDiv" id="waterQualitySelect" onchange="findByName();">
                 <option>--水质监测站--</option>
             </select>
         </div>
-        <div class="col-sm-1 col-sm-offset-1">
-            <!-- 地图底图切换列表 -->
-            <select class="layerSwitcherDiv" id="layerSwitcherBtn" onchange="onlayerSwitcherBtn()">
-                <option value="terrain">谷歌地形图</option>
-                <option value="vector">谷歌矢量图</option>
-                <option value="raster">谷歌遥感图</option>
-                <option value="road">谷歌交通图</option>
-            </select>
+        <div class="col-sm-8 col-sm-offset-1">
+            <ul class="nav nav-pills">
+                <li role="presentation"><a href="javascript:shuiQing();">实时水情</a></li>
+                <li role="presentation"><a href="javascript:findSite();">水质站点查询</a></li>
+                <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    热区功能 <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:void(0)" id="showReg">显示热区</a></li>
+                        <li><a href="javascript:void(0)" id="drawReg">绘制热区</a></li>
+                        <li><a href="javascript:void(0)" id="deleteReg">删除热区</a></li>
+                    </ul>
+                </li>
+                <li role="presentation">
+                    <select class="selectpicker"  data-style="btn-info" data-width="auto" id="layerSwitcherBtn" onchange="onlayerSwitcherBtn();">
+                        <option value="terrain">谷歌地形图</option>
+                        <option value="vector">谷歌矢量图</option>
+                        <option value="raster">谷歌遥感图</option>
+                        <option value="road">谷歌交通图</option>
+                    </select>
+
+                </li>
+            </ul>
 
         </div>
 
 
-    </div>
+
+    </div><%--row end--%>
     <div class="row">
         <div id="map"><%--地图容器--%>
 
@@ -203,7 +212,6 @@
             </div>
 
 
-
             <div id="dialog-confirm" title="图形属性信息设置">
                 <label>信息类别(infoType):警戒区域</label><br />
                 <label>名称(name):</label>
@@ -214,6 +222,35 @@
             </div>
             <div id="dialog-delete" title="删除热区要素确认">
                 <label>请确认是否删除该要素</label><br />
+            </div>
+
+            <div id="dd" title="实时水情">
+               <table class="table table-bordered" id="shuiQingTable">
+                   <tr class="success">
+                       <th>河流</th>
+                       <th>站名</th>
+                       <th>日期</th>
+                       <th>水位</th>
+                       <th>流量</th>
+                       <th>超警戒/汛限水位</th>
+                   </tr>
+               </table>
+            </div>
+
+
+
+            <div id="site" title="水质站点">
+                <table class="table table-bordered" id="siteTable">
+                    <tr class="success">
+                        <th>水质站点名</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr class="info">
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+
             </div>
 
             <!-- Popup -->
@@ -233,6 +270,84 @@
 
 
 <script>
+
+    function findSite()
+    {
+        $("#site").dialog("open");
+        $.post("FindAlllStationServlet",function (data)
+        {
+            var tableStr='<table class="table table-bordered" id="siteTable">\n' +
+                '                    <tr class="success">\n' +
+                '                        <th>水质站点名</th>\n' +
+                '                        <th>操作</th>\n' +
+                '                    </tr>';
+
+            for(var i=0;i<data.length;i++)
+            {
+               var obj= data[i];
+               var stationName=obj.stationName;
+               var hangStr='<tr class="info">\n' +
+                   '                        <td>'+stationName+'</td>\n' +
+                   '                        <td><button class="btn btn-info btn-xs">查看监测数据</button></td>\n' +
+                   '                    </tr>';
+               tableStr+=hangStr;
+            }
+            var endStr=' </table>\n';
+            tableStr+=endStr;
+            $("#siteTable").html(tableStr);
+
+        });
+
+    }
+
+    //实时水情按钮的回调函数
+    function shuiQing()
+    {
+        $("#dd").dialog("open");
+        $.post("CurrentWaterLevelServlet",function (data)
+        {
+
+            var tableStr=' <table class="table table-bordered" id="shuiQingTable">\n' +
+                '                   <tr class="success">\n' +
+                '                       <th>河流</th>\n' +
+                '                       <th>站名</th>\n' +
+                '                       <th>日期</th>\n' +
+                '                       <th>水位</th>\n' +
+                '                       <th>流量</th>\n' +
+                '                       <th>超警戒/汛限水位</th>\n' +
+                '                   </tr>';
+
+            for(var i=0;i<data.length;i++)
+            {
+                var obj = data[i];
+                var riverName=obj.riverName;
+                var stationName=obj.stationName;
+                var date=obj.date;
+                var waterLevel=obj.waterLevel;
+                var flow=obj.flow;
+                var over=obj.over;
+
+                var hangStr=' <tr class="info">\n' +
+                    '                       <td>'+riverName+'</td>\n' +
+                    '                       <td>'+stationName+'</td>\n' +
+                    '                       <td>'+date+'</td>\n' +
+                    '                       <td>'+waterLevel+'</td>\n' +
+                    '                       <td>'+flow+'</td>\n' +
+                    '                       <td>'+over+'</td>\n' +
+                    '                   </tr>';
+                tableStr+=hangStr;
+
+            }
+            var endStr=' </table>\n';
+            tableStr+=endStr;
+            $("#shuiQingTable").html(tableStr);
+
+
+
+        });
+
+
+    }
 
 
     //水质监测站下拉列表状态发生改变时的回调函数
@@ -693,6 +808,8 @@
             map.on('pointermove', pointermoveFun,this); //添加鼠标移动事件监听，捕获要素时添加热区功能
 
         });//ajax请求end
+
+
     }
 
 
@@ -842,6 +959,57 @@
         }
     }
 
+
+    $("#site").dialog
+    (
+        {
+            closeText:"关闭",
+            height:500,
+            width:350,
+            modal: true,
+            autoOpen:false,//默认隐藏对话框
+            show:
+                {
+                    effect: "blind",
+                    duration: 1000
+                },
+            hide:
+                {
+                    effect: "explode",
+                    duration: 1000
+                }
+
+
+        }
+
+
+    );
+
+    $("#dd").dialog
+    (
+        {
+            closeText:"关闭",
+            height:500,
+            width:700,
+            modal: true,
+            autoOpen:false,//默认隐藏对话框
+            show:
+                {
+                    effect: "blind",
+                    duration: 1000
+                },
+            hide:
+                {
+                    effect: "explode",
+                    duration: 1000
+                }
+
+
+        }
+
+
+    );
+
     // 初始化绘制热区要素信息设置对话框
     $("#dialog-confirm").dialog(
         {
@@ -906,6 +1074,8 @@
             vectLayer.getSource().removeFeature(currentFeature); //删除当前选中热区要素
 
         });
+
+
     }
 
     // 初始化删除要素信息设置对话框
@@ -943,6 +1113,7 @@
         map.un('pointermove', pointermoveFun, this); //移除鼠标移动事件监听
         selectRegData(); //通过后台查询热区要素显示并实现热区功能
     };
+
 
     /**
      * 【绘制热区】功能按钮处理函数
@@ -1041,6 +1212,8 @@
         map.removeLayer(googleLayer); //移除Google图层
         loadGoogleMap(layerType); //根据图层类型重新加载Google图层
     }
+
+
 
 </script>
 </body>

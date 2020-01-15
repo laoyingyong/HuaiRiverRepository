@@ -26,74 +26,105 @@
         }
 
     </script>
+    <style>
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            /* Margin bottom by footer height */
+            margin-bottom: 60px;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            /* Set the fixed height of the footer here */
+            height: 50px;
+            background-color: #f5f5f5;
+        }
+    </style>
 
 
 </head>
 <body style="background: url('img/img01.jpg') repeat-x;padding-top: 100px;">
 <div class="container">
     <div class="row">
-    <div class="col-sm-6 col-sm-offset-4">
+    <div class="col-sm-6 col-sm-offset-5">
     <h2>欢迎登录</h2>
     </div>
     </div>
-    <form action="${pageContext.request.contextPath}/loginServlet" method="post" class="form-horizontal">
-        <div class="form-group">
-            <label for="user" class="col-sm-2 control-label">用户名：</label>
-            <div class="col-sm-6">
-            <input type="text" name="username" class="form-control" id="user" placeholder="请输入用户名"/>
-            </div>
-            <div class="col-sm-2">
-                <span id="username_sp" style="color: red"></span>
+    <div class="row col-sm-offset-2">
+        <form action="${pageContext.request.contextPath}/loginServlet" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label for="user" class="col-sm-2 control-label">用户名：</label>
+                <div class="col-sm-6">
+                    <input type="text" name="username" class="form-control" id="user" placeholder="请输入用户名"/>
+                </div>
+                <div class="col-sm-2">
+                    <span id="username_sp" style="color: red"></span>
+                </div>
+
             </div>
 
-        </div>
+            <div class="form-group">
+                <label for="password" class="col-sm-2 control-label">密码：</label>
+                <div class="col-sm-6">
+                    <input type="password" name="password" class="form-control" id="password" placeholder="请输入密码"/>
+                </div>
+                <div class="col-sm-2">
+                    <span id="password_sp" style="color: red"></span>
+                </div>
+            </div>
 
-        <div class="form-group">
-            <label for="password" class="col-sm-2 control-label">密码：</label>
-            <div class="col-sm-6">
-            <input type="password" name="password" class="form-control" id="password" placeholder="请输入密码"/>
+            <div class="form-group">
+                <label for="verifycode" class="col-sm-2 control-label">验证码：</label>
+                <div class="col-sm-4">
+                    <input type="text" name="verifycode" class="form-control" id="verifycode" placeholder="请输入验证码"/>
+                </div>
+                <div class="col-sm-4">
+                    <a href="javascript:refreshCode();">
+                        <img src="${pageContext.request.contextPath}/checkCodeServlet" id="vcode"/>
+                    </a>
+                    <a href="javascript:void(0)" id="kan">看不清？点我</a>
+                </div>
+                <div class="col-sm-2">
+                    <span id="code_sp"></span>
+                </div>
             </div>
-            <div class="col-sm-2">
-                <span id="password_sp" style="color: red"></span>
+            <div class="form-group">
+                <div class="col-sm-2 col-sm-offset-2">
+                    <input class="btn btn btn-primary form-control" type="submit" value="登录">
+                </div>
+                <div class="col-sm-3 col-sm-offset-2">
+                    还没有账号？<span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> <a href="${pageContext.request.contextPath}/register.jsp">注册一个</a>
+                </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            <label for="verifycode" class="col-sm-2 control-label">验证码：</label>
-            <div class="col-sm-4">
-            <input type="text" name="verifycode" class="form-control" id="verifycode" placeholder="请输入验证码"/>
-            </div>
-            <div class="col-sm-4">
-            <a href="javascript:refreshCode();">
-                <img src="${pageContext.request.contextPath}/checkCodeServlet" id="vcode"/>
-            </a>
-            <a href="javascript:void(0)" id="kan">看不清？点我</a>
-            </div>
-            <div class="col-sm-2">
-                <span id="code_sp"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-2 col-sm-offset-2">
-            <input class="btn btn btn-primary form-control" type="submit" value="登录">
-            </div>
-            <div class="col-sm-3 col-sm-offset-2">
-            还没有账号？<span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> <a href="${pageContext.request.contextPath}/register.jsp">注册一个</a>
-            </div>
-        </div>
-    </form>
+        </form>
 
 
-    <c:if test="${requestScope.login_msg!=null}"><%--如果提示信息不为空的话，才会显示提示框--%>
-        <!-- 出错显示的信息框 -->
-        <div class="alert alert-warning alert-dismissible col-sm-6 col-sm-offset-2" role="alert">
-            <button type="button" class="close" data-dismiss="alert" >
-                <span>&times;</span>
-            </button>
-            <strong>${requestScope.login_msg}</strong>
+        <c:if test="${requestScope.login_msg!=null}"><%--如果提示信息不为空的话，才会显示提示框--%>
+            <!-- 出错显示的信息框 -->
+            <div class="alert alert-warning alert-dismissible col-sm-6 col-sm-offset-2" role="alert">
+                <button type="button" class="close" data-dismiss="alert" >
+                    <span>&times;</span>
+                </button>
+                <strong>${requestScope.login_msg}</strong>
+            </div>
+        </c:if>
+    </div><%--row end--%>
+</div><%--container结尾--%>
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 col-sm-offset-4">
+                <strong>Copyright &copy; 2019-2020 <a href="https://blog.csdn.net/Deep_rooted">Yingyong Lao</a>.</strong> All rights reserved.
+            </div>
         </div>
-    </c:if>
-</div>
+    </div>
+</footer>
 
 <script>
     //点击图片右侧文字刷新验证码
