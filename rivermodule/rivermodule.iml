@@ -22,5 +22,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 9.0.27" level="application_server_libraries" />
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="jsoup-1.11.2" level="project" />
+    <orderEntry type="library" name="fastjson-1.2.47" level="project" />
   </component>
 </module>

@@ -1,31 +1,27 @@
 package domain;
 
-import java.sql.Date;
-import java.sql.Time;
-
+/**
+ * @author laoyingyong
+ * @date: 2020-01-19 15:24
+ */
 public class WaterQuality
 {
-    private int id;
+    private Integer id;
     private String belongStation;
-    private Double ph;
-    private String phquality;
-    private Double oxygen;
-    private String oxygenquality;
-    private Double nitrogen;
-    private String nitrogenquality;
-    private Double permangan;
-    private String permanganquality;
-    private Double orgacarbon;
-    private String orgacarbonquality;
-    private Date date;
-    private Time time;
+    private String dateTime;
+    private Double pH;
+    private Double dO;
+    private Double nH4;
+    private Double cODMn;
+    private Double tOC;
+    private String level;
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -37,100 +33,60 @@ public class WaterQuality
         this.belongStation = belongStation;
     }
 
-    public Double getPh() {
-        return ph;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setPh(Double ph) {
-        this.ph = ph;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public String getPhquality() {
-        return phquality;
+    public Double getpH() {
+        return pH;
     }
 
-    public void setPhquality(String phquality) {
-        this.phquality = phquality;
+    public void setpH(Double pH) {
+        this.pH = pH;
     }
 
-    public Double getOxygen() {
-        return oxygen;
+    public Double getdO() {
+        return dO;
     }
 
-    public void setOxygen(Double oxygen) {
-        this.oxygen = oxygen;
+    public void setdO(Double dO) {
+        this.dO = dO;
     }
 
-    public String getOxygenquality() {
-        return oxygenquality;
+    public Double getnH4() {
+        return nH4;
     }
 
-    public void setOxygenquality(String oxygenquality) {
-        this.oxygenquality = oxygenquality;
+    public void setnH4(Double nH4) {
+        this.nH4 = nH4;
     }
 
-    public Double getNitrogen() {
-        return nitrogen;
+    public Double getcODMn() {
+        return cODMn;
     }
 
-    public void setNitrogen(Double nitrogen) {
-        this.nitrogen = nitrogen;
+    public void setcODMn(Double cODMn) {
+        this.cODMn = cODMn;
     }
 
-    public String getNitrogenquality() {
-        return nitrogenquality;
+    public Double gettOC() {
+        return tOC;
     }
 
-    public void setNitrogenquality(String nitrogenquality) {
-        this.nitrogenquality = nitrogenquality;
+    public void settOC(Double tOC) {
+        this.tOC = tOC;
     }
 
-    public Double getPermangan() {
-        return permangan;
+    public String getLevel() {
+        return level;
     }
 
-    public void setPermangan(Double permangan) {
-        this.permangan = permangan;
-    }
-
-    public String getPermanganquality() {
-        return permanganquality;
-    }
-
-    public void setPermanganquality(String permanganquality) {
-        this.permanganquality = permanganquality;
-    }
-
-    public Double getOrgacarbon() {
-        return orgacarbon;
-    }
-
-    public void setOrgacarbon(Double orgacarbon) {
-        this.orgacarbon = orgacarbon;
-    }
-
-    public String getOrgacarbonquality() {
-        return orgacarbonquality;
-    }
-
-    public void setOrgacarbonquality(String orgacarbonquality) {
-        this.orgacarbonquality = orgacarbonquality;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     @Override
@@ -138,18 +94,13 @@ public class WaterQuality
         return "WaterQuality{" +
                 "id=" + id +
                 ", belongStation='" + belongStation + '\'' +
-                ", ph=" + ph +
-                ", phquality='" + phquality + '\'' +
-                ", oxygen=" + oxygen +
-                ", oxygenquality='" + oxygenquality + '\'' +
-                ", nitrogen=" + nitrogen +
-                ", nitrogenquality='" + nitrogenquality + '\'' +
-                ", permangan=" + permangan +
-                ", permanganquality='" + permanganquality + '\'' +
-                ", orgacarbon=" + orgacarbon +
-                ", orgacarbonquality='" + orgacarbonquality + '\'' +
-                ", date=" + date +
-                ", time=" + time +
+                ", dateTime='" + dateTime + '\'' +
+                ", pH=" + pH +
+                ", dO=" + dO +
+                ", nH4=" + nH4 +
+                ", cODMn=" + cODMn +
+                ", tOC=" + tOC +
+                ", level='" + level + '\'' +
                 '}';
     }
 }

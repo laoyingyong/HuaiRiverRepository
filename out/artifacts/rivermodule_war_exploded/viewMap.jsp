@@ -159,15 +159,11 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-1" >
-            <select class="layerSwitcherDiv" id="waterQualitySelect" onchange="findByName();">
-                <option>--水质监测站--</option>
-            </select>
-        </div>
-        <div class="col-sm-8 col-sm-offset-1">
+        <div class="col-sm-12">
             <ul class="nav nav-pills">
                 <li role="presentation"><a href="javascript:shuiQing();">实时水情</a></li>
                 <li role="presentation"><a href="javascript:findSite();">水质站点查询</a></li>
+                <li role="presentation"><a href="javascript:viewCurrentWaterQuality();">实时水质数据</a></li>
                 <li role="presentation" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     热区功能 <span class="caret"></span>
@@ -237,6 +233,31 @@
                </table>
             </div>
 
+            <div id="wQuality" title="淮河流域实时水质数据">
+                <table class="table table-bordered" id="shuiZhiTable">
+                    <tr class="success">
+                        <th>测站名</th>
+                        <th>测量时间</th>
+                        <th>pH</th>
+                        <th>溶解氧</th>
+                        <th>氨氮</th>
+                        <th>高猛酸钾盐指数</th>
+                        <th>总有机碳</th>
+                        <th>水质类别</th>
+                    </tr>
+                    <tr class="info">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </div>
+
 
 
             <div id="site" title="水质站点">
@@ -271,6 +292,92 @@
 
 <script>
 
+
+    function viewCurrentWaterQuality()
+    {
+        $("#wQuality").dialog("open");
+        $.post("ViewCurrentWaterQualityServlet",function (data)
+        {
+
+
+            var tableStr='<table class="table table-bordered" id="shuiZhiTable">\n' +
+                '                    <tr class="success">\n' +
+                '                        <th>测站名</th>\n' +
+                '                        <th>测量时间</th>\n' +
+                '                        <th>pH</th>\n' +
+                '                        <th>溶解氧</th>\n' +
+                '                        <th>氨氮</th>\n' +
+                '                        <th>高猛酸钾盐指数</th>\n' +
+                '                        <th>总有机碳</th>\n' +
+                '                        <th>水质类别</th>\n' +
+                '                    </tr>';
+            for (var i = 0; i <data.length ; i++)
+            {
+                var rowStr;
+                var obj=data[i];
+                var belongStation=obj.belongStation;
+                var dateTime=obj.dateTime;
+                var pH=obj.pH;
+                var dO=obj.dO;
+                var nH4=obj.nH4;
+                var cODMn=obj.cODMn;
+                var tOC=obj.tOC;
+                var level=obj.level;
+
+                var tdStr;
+                if(level==="III")
+                {
+                    tdStr=' <td style="background-color: #03ff03">'+level+'</td>';
+                }
+                else if(level==="II")
+                {
+                    tdStr=' <td style="background-color: #34c3f6">'+level+'</td>';
+                }
+                else if(level==="IV")
+                {
+                    tdStr=' <td style="background-color: #faff19">'+level+'</td>';
+                }
+                else if(level==="I")
+                {
+                    tdStr=' <td style="background-color: #c5ffff">'+level+'</td>';
+                }
+                else if(level==="V")
+                {
+                    tdStr=' <td style="background-color: #ff9000">'+level+'</td>';
+                }
+                else if(level==="劣V")
+                {
+                    tdStr=' <td style="background-color: #ff0000">'+level+'</td>';
+                }
+                else
+                {
+                    tdStr=' <td style="background-color: #ffffff">'+level+'</td>';
+                }
+
+                rowStr='<tr">\n' +
+                    '                        <td>'+belongStation+'</td>\n' +
+                    '                        <td>'+dateTime+'</td>\n' +
+                    '                        <td>'+pH+'</td>\n' +
+                    '                        <td>'+dO+'</td>\n' +
+                    '                        <td>'+nH4+'</td>\n' +
+                    '                        <td>'+cODMn+'</td>\n' +
+                    '                        <td>'+tOC+'</td>\n' +
+                                                  tdStr+
+                    '                    </tr>';
+
+
+                tableStr+=rowStr;
+            }
+
+            var endStr=' </table>\n';
+            tableStr+=endStr;
+            $("#shuiZhiTable").html(tableStr);
+
+        });
+
+    }
+
+    //查看水质监测站按钮的回调函数
     function findSite()
     {
         $("#site").dialog("open");
@@ -348,287 +455,6 @@
 
 
     }
-
-
-    //水质监测站下拉列表状态发生改变时的回调函数
-    function findByName()
-    {
-        var value=$("#waterQualitySelect").val();//获取下拉列表的值
-
-        $.post("ViewWaterQulityInfoServlet",{stationName:value},function (data)
-        {
-            for(var i=0;i<data.length;i++)
-            {
-                var obj = data[i];
-                var belongStation=obj.belongStation;
-                var date=obj.date;
-                var ph=obj.ph;
-                var phquaity=obj.phquality;
-                var oxygen=obj.oxygen;
-                var oxygenquality=obj.oxygenquality;
-                var nitrogen=obj.nitrogen;
-                var nitrogenquality=obj.nitrogenquality;
-                var permangan=obj.permangan;
-                var permanganquality=obj.permanganquality;
-                var orgacarbon=obj.orgacarbon;
-                var orgacarbonquality=obj.orgacarbonquality;
-
-
-
-                // 基于准备好的dom，初始化echarts实例
-                var myChart = echarts.init(document.getElementById('main'));
-
-                // 指定图表的配置项和数据
-                var option =
-                {
-                    title:
-                    {
-                        x:'center',
-                        y: 'bottom',
-                        text: belongStation+":"+date
-                    },
-                    series:
-                    {
-                        type: 'sunburst',
-                        data:
-                        [
-                        {
-                            name: 'PH',
-                            children:
-                            [{
-                                value: 1,
-                                name: ph
-                            },
-                            {
-                                value: 1,
-                                name: phquaity
-                            }
-                            ]
-                        },
-                        {
-                            name: '溶解氧',
-                            children: [{
-                                name: oxygen,
-                                value: 1
-                            }, {
-                                name: oxygenquality,
-                                value: 1
-                            }]
-                        },  {
-                            name: '氨氮',
-                            children: [{
-                                name: nitrogen,
-                                value: 1
-                            }, {
-                                name: nitrogenquality,
-                                value: 1
-                            }]
-                        },
-                            {
-                                name: '高锰酸钾',
-                                children: [{
-                                    name: permangan,
-                                    value: 1
-                                }, {
-                                    name: permanganquality,
-                                    value: 1
-                                }]
-                            },
-                            {
-                                name: '总有机碳',
-                                children: [{
-                                    name: orgacarbon,
-                                    value: 1
-                                }, {
-                                    name: orgacarbonquality,
-                                    value: 1
-                                }]
-                            }
-                        ]
-                    }
-                };
-
-                // 使用刚指定的配置项和数据显示图表。
-                myChart.setOption(option);
-
-            }
-
-        });
-
-        $.post("FindLocationByNameServlet",{stationName:value},function (data)//发送ajax请求
-        {
-            var longitude = data.longitude;//经度
-            var latitude = data.latitude;//纬度
-            var stationName=data.stationName;//测站名
-            var introduction=data.introduction;//简述
-
-            var stationPosition = ol.proj.fromLonLat([longitude, latitude]);
-            //示例标注点的信息对象
-            var featuerInfo =
-                {
-                    geo: stationPosition,
-                    att:
-                        {
-                            title: stationName, //标注信息的标题内容
-                            titleURL: "http://www.openlayers.org/", //标注详细信息链接
-                            text:introduction, //标注内容简介
-                            imgURL: "img/bangbu.png" //标注的图片
-                        }
-                }
-
-
-            /**
-             * 创建标注样式函数,设置image为图标ol.style.Icon
-             * @param {ol.Feature} feature 要素
-             */
-            var createLabelStyle = function (feature)
-            {
-                return new ol.style.Style({
-                    image: new ol.style.Icon(/** @type {olx.style.IconOptions} */({
-                        anchor: [0.5, 60],
-                        anchorOrigin: 'top-right',
-                        anchorXUnits: 'fraction',
-                        anchorYUnits: 'pixels',
-                        offsetOrigin: 'top-right',
-                        // offset:[0,10],
-                        // scale:0.5,  //图标缩放比例
-                        opacity: 0.75,  //透明度
-                        src: 'img/blueIcon.png' //图标的url
-                    })),
-                    text: new ol.style.Text({
-                        textAlign: 'center', //位置
-                        textBaseline: 'middle', //基准线
-                        font: 'normal 14px 微软雅黑',  //文字样式
-                        text: feature.get('name'),  //文本内容
-                        fill: new ol.style.Fill({ color: '#aa3300' }), //文本填充样式（即文字颜色）
-                        stroke: new ol.style.Stroke({ color: '#ffcc33', width: 2 })
-                    })
-                });
-            }
-
-            //实例化Vector要素，通过矢量图层添加到地图容器中
-            var iconFeature = new ol.Feature({
-                geometry: new ol.geom.Point(stationPosition),
-                name: stationName,  //名称属性
-                population: 2115 //大概人口数（万）
-            });
-            iconFeature.setStyle(createLabelStyle(iconFeature));
-            //矢量标注的数据源
-            var vectorSource = new ol.source.Vector({
-                features: [iconFeature]
-            });
-            //矢量标注图层
-            var vectorLayer = new ol.layer.Vector({
-                source: vectorSource
-            });
-            map.addLayer(vectorLayer);
-
-            /**
-             * 实现popup的html元素
-             */
-            var container = document.getElementById('popup2');
-            var content = document.getElementById('popup-content');
-            var closer = document.getElementById('popup-closer');
-
-            /**
-             * 在地图容器中创建一个Overlay
-             */
-            var popup2 = new ol.Overlay(/** @type {olx.OverlayOptions} */({
-                element: container,
-                autoPan: true,
-                positioning: 'bottom-center',
-                stopEvent: false,
-                autoPanAnimation:
-                    {
-                        duration: 250
-                    }
-            }));
-            map.addOverlay(popup2);
-
-            /**
-             * 添加关闭按钮的单击事件（隐藏popup）
-             * @return {boolean} Don't follow the href.
-             */
-            closer.onclick = function ()
-            {
-                popup2.setPosition(undefined);  //未定义popup位置
-                closer.blur(); //失去焦点
-                return false;
-            };
-
-            /**
-             * 动态创建popup的具体内容
-             * @param {string} title
-             */
-            function addFeatrueInfo(info)
-            {
-                //新增a元素
-                var elementA = document.createElement('a');
-                elementA.className = "markerInfo";
-                elementA.href = info.att.titleURL;
-                //elementA.innerText = info.att.title;
-                setInnerText(elementA, info.att.title);
-                content.appendChild(elementA); // 新建的div元素添加a子节点
-                //新增div元素
-                var elementDiv = document.createElement('div');
-                elementDiv.className = "markerText";
-                //elementDiv.innerText = info.att.text;
-                setInnerText(elementDiv, info.att.text);
-                content.appendChild(elementDiv); // 为content添加div子节点
-                //新增img元素
-                var elementImg = document.createElement('img');
-                elementImg.className = "markerImg";
-                elementImg.src = info.att.imgURL;
-                content.appendChild(elementImg); // 为content添加img子节点
-            }
-            /**
-             * 动态设置元素文本内容（兼容）
-             */
-            function setInnerText(element, text)
-            {
-                if (typeof element.textContent == "string")
-                {
-                    element.textContent = text;
-                } else
-                {
-                    element.innerText = text;
-                }
-            }
-
-            /**
-             * 为map添加点击事件监听，渲染弹出popup
-             */
-            map.on('click', function (evt)
-            {
-                var coordinate = evt.coordinate;
-                //判断当前单击处是否有要素，捕获到要素时弹出popup
-                var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) { return feature; });
-                if (feature)
-                {
-                    content.innerHTML = ''; //清空popup的内容容器
-                    addFeatrueInfo(featuerInfo); //在popup中加载当前要素的具体信息
-                    if (popup2.getPosition() === undefined)
-                    {
-                        popup2.setPosition(coordinate); //设置popup的位置
-                    }
-                }
-            });
-            /**
-             * 为map添加鼠标移动事件监听，当指向标注时改变鼠标光标状态
-             */
-            map.on('pointermove', function (e)
-            {
-                var pixel = map.getEventPixel(e.originalEvent);
-                var hit = map.hasFeatureAtPixel(pixel);
-                map.getTargetElement().style.cursor = hit ? 'pointer' : '';
-            });
-
-        });
-
-    }
-
-
-
 
 
     //实例化鼠标位置控件（MousePosition）
@@ -984,6 +810,34 @@
 
 
     );
+
+
+    $("#wQuality").dialog
+    (
+        {
+            closeText:"关闭",
+            height:500,
+            width:900,
+            modal: true,
+            autoOpen:false,//默认隐藏对话框
+            show:
+                {
+                    effect: "blind",
+                    duration: 1000
+                },
+            hide:
+                {
+                    effect: "explode",
+                    duration: 1000
+                }
+
+
+        }
+
+
+    );
+
+
 
     $("#dd").dialog
     (
