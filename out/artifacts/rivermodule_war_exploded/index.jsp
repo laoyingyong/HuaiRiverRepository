@@ -25,10 +25,8 @@
   <script src="js/bootstrap.min.js"></script>
   <script type="text/javascript" src="js/init.js">
   </script>
-    <script>
 
 
-    </script>
 </head>
 <body style="background: url('img/img01.jpg') repeat-x;padding-top: 52px">
 
@@ -146,6 +144,7 @@
 
 
 </div><%--container的结尾--%>
+
 
 
 <script>

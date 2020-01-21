@@ -8,14 +8,29 @@
 <html>
 <head>
     <title>添加水质质量数据</title>
+    <script src="../js/jquery-ui.js"></script>
     <!-- 2. jQuery导入，建议使用1.9以上的版本 -->
     <script src="../js/jquery-3.2.1.min.js"></script>
     <!-- 1. 导入CSS的全局样式 -->
     <link href="../css/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/jquery-ui.min.css">
     <script src="../js/bootstrap.min.js"></script>
     <script>
         $(function ()
         {
+
+            $.post("../FindAlllStationServlet",function (data)
+            {
+                for (var i = 0; i <data.length ; i++)
+                {
+                    var obj=data[i];
+                    var stationName=obj.stationName;
+                    var optionStr='<option value="'+stationName+'">'+stationName+'</option>';
+                    $("#belongStation").append(optionStr);
+                }
+
+            });
+
             $("#stationForm").submit(function ()
             {
                 $.get("../AddWaterQualityDataServlet",$("#stationForm").serialize(),function (data)//serialize()千万别少写了括号哦
@@ -32,28 +47,58 @@
             });
 
 
-            $("#waterQualityForm").submit(function ()
-                {
-                    $.post("../AddWaterQualityInfoServlet",$("#waterQualityForm").serialize(),function (data)
-                    {
-                        var msg = data.msg;
-                        var str='<div class="alert alert-warning alert-dismissible" role="alert">\n' +
-                            '  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
-                            '  <strong>提示：</strong>'+msg+'\n' +
-                            '</div>';
-                        $("#msg2_div").html(str);
-
-
-
-                    });
-
-
-                    return false;
-
-                }
-            );
 
         });
+
+
+        function addSomeWaterQuality()
+        {
+            $.post("../AddWaterQualityServlet",function (data)
+            {
+                var msg=data.msg;
+                alert(msg);
+
+            });
+
+        }
+
+        function getStation()
+        {
+            var belongStation = $("#belongStation").val();
+            return belongStation;
+        }
+        
+        function addOneWaterQuality() 
+        {
+            var belongStation = getStation();
+            var waterQuality=getQualityLevel();
+            var date = $("#date").val();
+            var ph = $("#ph").val();
+            var oxygen = $("#oxygen").val();
+            var nitrogen=$("#nitrogen").val();
+            var permangan = $("#permangan").val();
+            var orgacarbon=$("#orgacarbon").val();
+
+
+            $.post("../AddOneWaterQualityServlet",{belongStation:belongStation,date:date,ph:ph,oxygen:oxygen,nitrogen:nitrogen,permangan:permangan,orgacarbon:orgacarbon,waterQuality:waterQuality},function (data)
+            {
+                alert(data.msg);
+                
+            });
+            
+        }
+
+
+        function getQualityLevel()
+        {
+            var a = $("#qualitySelect").val();
+
+            return a;
+        }
+
+
+
+
     </script>
 </head>
 <body style="background: url('../img/img01.jpg') repeat-x;">
@@ -93,9 +138,8 @@
     <div class="row" style="padding-top: 50px"><%--第二行--%>
 
         <div class="col-md-12">
-            <form id="waterQualityForm" action="AddWaterQualityDataServlet" method="post">
                 <table class="table table-bordered table-responsive table-condensed">
-                    <caption style="text-align: center;font-size: 24px">添加水质监测数据</caption>
+                    <caption style="text-align: center;font-size: 24px">手动添加水质监测数据</caption>
                     <tr class="success">
                         <th  style="text-align: center">所属测站名</th>
                         <th  style="text-align: center">PH</th>
@@ -104,32 +148,57 @@
                         <th  style="text-align: center">高猛酸钾指数</th>
                         <th  style="text-align: center">总有机碳</th>
                         <th  style="text-align: center">水质类别</th>
-                        <th  style="text-align: center">更新日期</th>
-                        <th  style="text-align: center">更新时间</th>
+                        <th  style="text-align: center">测量时间</th>
                     </tr>
                     <tr class="info">
-                        <td><input style="width: 120px" name="belongStation" placeholder="江苏盱眙"></td>
-                        <td><input style="width: 120px" name="ph" placeholder="8.02"></td>
-                        <td><input style="width: 110px" name="oxygen" placeholder="11.33"></td>
-                        <td><input style="width: 120px" name="nitrogen" placeholder="1.39"></td>
-                        <td><input style="width: 120px" name="permangan" placeholder="3.5"></td>
-                        <td><input style="width: 120px" name="orgacarbon" placeholder="0.8"></td>
-                        <td><input style="width: 120px" name="waterQuality" placeholder="IV"></td>
-                        <td><input style="width: 140px" type="date" name="date" placeholder="2019-12-11"></td>
-                        <td><input style="width: 120px" name="time"  placeholder="20:00:00"></td>
+                        <td>
+                            <select id="belongStation" onchange="getStation();">
+                                <option>--请选择--</option>
+                            </select>
+                        </td>
+                        <td><input type="number" step="0.01" style="width: 120px" id="ph" name="ph" placeholder="8.02"></td>
+                        <td><input type="number" step="0.01" style="width: 110px" id="oxygen" name="oxygen" placeholder="11.33"></td>
+                        <td><input type="number" step="0.01" style="width: 120px" name="nitrogen" id="nitrogen" placeholder="1.39"></td>
+                        <td><input type="number" step="0.01" style="width: 120px" name="permangan" id="permangan" placeholder="3.5"></td>
+                        <td><input type="number" step="0.01" style="width: 120px" name="orgacarbon" id="orgacarbon" placeholder="0.8"></td>
+                        <td>
+                            <select id="qualitySelect" onchange="getQualityLevel();">
+                                <option>--请选择--</option>
+                                <option value="Ⅰ">Ⅰ</option>
+                                <option value="Ⅱ">Ⅱ</option>
+                                <option value="Ⅲ">Ⅲ</option>
+                                <option value="Ⅳ">Ⅳ</option>
+                                <option value="Ⅴ">Ⅴ</option>
+                                <option value="劣Ⅴ">劣Ⅴ</option>
+
+                            </select>
+                        </td>
+                        <td><input  style="width: 180px"  name="date" id="date" placeholder="2019-12-11 12:00"></td>
                     </tr>
                     <tr class="info">
-                        <td colspan="4" style="text-align: center"><input id="addWaterQuality_Btn" type="submit" value="添加" class="btn btn-info"></td>
-                        <td colspan="5"> <div id="msg2_div"></div></td>
+                        <td colspan="4" style="text-align: center"><input  onclick="addOneWaterQuality();" type="button" value="添加" class="btn btn-info"></td>
+                        <td colspan="5"></td>
                     </tr>
 
                 </table>
-            </form>
-
         </div><%--单元格的结尾--%>
 
 
     </div><%--第二行end--%>
+
+
+    <div class="row" style="padding-top:50px">
+        <div class="col-sm-3 col-sm-offset-4">
+            <table class="table table-bordered">
+                <caption style="text-align: center;font-size: 24px">一键添加多条水质数据</caption>
+                <tr class="info">
+                    <td><button onclick="addSomeWaterQuality();" class="btn btn-info"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;从“中国环境监测总站”同步数据到数据库</button></td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
 
 </div><%--container容器end--%>
 

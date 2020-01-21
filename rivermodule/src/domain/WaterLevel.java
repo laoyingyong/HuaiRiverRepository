@@ -1,30 +1,48 @@
 package domain;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class WaterLevel
 {
-    private int id;
-    private String name;
-    private Double waterLevel;
-    private Double over;
-    private String status;
-    private Date collectionDate;
+   private Integer id;
+   private String riverName;
+   private String siteName;
+   private Timestamp collectionDate;
+   private Double waterLevel;
+   private Double flow;
+   private Double over;
 
-    public int getId() {
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getRiverName() {
+        return riverName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRiverName(String riverName) {
+        this.riverName = riverName;
+    }
+
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
+    public Timestamp getCollectionDate() {
+        return collectionDate;
+    }
+
+    public void setCollectionDate(Timestamp collectionDate) {
+        this.collectionDate = collectionDate;
     }
 
     public Double getWaterLevel() {
@@ -35,6 +53,14 @@ public class WaterLevel
         this.waterLevel = waterLevel;
     }
 
+    public Double getFlow() {
+        return flow;
+    }
+
+    public void setFlow(Double flow) {
+        this.flow = flow;
+    }
+
     public Double getOver() {
         return over;
     }
@@ -43,31 +69,16 @@ public class WaterLevel
         this.over = over;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Date getCollectionDate() {
-        return collectionDate;
-    }
-
-    public void setCollectionDate(Date collectionDtate) {
-        this.collectionDate = collectionDtate;
-    }
-
     @Override
     public String toString() {
         return "WaterLevel{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", waterLevel=" + waterLevel +
-                ", over=" + over +
-                ", status='" + status + '\'' +
+                ", riverName='" + riverName + '\'' +
+                ", siteName='" + siteName + '\'' +
                 ", collectionDate=" + collectionDate +
+                ", waterLevel=" + waterLevel +
+                ", flow=" + flow +
+                ", over=" + over +
                 '}';
     }
 }

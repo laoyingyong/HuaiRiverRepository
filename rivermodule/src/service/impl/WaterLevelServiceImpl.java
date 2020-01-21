@@ -42,6 +42,22 @@ public class WaterLevelServiceImpl implements WaterLevelService
     }
 
     @Override
+    public int addManyLevel(List<WaterLevel> levelList)
+    {
+        int count=0;
+        for (WaterLevel waterLevel : levelList)
+        {
+            boolean b = dao.addWaterLevelInfo(waterLevel);
+            if (b)
+            {
+                count++;
+            }
+
+        }
+        return count;
+    }
+
+    @Override
     public boolean update(WaterLevel waterLevel)
     {
         boolean update = dao.update(waterLevel);

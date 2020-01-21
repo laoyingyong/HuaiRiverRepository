@@ -39,12 +39,13 @@ public class WaterLevelDaoImpl implements WaterLevelDao
     {
         int update=0;
         try {
-            String sql="insert into water_level (id,name,waterLevel,over,status,collectionDate) values(null,?,?,?,?,?)";
-            update = template.update(sql, waterLevel.getName(),
+            String sql="insert into water_level (id,riverName,siteName,collectionDate,waterLevel,flow,over) values(null,?,?,?,?,?,?)";
+            update = template.update(sql, waterLevel.getRiverName(),
+                    waterLevel.getSiteName(),
+                    waterLevel.getCollectionDate(),
                     waterLevel.getWaterLevel(),
-                    waterLevel.getOver(),
-                    waterLevel.getStatus(),
-                    waterLevel.getCollectionDate());
+                    waterLevel.getFlow(),
+                    waterLevel.getOver());
         } catch (DataAccessException e) {
             System.out.println(e);
         }
@@ -64,13 +65,14 @@ public class WaterLevelDaoImpl implements WaterLevelDao
     {
         int update=0;
         try {
-            String sql="update water_level set name=?,waterLevel=?,over=?,status=?,collectionDate=? where id=?";
+            String sql="update water_level set riverName=?,siteName=?,collectionDate=? ,waterLevel=?,flow=?,over=? where id=?";
             update = template.update(sql,
-                    waterLevel.getName(),
-                    waterLevel.getWaterLevel(),
-                    waterLevel.getOver(),
-                    waterLevel.getStatus(),
+                    waterLevel.getRiverName(),
+                    waterLevel.getSiteName(),
                     waterLevel.getCollectionDate(),
+                    waterLevel.getWaterLevel(),
+                    waterLevel.getFlow(),
+                    waterLevel.getOver(),
                     waterLevel.getId());
         } catch (DataAccessException e) {
             e.printStackTrace();

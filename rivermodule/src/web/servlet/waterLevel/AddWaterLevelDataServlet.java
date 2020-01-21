@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @WebServlet("/AddWaterLevelDataServlet")
 public class AddWaterLevelDataServlet extends HttpServlet
@@ -20,21 +21,38 @@ public class AddWaterLevelDataServlet extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         request.setCharacterEncoding("utf-8");
-        String name = request.getParameter("name");
-        String waterLevel = request.getParameter("waterLevel");
-        String over = request.getParameter("over");
-        String status = request.getParameter("status");
+        String riverName = request.getParameter("riverName");
+        String siteName = request.getParameter("siteName");
         String collectionDate = request.getParameter("collectionDate");
+        System.out.println(collectionDate);
+        String waterLevel = request.getParameter("waterLevel");
+        String flow = request.getParameter("flow");
+        String over = request.getParameter("over");
+
 
         WaterLevel waterLevelObj=new WaterLevel();
 
-        try {
-            waterLevelObj.setName(name);
-            waterLevelObj.setWaterLevel(Double.parseDouble(waterLevel));
-            waterLevelObj.setOver(Double.parseDouble(over));
-            waterLevelObj.setStatus(status);
-            waterLevelObj.setCollectionDate(Date.valueOf(collectionDate));
-        } catch (NumberFormatException e) {
+        try
+        {
+            if(riverName!=null&&riverName.length()!=0)
+            {waterLevelObj.setRiverName(riverName);}
+            if (siteName!=null&&siteName.length()!=0)
+            {waterLevelObj.setSiteName(siteName);}
+            String date="";
+            if(collectionDate!=null&&collectionDate.length()!=0)
+            {
+                date=collectionDate.replace("T"," ")+":00";//多出来一个T,必须去掉
+                waterLevelObj.setCollectionDate(Timestamp.valueOf(date));
+            }
+            if(waterLevel!=null&&waterLevel.length()!=0)
+            {waterLevelObj.setWaterLevel(Double.parseDouble(waterLevel));}
+            if(flow!=null&&flow.length()!=0)
+            {waterLevelObj.setFlow(Double.parseDouble(flow));}
+            if(over!=null&&over.length()!=0)
+            { waterLevelObj.setOver(Double.parseDouble(over));}
+
+        } catch (Exception e)
+        {
             System.out.println(e);
         }
 

@@ -15,39 +15,24 @@
     <script src="../js/bootstrap.min.js"></script>
     <script>
 
-            var status;
-
-            $(function ()
+        $(function () //入口函数
+        {
+            $("#waterLevelForm").submit(function ()
             {
-                $("#status").change(function ()
+                $.post("../AddWaterLevelDataServlet",$(this).serialize(),function (data)
                 {
-                    status=$("#status").val();
+                    alert(data.msg);
                 });
 
+                return false;//阻止页面跳转
             });
-            function addWaterLevel()
-            {
+        });
 
-                var name=$("#name").val();
-                var waterLevel=$("#waterLevel").val();
-                var over=$("#over").val();
-                var collectionDate=$("#collectionDate").val();
+        function addWaterLevel()
+        {
+            $.post();
 
-                $.post("../AddWaterLevelDataServlet",{name:name,waterLevel:waterLevel,over:over,status:status,collectionDate:collectionDate},function (data)
-                {
-                    var msg = data.msg;
-                    var str='<div class="alert alert-warning alert-dismissible" role="alert">\n' +
-                        '  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
-                        '  <strong>提示：</strong>'+msg+'\n' +
-                        '</div>';
-                    $("#msg_div").html(str);
-
-                });
-
-            }
-
-
-
+        }
 
 
     </script>
@@ -55,28 +40,29 @@
 <body style="background:url('../img/img01.jpg') repeat-x">
 <div class="container">
     <div class="row">
-        <div class="col-sm-8 col-sm-offset-2">
+        <div class="col-sm-12">
             <form id="waterLevelForm" action="AddWaterQualityDataServlet" method="post">
                 <table class="table table-bordered">
                     <caption style="text-align: center;font-size: 24px">添加水位监测数据</caption>
                     <tr class="success">
-                        <th  style="text-align: center">地点</th>
+                        <th  style="text-align: center">河流</th>
+                        <th  style="text-align: center">站名</th>
+                        <th  style="text-align: center">日期</th>
                         <th  style="text-align: center">水位（m）</th>
-                        <th  style="text-align: center">超过警戒线（m）</th>
-                        <th  style="text-align: center">状态</th>
-                        <th  style="text-align: center">采集日期</th>
+                        <th  style="text-align: center">流量</th>
+                        <th  style="text-align: center">超警戒/汛限水位</th>
                     </tr>
                     <tr class="info">
-                        <td><input id="name" name="name" placeholder="王家坝控制站"></td>
-                        <td><input id="waterLevel" type="number" step="0.01" min="0" name="waterLevel" placeholder="21.43"></td>
-                        <td><input id="over" name="over" type="number" min="0" step="0.01" placeholder="0.01"></td>
-                        <td><select id="status"><option>--请选择--</option><option value="OK">正常</option><option value="NO">异常</option></select></td>
-                        <td><input id="collectionDate" name="collectionDate" type="date"></td>
+                        <td><input name="riverName" placeholder="淮河"></td>
+                        <td><input name="siteName" placeholder="站名"></td>
+                        <td><input type="datetime-local" name="collectionDate"></td>
+                        <td><input type="number" step="0.01" style="width: 80px" name="waterLevel"></td>
+                        <td><input type="number" step="0.1" style="width: 80px" name="flow"></td>
+                        <td><input type="number" step="0.01" style="width: 80px" name="over"></td>
 
                     </tr>
                     <tr class="info">
-                        <td colspan="2" style="text-align: center"><input onclick="addWaterLevel();" type="button" value="添加" class="btn btn-info"></td>
-                        <td colspan="3"> <div id="msg_div"></div></td>
+                        <td colspan="6" style="text-align: center"><input type="submit" value="添加" class="btn btn-info"></td>
                     </tr>
 
                 </table>
@@ -86,6 +72,13 @@
         </div><%--单元格的结尾--%>
 
     </div><%--row end--%>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <button class="btn btn-info" onclick="addWaterLevel();"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;从淮河水文局同步数据到数据库</button>
+        </div>
+
+    </div>
 </div>
 
 </body>

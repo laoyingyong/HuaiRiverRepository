@@ -33,11 +33,9 @@ public class UpdateWaterLevelData extends HttpServlet
 
         try {
             waterLevelObj.setId(Integer.parseInt(id));
-            waterLevelObj.setName(name);
             waterLevelObj.setWaterLevel(Double.parseDouble(waterLevel));
             waterLevelObj.setOver(Double.parseDouble(over));
-            waterLevelObj.setStatus(status);
-            waterLevelObj.setCollectionDate(Date.valueOf(collectionDate));
+
         } catch (Exception e) {
             System.out.println(e);
         }
