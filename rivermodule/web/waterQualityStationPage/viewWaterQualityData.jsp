@@ -9,11 +9,13 @@
 <head>
     <title>查看水质信息</title>
     <!-- 2. jQuery导入，建议使用1.9以上的版本 -->
-    <script src="../js/jquery-3.2.1.min.js"></script>
+    <script src="../js/jquery-1.11.2.min.js"></script>
     <!-- 1. 导入CSS的全局样式 -->
     <link href="../css/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
      <link href="../css/costomizeAlertDialog/customizeAlert.css" rel="stylesheet">
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery-ui.js"></script>
+    <link rel="stylesheet" href="../css/jquery-ui.min.css"/>
     <script>
         $(function () //入口函数
         {
@@ -242,62 +244,85 @@
         //查看对应的水质信息的回调函数
         function viewWaterQualityInfo(stationName)
         {
-            var divStr='<table class="table table-bordered table-hover" id="waterQualityInfo_table">\n' +
-                '                <caption style="text-align: center;font-size: 24px">测站对应的水质信息</caption>\n' +
-                '                <tr class="success">\n' +
-                '                    <th style="text-align: center">所属测站</th>\n' +
-                '                    <th style="text-align: center">ph</th>\n' +
-                '                    <th style="text-align: center">溶解氧</th>\n' +
-                '                    <th style="text-align: center">氨氮</th>\n' +
-                '                    <th style="text-align: center">高猛酸钾指数</th>\n' +
-                '                    <th style="text-align: center">总有机碳</th>\n' +
-                '                    <th style="text-align: center">水质类别</th>\n' +
-                '                    <th style="text-align: center">日期</th>\n' +
-                '                    <th style="text-align: center">更新时间</th>\n' +
-                '                    <th style="text-align: center">操作</th>\n' +
-                '                </tr>';
+            $("#qualityDia").dialog("open");
             $.post("../ViewWaterQulityInfoServlet",{stationName:stationName},function (data)
             {
+
+
+                var strTab='<table class="table table-bordered table-hover" id="waterQualityTab">\n' +
+                    '                    <tr class="success">\n' +
+                    '                        <th>所属测站</th>\n' +
+                    '                        <th>PH</th>\n' +
+                    '                        <th>溶解氧</th>\n' +
+                    '                        <th>氨氮</th>\n' +
+                    '                        <th>高猛酸钾盐指数</th>\n' +
+                    '                        <th>总有机碳</th>\n' +
+                    '                        <th>水质类别</th>\n' +
+                    '                        <th>测量时间</th>\n' +
+                    '                        <th>操作</th>\n' +
+                    '                    </tr>';
                 for(var i=0;i<data.length;i++)
                 {
-                    var obj = data[i];
+                    var obj=data[i];
                     var id=obj.id;
-                    var belongStation = obj.belongStation;
-                    var ph = obj.ph;
-                    var oxygen=obj.oxygen;
-                    var nitrogen=obj.nitrogen;
-                    var permangan=obj.permangan;
-                    var orgacarbon=obj.orgacarbon;
-                    var phquality=obj.phquality;
-                    var date=obj.date;
-                    var time=obj.time;
+                    var belongStation=obj.belongStation;
+                    var pH=obj.pH;
+                    var dO=obj.dO;
+                    var nH4=obj.nH4;
+                    var cODMn=obj.cODMn;
+                    var tOC=obj.tOC;
+                    var level=obj.level;
+                    var dateTime=obj.dateTime;
+                    var date=new Date(dateTime);
+                    var dateStr=dateFormat("yyyy-MM-dd HH:mm",date)
 
-                    var item='  <tr class="info">\n' +
-                        '                    <td style="text-align: center">'+belongStation+'</td>\n' +
-                        '                    <td style="text-align: center">'+ph+'</td>\n' +
-                        '                    <td style="text-align: center">'+oxygen+'</td>\n' +
-                        '                    <td style="text-align: center">'+nitrogen+'</td>\n' +
-                        '                    <td style="text-align: center">'+permangan+'</td>\n' +
-                        '                    <td style="text-align: center">'+orgacarbon+'</td>\n' +
-                        '                    <td style="text-align: center">'+phquality+'</td>\n' +
-                        '                    <td style="text-align: center">'+date+'</td>\n' +
-                        '                    <td style="text-align: center">'+time+'</td>\n' +
-                        '                    <td style="text-align: center">' +
-                        '<input type="button" onclick="updateQuality('+id+',\''+belongStation+'\','+ph+','+oxygen+','+nitrogen+','+permangan+','+orgacarbon+',\''+phquality+'\',\''+date+'\',\''+time+'\');" class="btn btn-info btn-xs" value="修改">&nbsp;' +
-                        '<input type="button" class="btn btn-info btn-xs" value="删除" onclick="deleQuality('+id+');"></td>\n' +
-                        '\n' +
-                        '                </tr>';
+                    var tdStr;
+                    if(level==="III")
+                    {
+                        tdStr=' <td style="background-color: #03ff03">'+level+'</td>';
+                    }
+                    else if(level==="II")
+                    {
+                        tdStr=' <td style="background-color: #34c3f6">'+level+'</td>';
+                    }
+                    else if(level==="IV")
+                    {
+                        tdStr=' <td style="background-color: #faff19">'+level+'</td>';
+                    }
+                    else if(level==="I")
+                    {
+                        tdStr=' <td style="background-color: #c5ffff">'+level+'</td>';
+                    }
+                    else if(level==="V")
+                    {
+                        tdStr=' <td style="background-color: #ff9000">'+level+'</td>';
+                    }
+                    else if(level==="劣V")
+                    {
+                        tdStr=' <td style="background-color: #ff0000">'+level+'</td>';
+                    }
+                    else
+                    {
+                        tdStr=' <td style="background-color: #ffffff">'+level+'</td>';
+                    }
 
-                    divStr+=item;
+                    var strRow='<tr class="info">\n' +
+                        '                        <td>'+belongStation+'</td>\n' +
+                        '                        <td>'+pH+'</td>\n' +
+                        '                        <td>'+dO+'</td>\n' +
+                        '                        <td>'+nH4+'</td>\n' +
+                        '                        <td>'+cODMn+'</td>\n' +
+                        '                        <td>'+tOC+'</td>\n' +
+                        tdStr+
+                        '                        <td>'+dateStr+'</td>\n' +
+                        '                        <td><input onclick="updateQuality('+id+',\''+belongStation+'\','+pH+','+dO+','+nH4+','+cODMn+','+tOC+',\''+level+'\',\''+dateStr+'\');" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;<input type="button" class="btn btn-info btn-xs" value="删除"></td>\n' +
+                        '                    </tr>';
+                    strTab+=strRow;
                 }
 
-                var endStr=' </table>';
-                $("#details_div").html(divStr);
-
-
-
-
-
+                var strEnd='</table>';
+                strTab+=strEnd;
+                $("#qualityDia").html(strTab);
             });
 
         }
@@ -432,8 +457,11 @@
         }
 
         //更新水质信息按钮的回调函数
-        function updateQuality(id,belongStation,ph,oxygen,nitrogen,permangan,orgacarbon,phquality,date,time)
+        function updateQuality(id,belongStation,ph,oxygen,nitrogen,permangan,orgacarbon,level,datetime)
         {
+            var time=datetime+":00";
+            alert(time);
+            $("#qualityDia").dialog("close");
             var tableStr=' <table class="table table-bordered">\n' +
                 '                <caption style="text-align: center;font-size: 24px">修改水质信息</caption>\n' +
                 '                <tr class="success">\n' +
@@ -444,8 +472,7 @@
                 '                    <th>高锰酸钾指数</th>\n' +
                 '                    <th>总有机碳</th>\n' +
                 '                    <th>水质类别</th>\n' +
-                '                    <th>日期</th>\n' +
-                '                    <th>更新时间</th>\n' +
+                '                    <th>测量时间</th>\n' +
                 '                    <th>操作</th>\n' +
                 '                </tr>\n' +
                 '                <tr class="info">\n' +
@@ -455,9 +482,8 @@
                 '                    <td><input id="Nitrogen" type="number" step="0.01" min="0" style="width: 50px" value="'+nitrogen+'"></td>\n' +
                 '                    <td><input id="Permangan" type="number" step="0.01" min="0" style="width: 50px" value="'+permangan+'"></td>\n' +
                 '                    <td><input id="Orgacarbon" type="number" step="0.01" min="0" style="width: 50px" value="'+orgacarbon+'"></td>\n' +
-                '                    <td><input id="PhQuality" type="text" style="width: 50px" value="'+phquality+'"></td>\n' +
-                '                    <td><input id="Date" type="date" style="width: 145px" value="'+date+'"></td>\n' +
-                '                    <td><input id="Time" type="time" style="width: 100px;width: 120px" step="1" value="'+time+'"></td>\n' +
+                '                    <td><input id="PhQuality" type="text" style="width: 50px" value="'+level+'"></td>\n' +
+                '                    <td><input id="Time" type="datetime-local" style="width: 160px" step="1" value="'+time+'"></td>\n' +
                 '                    <td><input type="button" class="btn btn-xs btn-info" value="确认修改" onclick="confirmUpdateQuality('+id+')"></td>\n' +
                 '                </tr>\n' +
                 '            </table>';
@@ -566,7 +592,59 @@
 
         </div><%--单元格end--%>
 
+        <div id="qualityDia" title="水质信息">
+                <table class="table table-bordered table-hover" id="waterQualityTab">
+                    <tr class="success">
+                        <th>所属测站</th>
+                        <th>PH</th>
+                        <th>溶解氧</th>
+                        <th>氨氮</th>
+                        <th>高猛酸钾盐指数</th>
+                        <th>总有机碳</th>
+                        <th>水质类别</th>
+                        <th>测量时间</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr class="info">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><input type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;<input type="button" class="btn btn-info btn-xs" value="删除"></td>
+                    </tr>
+                </table>
+        </div>
         <div class="col-sm-6" id="details_div"><%--对应的水质信息--%>
+
+            <table class="table table-bordered table-hover">
+                <caption style="text-align: center;font-size: 24px">水质信息</caption>
+                <tr class="success">
+                    <th>所属测站</th>
+                    <th>PH</th>
+                    <th>溶解氧</th>
+                    <th>氨氮</th>
+                    <th>高猛酸钾盐指数</th>
+                    <th>总有机碳</th>
+                    <th>水质类别</th>
+                    <th>测量时间</th>
+                    <th>操作</th>
+                </tr>
+                <tr class="info">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;<input type="button" class="btn btn-info btn-xs" value="删除"></td>
+                </tr>
+            </table>
         </div>
 
     </div><%--row end--%>
@@ -583,5 +661,45 @@
 
 </div>
 <script src="../js/customizeAlertDialog/customizeAlert.js"></script>
+<script>
+    $("#qualityDia").dialog
+    (
+        {
+            closeText:"关闭",
+            height:500,
+            width:900,
+            modal: true,
+            autoOpen:false,//默认隐藏对话框
+
+        }
+
+
+    );
+
+
+    function dateFormat(fmt, date) //时间格式化
+    {
+        var ret;
+        var opt =
+            {
+                "y+": date.getFullYear().toString(),        // 年
+                "M+": (date.getMonth() + 1).toString(),     // 月
+                "d+": date.getDate().toString(),            // 日
+                "H+": date.getHours().toString(),           // 时
+                "m+": date.getMinutes().toString(),         // 分
+                "s+": date.getSeconds().toString()       // 秒
+                // 有其他格式化字符需求可以继续添加，必须转化成字符串
+            };
+        for (var k in opt)
+        {
+            ret = new RegExp("(" + k + ")").exec(fmt);
+            if (ret)
+            {
+                fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+            };
+        };
+        return fmt;
+    }
+</script>
 </body>
 </html>

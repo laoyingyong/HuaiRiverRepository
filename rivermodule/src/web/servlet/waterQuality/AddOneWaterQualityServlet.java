@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
 
 /**
  * @author laoyingyong
@@ -25,6 +26,7 @@ public class AddOneWaterQualityServlet extends HttpServlet
         WaterQualityService service=new WaterQualityServiceImpl();
         String belongStation = request.getParameter("belongStation");
         String dateTime = request.getParameter("date");
+        System.out.println(dateTime);
         String pH = request.getParameter("ph");
         String oxygen = request.getParameter("oxygen");
         String nitrogen = request.getParameter("nitrogen");
@@ -38,7 +40,7 @@ public class AddOneWaterQualityServlet extends HttpServlet
             if(belongStation!=null&&!belongStation.equals(""))
             waterQuality.setBelongStation(belongStation);
             if(dateTime!=null&&!dateTime.equals(""))
-            {waterQuality.setDateTime(dateTime);}
+            {waterQuality.setDateTime(Timestamp.valueOf(dateTime.replace("T"," ")+":00"));}
             if(pH!=null&&!pH.equals(""))
             {waterQuality.setpH(Double.parseDouble(pH));}
             if(oxygen!=null&&!oxygen.equals(""))

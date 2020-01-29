@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class AddWaterQualityServlet extends HttpServlet
                     System.out.println(level);
 
                     waterQuality.setBelongStation(siteName);
-                    waterQuality.setDateTime(dateTime);
+                    waterQuality.setDateTime(Timestamp.valueOf(dateTime+":00"));
                     if(!pH.equals("--"))
                         waterQuality.setpH(Double.parseDouble(pH));
                     if(!aDo.equals("--"))

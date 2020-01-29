@@ -3,8 +3,11 @@ package dao.impl;
 import dao.WaterQualityDao;
 import domain.WaterQuality;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import util.JDBCUtils;
+
+import java.util.List;
 
 /**
  * @author laoyingyong
@@ -34,6 +37,21 @@ public class WaterQualityDaoImpl implements WaterQualityDao
         {
             return true;
         }
+    }
+
+    @Override
+    public List<WaterQuality> findByName(String stationName)
+    {
+        List<WaterQuality> list=null;
+        try
+        {
+            String sql="select * from water_quality where belongStation=?";
+            list = template.query(sql, new BeanPropertyRowMapper<WaterQuality>(WaterQuality.class), stationName);
+        } catch (Exception e)
+        {
+            System.out.println(e);
+        }
+        return list;
     }
 
 

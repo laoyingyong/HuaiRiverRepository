@@ -2,6 +2,7 @@ package dao.impl;
 
 
 import domain.User;
+import org.springframework.dao.DataAccessException;
 import util.JDBCUtils;
 import dao.UserDao;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -153,5 +154,27 @@ public class UserDaoImpl implements UserDao {
         System.out.println(params);
 
         return template.query(sql,new BeanPropertyRowMapper<User>(User.class),params.toArray());
+    }
+
+    @Override
+    public boolean updateUserInfo(User user)
+    {
+        int update=0;
+        try {
+            String sql="update user set name = ?,gender = ? ,age = ? , address = ? , qq = ?, email = ? where id = ?";
+            update = template.update(sql, user.getName(), user.getGender(), user.getAge(),
+                    user.getAddress(), user.getQq(), user.getEmail(), user.getId());
+        } catch (Exception e)
+        {
+            System.out.println(e);
+        }
+        if(update!=0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

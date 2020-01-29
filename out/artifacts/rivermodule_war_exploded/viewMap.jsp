@@ -80,6 +80,11 @@
         }
 
 
+        .ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+        .ui-widget, .ui-widget input, .ui-widget select{font-size:14px;font-family:"微软雅黑";}
+        .ui-widget .ui-widget{font-size:14px; font-family:"微软雅黑"; color: #222222;}
+
+
 
     </style>
     <script>
@@ -114,7 +119,7 @@
                 <li role="presentation"><a href="javascript:viewCurrentWaterQuality();">实时水质数据</a></li>
                 <li role="presentation" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    热区功能 <span class="caret"></span>
+                    热区 <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="javascript:void(0)" id="showReg">显示热区</a></li>
@@ -196,6 +201,19 @@
 
         </div>
 
+
+        <div id="dialog-confirm" title="图形属性信息设置">
+            <label>信息类别:警戒区域</label><br />
+            <label>热区名称:</label>
+            <input type="text" value="" id="name" />
+            <br />
+            <label>所在城市:</label>
+            <input type="text"  id="city" />
+        </div>
+        <div id="dialog-delete" title="删除热区要素确认">
+            <label>是否删除该要素？</label><br />
+        </div>
+
         <div id="map"><%--地图容器--%>
 
             <!-- Popup -->
@@ -204,6 +222,9 @@
                 <div id="popup-content">
                 </div>
             </div>
+
+
+            <div id="mypopup"  ></div><%--热区的popup--%>
 
 
 
@@ -453,6 +474,7 @@
                 var obj=data[i];
                 var belongStation=obj.belongStation;
                 var dateTime=obj.dateTime;
+                var timeStr=dateFormat("YYYY-MM-dd HH:mm",new Date(dateTime));
                 var pH=obj.pH;
                 var dO=obj.dO;
                 var nH4=obj.nH4;
@@ -492,7 +514,7 @@
 
                 rowStr='<tr">\n' +
                     '                        <td>'+belongStation+'</td>\n' +
-                    '                        <td>'+dateTime+'</td>\n' +
+                    '                        <td>'+timeStr+'</td>\n' +
                     '                        <td>'+pH+'</td>\n' +
                     '                        <td>'+dO+'</td>\n' +
                     '                        <td>'+nH4+'</td>\n' +
@@ -566,7 +588,7 @@
                 var riverName=obj.riverName;
                 var stationName=obj.siteName;
                 var date=obj.collectionDate;
-                var dateTime=new Date(date).toLocaleString();
+                var dateTime=dateFormat("YYYY-MM-dd HH:mm",new Date(date));
                 var waterLevel=obj.waterLevel;
                 var flow=obj.flow;
                 var over=obj.over;
@@ -595,10 +617,74 @@
 
 
 
+    var flashFeature;  //热区要素
+    var preFeature;  //前一个热区要素
+    var flag = false; //是否是同一个要素的标识
+    var feature; //当前鼠标选中要素
+    var draw; //绘制对象
+    var geoStr = null; // 当前绘制图形的坐标串
+    var currentFeature = null; //当前绘制的几何要素
+
+    //绘制热区的样式
+    var flashStyle = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 102, 0, 0.2)'
+        }),
+        stroke: new ol.style.Stroke({
+            color: '#cc3300',
+            width: 2
+        }),
+        image: new ol.style.Circle({
+            radius: 7,
+            fill: new ol.style.Fill({
+                color: '#cc3300'
+            })
+        })
+    });
+    //矢量要素（区）的样式
+    var vectStyle = new ol.style.Style({
+        fill: new ol.style.Fill({
+            color: 'rgba(255, 255, 255, 0.5)'
+        }),
+        stroke: new ol.style.Stroke({
+            color: '#0099ff',
+            width: 2
+        }),
+        image: new ol.style.Circle({
+            radius: 7,
+            fill: new ol.style.Fill({
+                color: '#0099ff'
+            })
+        })
+    });
+
+    //矢量数据源
+    var vectSource = new ol.source.Vector({
+    });
+    //矢量图层
+    var vectLayer = new ol.layer.Vector({
+        source: vectSource,
+        style: vectStyle,
+        opacity: 0.5
+    });
+
+    //矢量数据源（热区）
+    var hotSpotsSource = new ol.source.Vector({
+    });
+    //矢量图层（热区）
+    var hotSpotsLayer = new ol.layer.Vector({
+        source: hotSpotsSource,
+        style: flashStyle,
+        opacity: 1
+    });
+
+
+
+
     //实例化地图对象加载地图
     var googleLayer = new ol.layer.GoogleMapLayer({layerType: ol.source.GoogleLayerType.TERRAIN});//Google图层
     var map = new ol.Map({
-        layers: [googleLayer],
+        layers: [googleLayer,vectLayer,hotSpotsLayer],
         target: 'map',
         view: new ol.View({
             center:ol.proj.fromLonLat([115.81, 32.89]),
@@ -617,6 +703,329 @@
         initialView.setCenter(initialCenter);
         initialView.setRotation(initialRotation);
     });
+
+
+
+
+
+
+    /**
+     * 在地图容器中创建一个Overlay
+     */
+    var element = document.getElementById('mypopup');
+    var mypopup = new ol.Overlay(/** @type {olx.OverlayOptions} */({
+        element: element,
+        positioning: 'bottom-center',
+        stopEvent: false
+    }));
+    map.addOverlay(mypopup);
+
+
+    /**
+     * 通过后台查询热区要素
+     */
+    function selectRegData()
+    {
+
+        $.post("../FindAllGraphServlet",function (data)
+        {
+            if(data.length===0)
+            {
+                alert("数据库中没有数据！");
+            }
+            preFeature = null;
+            flag = false;  //还原要素判断标识
+            hotSpotsSource.clear(); //清空绘图层数据源
+            hotSpotsLayer.setVisible(true); //显示绘图层
+            vectSource.clear(); //清空矢量图层数据源
+
+            for(var i=0;i<data.length;i++)
+            {
+
+
+                var obj = data[i];
+
+                var name = obj.name;
+                var id = obj.id;
+
+                var geome=obj.geometry;//坐标的字符串
+
+
+                var pointArray=geome.split(";")//先按分号进行切割
+                var coordinates = new Array();
+                coordinates[0] = new Array();
+                for(var j=0;j<pointArray.length;j++)
+                {
+                    coordinates[0][j] = pointArray[j].split(",");
+
+                }
+
+                //创建一个新的要素，并添加到数据源中
+                var feature = new ol.Feature({
+                    geometry: new ol.geom.Polygon(coordinates),
+                    name:name,
+                    id:id
+                });
+                vectSource.addFeature(feature);
+
+            }
+
+            map.on('pointermove', pointermoveFun,this); //添加鼠标移动事件监听，捕获要素时添加热区功能
+
+        });//ajax请求end
+
+    }
+
+
+    /**
+     * 鼠标移动事件监听处理函数（添加热区功能）
+     */
+    function pointermoveFun(e)
+    {
+        var pixel = map.getEventPixel(e.originalEvent);
+        var hit = map.hasFeatureAtPixel(pixel);
+        map.getTargetElement().style.cursor = hit ? 'pointer' : '';//改变鼠标光标状态
+
+        if (hit) {
+            //当前鼠标位置选中要素
+            var feature = map.forEachFeatureAtPixel(e.pixel,
+                function (feature, layer) {
+                    return feature;
+                });
+            //如果当前存在热区要素
+            if (feature) {
+                //显示热区图层
+                hotSpotsLayer.setVisible(true);
+                //控制添加热区要素的标识（默认为false）
+                if (preFeature != null) {
+                    if (preFeature === feature) {
+                        flag = true; //当前鼠标选中要素与前一个选中要素相同
+                    }
+                    else {
+
+                        flag = false; //当前鼠标选中要素不是前一个选中要素
+                        hotSpotsSource.removeFeature(preFeature); //将前一个热区要素移除
+                        preFeature = feature; //更新前一个热区要素对象
+                    }
+                }
+                //如果当前选中要素与之前选中要素不同，在热区绘制层添加当前要素
+                if (!flag) {
+                    $(element).popover('destroy'); //销毁popup
+                    flashFeature = feature; //当前热区要素
+                    flashFeature.setStyle(flashStyle); //设置要素样式
+                    hotSpotsSource.addFeature(flashFeature); //添加要素
+                    hotSpotsLayer.setVisible(true); //显示热区图层
+                    preFeature = flashFeature; //更新前一个热区要素对象
+                }
+                //弹出popup显示热区信息
+                mypopup.setPosition(e.coordinate); //设置popup的位置
+                $(element).popover({
+                    placement: 'top',
+                    html: true,
+                    content: feature.get('name')
+                });
+                $(element).css("width", "120px");
+                $(element).popover('show'); //显示popup
+
+            }
+            else {
+                hotSpotsSource.clear(); //清空热区图层数据源
+                flashFeature = null; //置空热区要素
+                $(element).popover('destroy'); //销毁popup
+                hotSpotsLayer.setVisible(false); //隐藏热区图层
+            }
+        }
+        else {
+            $(element).popover('destroy'); //销毁popup
+            hotSpotsLayer.setVisible(false); //隐藏热区图层
+        }
+    }
+
+
+    /**
+     * 绘制结束事件的回调函数，
+     * @param {ol.interaction.DrawEvent} evt 绘制结束事件
+     */
+    function drawEndCallBack(evt)
+    {
+        map.removeInteraction(draw); //移除绘制控件
+
+        var geoType = "Polygon"; //绘制图形类型
+        $("#dialog-confirm").dialog("open"); //打开属性信息设置对话框
+        currentFeature = evt.feature; //当前绘制的要素
+        var geo = currentFeature.getGeometry(); //获取要素的几何信息
+        var coordinates = geo.getCoordinates(); //获取几何坐标
+        //将几何坐标拼接为字符串
+        if (geoType == "Polygon")
+        {
+            geoStr = coordinates[0].join(";");
+        }
+        else
+        {
+            geoStr = coordinates.join(";");
+        }
+    }
+
+    /**
+     * 提交数据到后台保存
+     * @param {string} geoData 区几何数据
+     * @param {string} attData 区属性数据
+     */
+    function saveData( geoData, attData)
+    {
+        //通过ajax请求将数据传到后台文件进行保存处理
+        $.post("../AddGraphInfoServlet",{geo: geoData, att: attData},function (data)
+        {
+            alert(data.msg);
+
+        });
+
+    }
+
+    /**
+     * 将绘制的几何数据与对话框设置的属性数据提交到后台处理
+     */
+    function submitData()
+    {
+        var name = $("#name").val(); //名称
+        var city = $("#city").val(); //所属城市
+        var attData = name + "," + city;
+
+        if (geoStr != null)
+        {
+            saveData(geoStr, attData); //将数据提交到后台处理（保存到数据库中）
+            currentFeature = null;  //置空当前绘制的几何要素
+            geoStr = null; //置空当前绘制图形的geoStr
+        }
+        else
+        {
+            alert("未得到绘制图形几何信息！");
+            vector.getSource().removeFeature(currentFeature); //删除当前绘制图形
+        }
+    }
+
+    // 初始化绘制热区要素信息设置对话框
+    $("#dialog-confirm").dialog(
+        {
+            modal: true,  // 创建模式对话框
+            autoOpen: false, //默认隐藏对话框
+            //对话框打开时默认设置
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close", $(this).parent()).hide(); //隐藏默认的关闭按钮
+            },
+            //对话框功能按钮
+            buttons:
+             {
+                "提交": function ()
+                {
+                    submitData(); //提交几何与属性信息到后台处理
+                    $(this).dialog('close'); //关闭对话框
+                },
+                "取消": function ()
+                {
+                    $(this).dialog('close'); //关闭对话框
+                    vectLayer.getSource().removeFeature(currentFeature); //删除当前绘制图形
+                }
+            }
+        });
+
+
+    /**
+     * 鼠标单击事件监听处理函数
+     */
+    function singleclickFun(e)
+    {
+        var pixel = map.getEventPixel(e.originalEvent);
+        var hit = map.hasFeatureAtPixel(pixel);
+        map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+        //当前鼠标位置选中要素
+        var feature = map.forEachFeatureAtPixel(e.pixel,
+            function (feature, layer) {
+                return feature;
+            });
+        //如果当前存在热区要素
+        if (feature)
+        {
+            $("#dialog-delete").dialog("open"); //打开删除要素设置对话框
+            currentFeature = feature; //当前绘制的要素
+        }
+    }
+    /**
+     * 通过后台删除热区要素
+     */
+    function deleteData(feature)
+    {
+        var regID = feature.get('id'); //要素的ID
+
+        //通过ajax请求将数据传到后台文件进行删除处理
+        $.post("../DeleGraphServlet",{fID: regID},function (data)
+        {
+            alert(data.msg);
+            vectLayer.getSource().removeFeature(currentFeature); //删除当前选中热区要素
+
+        });
+
+    }
+
+    // 初始化删除要素信息设置对话框
+    $("#dialog-delete").dialog(
+        {
+            modal: true,  // 创建模式对话框
+            autoOpen: false, //默认隐藏对话框
+            //对话框打开时默认设置
+            open: function (event, ui) {
+                $(".ui-dialog-titlebar-close", $(this).parent()).hide(); //隐藏默认的关闭按钮
+            },
+            //对话框功能按钮
+            buttons: {
+                "删除": function () {
+                    deleteData(currentFeature);  //通过后台删除数据库中的热区要素数据并同时删除前端绘图
+                    $(this).dialog('close'); //关闭对话框
+                },
+                "取消": function () {
+                    $(this).dialog('close'); //关闭对话框
+
+                }
+            }
+        });
+
+
+    /**
+     * 【显示热区】功能按钮处理函数
+     */
+    document.getElementById('showReg').onclick = function () {
+        map.un('pointermove', pointermoveFun, this); //移除鼠标移动事件监听
+        selectRegData(); //通过后台查询热区要素显示并实现热区功能
+    };
+
+    /**
+     * 【绘制热区】功能按钮处理函数
+     */
+    document.getElementById('drawReg').onclick = function () {
+        map.removeInteraction(draw); //移除绘制控件
+        map.un('singleclick', singleclickFun, this); //移除鼠标单击事件监听
+
+        //实例化交互绘制类对象并添加到地图容器中
+        draw = new ol.interaction.Draw({
+            source: vectLayer.getSource(), //绘制层数据源
+            type: /** @type {ol.geom.GeometryType} */"Polygon"  //几何图形类型
+        });
+        map.addInteraction(draw);
+        //添加绘制结束事件监听，在绘制结束后保存信息到数据库
+        draw.on('drawend', drawEndCallBack, this);
+    };
+
+    /**
+     * 【删除热区】功能按钮处理函数
+     */
+    document.getElementById('deleteReg').onclick = function () {
+        map.un('pointermove', pointermoveFun, this); //移除鼠标移动事件监听
+
+        map.un('singleclick', singleclickFun, this); //移除鼠标单击事件监听
+        map.on('singleclick', singleclickFun, this); //添加鼠标单击事件监听
+    };
+
+
 
 
 
@@ -701,63 +1110,29 @@
     );
 
 
-
-
-
-   /* //地图视图的初始参数
-    var firstview = map.getView();
-    var firstzoom = firstview.getZoom();
-    var firstcenter = firstview.getCenter();
-    var firstrotation = firstview.getRotation();
-
-
-    $("#reset").click(function ()
+    function dateFormat(fmt, date) //时间格式化
     {
-        firstview.setCenter(firstcenter); //初始中心点
-        firstview.setRotation(firstrotation); //初始旋转角度
-        firstview.setZoom(firstzoom); //初始缩放级数
-    });
-*/
-
-
-    //根据图层类型加载Google地图
-    function loadGoogleMap(mapType)
-    {
-        switch (mapType)
+        var ret;
+        var opt =
+            {
+                "Y+": date.getFullYear().toString(),        // 年
+                "M+": (date.getMonth() + 1).toString(),     // 月
+                "d+": date.getDate().toString(),            // 日
+                "H+": date.getHours().toString(),           // 时
+                "m+": date.getMinutes().toString(),         // 分
+                "s+": date.getSeconds().toString()       // 秒
+                // 有其他格式化字符需求可以继续添加，必须转化成字符串
+            };
+        for (var k in opt)
         {
-            case "terrain": //地形
-                googleLayer = new ol.layer.GoogleMapLayer({
-                    layerType: ol.source.GoogleLayerType.TERRAIN
-                });
-                break;
-            case "vector": //矢量
-                googleLayer = new ol.layer.GoogleMapLayer({
-                    layerType: ol.source.GoogleLayerType.VEC
-                });
-                break;
-            case "raster": //影像
-                googleLayer = new ol.layer.GoogleMapLayer({
-                    layerType: ol.source.GoogleLayerType.RASTER
-                });
-                break;
-            case "road": //道路
-                googleLayer = new ol.layer.GoogleMapLayer({
-                    layerType: ol.source.GoogleLayerType.ROAD
-                });
-            default:
-        }
-        map.addLayer(googleLayer); //添加Google地图图层
+            ret = new RegExp("(" + k + ")").exec(fmt);
+            if (ret)
+            {
+                fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+            };
+        };
+        return fmt;
     }
-
-    //初始化图层切换控件
-    function onlayerSwitcherBtn()
-    {
-        var layerType = $("#layerSwitcherBtn option:selected").val();
-        map.removeLayer(googleLayer); //移除Google图层
-        loadGoogleMap(layerType); //根据图层类型重新加载Google图层
-    }
-
-
 
 </script>
 </body>

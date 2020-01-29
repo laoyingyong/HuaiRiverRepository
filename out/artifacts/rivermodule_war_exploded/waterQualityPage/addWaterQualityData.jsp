@@ -173,7 +173,7 @@
 
                             </select>
                         </td>
-                        <td><input  style="width: 180px"  name="date" id="date" placeholder="2019-12-11 12:00"></td>
+                        <td><input type="datetime-local" style="width: 180px"  name="date" id="date" placeholder="2019-12-11 12:00"></td>
                     </tr>
                     <tr class="info">
                         <td colspan="4" style="text-align: center"><input  onclick="addOneWaterQuality();" type="button" value="添加" class="btn btn-info"></td>

@@ -42,4 +42,6 @@ public interface UserDao {
      * @return
      */
     List<User> findByPage(int start, int rows, Map<String, String[]> condition);
+
+    boolean updateUserInfo(User user);
 }

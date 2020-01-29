@@ -30,7 +30,10 @@
 
         function addWaterLevel()
         {
-            $.post();
+            $.post("../AddManyWaterLevelServlet",function (data)
+            {
+                alert(data.msg);
+            });
 
         }
 

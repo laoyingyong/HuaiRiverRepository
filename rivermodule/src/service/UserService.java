@@ -70,4 +70,7 @@ public interface UserService {
      * @return
      */
     PageBean<User> findUserByPage(String currentPage, String rows, Map<String, String[]> condition);
+
+
+    boolean updateUserInfo(User user);
 }

@@ -15,4 +15,5 @@ public interface WaterQualityService
     public abstract int add(List<WaterQuality> waterQualityList);
 
     public abstract boolean addOne(WaterQuality waterQuality);
+    public abstract List<WaterQuality> findByName(String stationName);
 }

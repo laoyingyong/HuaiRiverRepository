@@ -1,5 +1,7 @@
 package domain;
 
+import java.sql.Timestamp;
+
 /**
  * @author laoyingyong
  * @date: 2020-01-19 15:24
@@ -8,14 +10,13 @@ public class WaterQuality
 {
     private Integer id;
     private String belongStation;
-    private String dateTime;
+    private Timestamp dateTime;
     private Double pH;
     private Double dO;
     private Double nH4;
     private Double cODMn;
     private Double tOC;
     private String level;
-
 
     public Integer getId() {
         return id;
@@ -33,11 +34,11 @@ public class WaterQuality
         this.belongStation = belongStation;
     }
 
-    public String getDateTime() {
+    public Timestamp getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Timestamp dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -94,7 +95,7 @@ public class WaterQuality
         return "WaterQuality{" +
                 "id=" + id +
                 ", belongStation='" + belongStation + '\'' +
-                ", dateTime='" + dateTime + '\'' +
+                ", dateTime=" + dateTime +
                 ", pH=" + pH +
                 ", dO=" + dO +
                 ", nH4=" + nH4 +

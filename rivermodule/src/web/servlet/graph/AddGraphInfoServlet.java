@@ -18,10 +18,6 @@ public class AddGraphInfoServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        String type = request.getParameter("type");//几何类型
-        System.out.println(type);
-        String table = request.getParameter("table");
-        System.out.println(table);
         String geo = request.getParameter("geo");
         System.out.println("地理坐标："+geo);
         String att = request.getParameter("att");

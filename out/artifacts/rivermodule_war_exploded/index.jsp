@@ -55,7 +55,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><p class="navbar-text">当前时间：<span id="time_sp" style="color:dodgerblue"></span></p></li>
                     <c:if test="${user!=null}">
-                        <li><p class="navbar-text"><span>当前用户：</span>${user.username}</p></li>
+                        <li><p class="navbar-text"><span>当前用户：</span><a target="myframe" href="../userPage/currentUserInfo.jsp">${user.name}</a></p></li>
                     </c:if>
                     <c:if test="${user==null}">
                         <li><p class="navbar-text"><span>当前用户：</span>未登录</p></li>
@@ -128,8 +128,8 @@
 
             </div>
 
-            <div class="col-sm-10">
-                <iframe style="width: 100%;height: 700px;border: 0px" name="myframe"></iframe>
+            <div class="col-sm-10" style="padding-left: 0px;padding-right: 0px">
+                <iframe style="width: 100%;height: 700px;border: 0px" name="myframe" src="welcom.jsp"></iframe>
 
             </div>
 
@@ -153,7 +153,7 @@
     function getCurrentTime()
     {
         var time=new Date();
-        var s = time.toLocaleString();
+        var s=dateFormat("yyyy年MM月dd日 HH时mm分ss秒",time);
         return s;
     }
     function f()
@@ -161,6 +161,31 @@
         $("#time_sp").html(getCurrentTime());
     }
     window.setInterval(f,1000);
+
+
+    function dateFormat(fmt, date) //时间格式化
+    {
+        var ret;
+        var opt =
+         {
+            "y+": date.getFullYear().toString(),        // 年
+            "M+": (date.getMonth() + 1).toString(),     // 月
+            "d+": date.getDate().toString(),            // 日
+            "H+": date.getHours().toString(),           // 时
+            "m+": date.getMinutes().toString(),         // 分
+            "s+": date.getSeconds().toString()       // 秒
+            // 有其他格式化字符需求可以继续添加，必须转化成字符串
+        };
+        for (var k in opt)
+        {
+            ret = new RegExp("(" + k + ")").exec(fmt);
+            if (ret)
+            {
+                fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+            };
+        };
+        return fmt;
+    }
 
 </script>
 

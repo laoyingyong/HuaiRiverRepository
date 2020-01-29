@@ -60,9 +60,9 @@ public class AddManyWaterLevelServlet extends HttpServlet
                 System.out.println(e);
             }
             list.add(waterLevel);
-            i = service.addManyLevel(list);
 
         }
+        i = service.addManyLevel(list);
         System.out.println(list);
         ObjectMapper mapper=new ObjectMapper();
         ResultInfo info=new ResultInfo();

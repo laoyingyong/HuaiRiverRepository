@@ -100,4 +100,11 @@ public class UserServiceImpl implements UserService {
 
         return pb;
     }
+
+    @Override
+    public boolean updateUserInfo(User user)
+    {
+        boolean b = dao.updateUserInfo(user);
+        return b;
+    }
 }

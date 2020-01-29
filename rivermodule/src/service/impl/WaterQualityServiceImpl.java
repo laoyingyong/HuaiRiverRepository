@@ -38,5 +38,12 @@ public class WaterQualityServiceImpl implements WaterQualityService
         return add;
     }
 
+    @Override
+    public List<WaterQuality> findByName(String stationName)
+    {
+        List<WaterQuality>  list= dao.findByName(stationName);
+        return list;
+    }
+
 
 }

@@ -18,10 +18,7 @@ public class DeleGraphServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        String type = request.getParameter("type");
-        System.out.println(type);
-        String table = request.getParameter("table");
-        System.out.println(table);
+
         String id = request.getParameter("fID");
         System.out.println("id是："+id);
 

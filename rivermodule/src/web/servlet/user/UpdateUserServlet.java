@@ -39,7 +39,9 @@ public class UpdateUserServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath()+"/userListServlet");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        
         this.doPost(request, response);
     }
 }
