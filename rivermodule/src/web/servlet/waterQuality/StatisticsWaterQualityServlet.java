@@ -1,9 +1,9 @@
-package web.servlet.waterLevel;
+package web.servlet.waterQuality;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import domain.ResultInfo;
-import service.WaterLevelService;
-import service.impl.WaterLevelServiceImpl;
+import domain.Statistics;
+import service.WaterQualityService;
+import service.impl.WaterQualityServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,28 +12,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/DeleteInfoServlet")
-public class DeleteInfoServlet extends HttpServlet
+/**
+ * @author laoyingyong
+ * @date: 2020-01-30 13:03
+ */
+@WebServlet("/StatisticsWaterQualityServlet")
+public class StatisticsWaterQualityServlet extends HttpServlet
 {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        String id = request.getParameter("id");
-        WaterLevelService service=new WaterLevelServiceImpl();
-        boolean b = service.deleteInfo(Integer.parseInt(id));
-
-        ResultInfo info=new ResultInfo();
-        if(b)
-        {
-            info.setMsg("删除成功！");
-        }
-        else
-        {
-            info.setMsg("删除失败！");
-        }
-
+        request.setCharacterEncoding("utf-8");
+        String stationName = request.getParameter("stationName");
+        WaterQualityService service=new WaterQualityServiceImpl();
+        Statistics count = service.count(stationName);
         ObjectMapper mapper=new ObjectMapper();
         response.setContentType("application/json;charset=utf-8");
-        mapper.writeValue(response.getOutputStream(),info);
+        mapper.writeValue(response.getOutputStream(),count);
 
     }
 

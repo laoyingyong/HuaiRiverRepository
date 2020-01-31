@@ -2,6 +2,7 @@ package service;
 
 import dao.WaterQualityDao;
 import dao.impl.WaterQualityDaoImpl;
+import domain.Statistics;
 import domain.WaterQuality;
 
 import java.util.List;
@@ -16,4 +17,8 @@ public interface WaterQualityService
 
     public abstract boolean addOne(WaterQuality waterQuality);
     public abstract List<WaterQuality> findByName(String stationName);
+    public abstract boolean update(WaterQuality waterQuality);
+    public abstract boolean del(int id);
+    public abstract Statistics count(String stationName);
+    public abstract WaterQuality findNewestRecord(String stationName);
 }

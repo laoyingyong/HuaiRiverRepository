@@ -164,12 +164,12 @@
                         <td>
                             <select id="qualitySelect" onchange="getQualityLevel();">
                                 <option>--请选择--</option>
-                                <option value="Ⅰ">Ⅰ</option>
-                                <option value="Ⅱ">Ⅱ</option>
-                                <option value="Ⅲ">Ⅲ</option>
-                                <option value="Ⅳ">Ⅳ</option>
-                                <option value="Ⅴ">Ⅴ</option>
-                                <option value="劣Ⅴ">劣Ⅴ</option>
+                                <option value="I">Ⅰ</option>
+                                <option value="II">Ⅱ</option>
+                                <option value="III">Ⅲ</option>
+                                <option value="IV">Ⅳ</option>
+                                <option value="V">Ⅴ</option>
+                                <option value="劣V">劣Ⅴ</option>
 
                             </select>
                         </td>

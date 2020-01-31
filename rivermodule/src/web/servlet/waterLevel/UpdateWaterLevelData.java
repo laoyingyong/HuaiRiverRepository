@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Map;
 
 @WebServlet("/UpdateWaterLevelData")
@@ -23,9 +24,10 @@ public class UpdateWaterLevelData extends HttpServlet
         request.setCharacterEncoding("utf-8");
         String id = request.getParameter("id");
         String waterLevel = request.getParameter("shuiwei");
-        String name = request.getParameter("name");
+        String riverName = request.getParameter("riverName");
+        String siteName = request.getParameter("siteName");
         String over = request.getParameter("chaoguo");
-        String status = request.getParameter("zhuangtai");
+        String flow = request.getParameter("flow");
         String collectionDate = request.getParameter("caijiriqi");
 
 
@@ -34,7 +36,11 @@ public class UpdateWaterLevelData extends HttpServlet
         try {
             waterLevelObj.setId(Integer.parseInt(id));
             waterLevelObj.setWaterLevel(Double.parseDouble(waterLevel));
+            waterLevelObj.setRiverName(riverName);
+            waterLevelObj.setSiteName(siteName);
+            waterLevelObj.setFlow(Double.parseDouble(flow));
             waterLevelObj.setOver(Double.parseDouble(over));
+            waterLevelObj.setCollectionDate(Timestamp.valueOf(collectionDate+":00"));
 
         } catch (Exception e) {
             System.out.println(e);

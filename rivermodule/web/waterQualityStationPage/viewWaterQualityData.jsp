@@ -15,6 +15,7 @@
      <link href="../css/costomizeAlertDialog/customizeAlert.css" rel="stylesheet">
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/jquery-ui.js"></script>
+    <script src="../js/echarts.min.js"></script>
     <link rel="stylesheet" href="../css/jquery-ui.min.css"/>
     <script>
         $(function () //入口函数
@@ -97,9 +98,10 @@
                         '                    <td style="text-align: center">'+id+'</td>\n' +
                         '                    <td style="text-align: center">'+stationName+'</td>\n' +
                         '                    <td style="text-align: center">\n' +
-                        '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
-                        '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
-                        '                        <input onclick="update('+id+',\''+stationName+'\','+longitude+','+latitude+',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;\n' +
+                        '                        <input onclick="viewStatistics(\''+stationName+'\')" type="button" class="btn btn-info btn-xs" value="查看水质统计图">&nbsp;&nbsp;\n'+
+                        '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;\n' +
+                        '                        <input onclick="update('+id+',\''+stationName+'\','+longitude+','+latitude+',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;\n' +
                         '                        <input onclick="dele('+id+');" type="button" class="btn btn-info btn-xs" value="删除">\n' +
                         '                    </td>\n' +
                         '                </tr>';
@@ -212,9 +214,10 @@
                         '                    <td style="text-align: center">'+id+'</td>\n' +
                         '                    <td style="text-align: center">'+stationName+'</td>\n' +
                         '                    <td style="text-align: center">\n' +
-                        '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
-                        '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
-                        '                        <input onclick="update('+id+',\''+stationName+'\','+longitude+','+latitude+',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;\n' +
+                        '                        <input onclick="viewStatistics(\''+stationName+'\')" type="button" class="btn btn-info btn-xs" value="查看水质统计图">&nbsp;&nbsp;\n'+
+                        '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;\n' +
+                        '                        <input onclick="update('+id+',\''+stationName+'\','+longitude+','+latitude+',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;\n' +
                         '                        <input onclick="dele('+id+');" type="button" class="btn btn-info btn-xs" value="删除">\n' +
                         '                    </td>\n' +
                         '                </tr>';
@@ -248,6 +251,10 @@
             $.post("../ViewWaterQulityInfoServlet",{stationName:stationName},function (data)
             {
 
+                if(data=="")
+                {
+                    alert("数据库尚未有该站点的监测数据！");
+                }
 
                 var strTab='<table class="table table-bordered table-hover" id="waterQualityTab">\n' +
                     '                    <tr class="success">\n' +
@@ -315,14 +322,15 @@
                         '                        <td>'+tOC+'</td>\n' +
                         tdStr+
                         '                        <td>'+dateStr+'</td>\n' +
-                        '                        <td><input onclick="updateQuality('+id+',\''+belongStation+'\','+pH+','+dO+','+nH4+','+cODMn+','+tOC+',\''+level+'\',\''+dateStr+'\');" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;<input type="button" class="btn btn-info btn-xs" value="删除"></td>\n' +
+                        '                        <td><input onclick="updateQuality('+id+',\''+belongStation+'\','+pH+','+dO+','+nH4+','+cODMn+','+tOC+',\''+level+'\',\''+dateStr+'\');" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;' +
+                        '<input type="button" class="btn btn-info btn-xs" value="删除" onclick="deleQuality('+id+');"></td>\n' +
                         '                    </tr>';
                     strTab+=strRow;
                 }
 
                 var strEnd='</table>';
                 strTab+=strEnd;
-                $("#qualityDia").html(strTab);
+                $("#waterQualityDiv").html(strTab);
             });
 
         }
@@ -364,9 +372,10 @@
                         '                    <td style="text-align: center">'+id+'</td>\n' +
                         '                    <td style="text-align: center">'+stationName+'</td>\n' +
                         '                    <td style="text-align: center">\n' +
-                        '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
-                        '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
-                        '                        <input onclick="update('+id+',\''+stationName+'\','+longitude+','+latitude+',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;\n' +
+                        '                        <input onclick="viewWaterQualityInfo(\''+stationName+'\');" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;\n' +
+                        '                        <input onclick="viewStatistics(\''+stationName+'\')" type="button" class="btn btn-info btn-xs" value="查看水质统计图">&nbsp;&nbsp;\n'+
+                        '                        <input onclick="intro('+id+');" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;\n' +
+                        '                        <input onclick="update('+id+',\''+stationName+'\','+longitude+','+latitude+',\''+section+'\',\''+introduction+'\')" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;\n' +
                         '                        <input onclick="dele('+id+');" type="button" class="btn btn-info btn-xs" value="删除">\n' +
                         '                    </td>\n' +
                         '                </tr>';
@@ -459,9 +468,6 @@
         //更新水质信息按钮的回调函数
         function updateQuality(id,belongStation,ph,oxygen,nitrogen,permangan,orgacarbon,level,datetime)
         {
-            var time=datetime+":00";
-            alert(time);
-            $("#qualityDia").dialog("close");
             var tableStr=' <table class="table table-bordered">\n' +
                 '                <caption style="text-align: center;font-size: 24px">修改水质信息</caption>\n' +
                 '                <tr class="success">\n' +
@@ -483,11 +489,11 @@
                 '                    <td><input id="Permangan" type="number" step="0.01" min="0" style="width: 50px" value="'+permangan+'"></td>\n' +
                 '                    <td><input id="Orgacarbon" type="number" step="0.01" min="0" style="width: 50px" value="'+orgacarbon+'"></td>\n' +
                 '                    <td><input id="PhQuality" type="text" style="width: 50px" value="'+level+'"></td>\n' +
-                '                    <td><input id="Time" type="datetime-local" style="width: 160px" step="1" value="'+time+'"></td>\n' +
+                '                    <td><input id="Time" type="text" style="width: 160px"  value="'+datetime+'"></td>\n' +
                 '                    <td><input type="button" class="btn btn-xs btn-info" value="确认修改" onclick="confirmUpdateQuality('+id+')"></td>\n' +
                 '                </tr>\n' +
                 '            </table>';
-            $("#update_div").html(tableStr);
+            $("#waterQualityDiv").html(tableStr);
 
         }
 
@@ -501,12 +507,11 @@
             var permangan=$("#Permangan").val();
             var orgacarbon=$("#Orgacarbon").val();
             var phquality=$("#PhQuality").val();
-            var date=$("#Date").val();
             var time=$("#Time").val();
 
             $.post("../UpdateWaterQualityInfoServlet",
                 {id:id,belongStation:belongStation,ph:ph,oxygen:oxygen,nitrogen:nitrogen,
-                    permangan:permangan,orgacarbon:orgacarbon,phquality:phquality,date:date,time:time},function (data)
+                    permangan:permangan,orgacarbon:orgacarbon,phquality:phquality,time:time},function (data)
                 {
                     alert(data.msg);
                     window.location.href="viewWaterQualityData.jsp";
@@ -549,7 +554,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-7">
             <table class="table table-bordered table-hover" id="waterQuality_table">
                 <caption style="text-align: center;font-size: 24px">测站一览</caption>
                 <tr class="success">
@@ -562,6 +567,7 @@
                     <td style="text-align: center">监测站名称</td>
                     <td style="text-align: center">
                         <input onclick="viewWaterQualityInfo(stationName);" type="button" class="btn btn-info btn-xs" value="查看监测数据">&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="button" class="btn btn-info btn-xs" value="查看水质统计图">&nbsp;&nbsp;&nbsp;&nbsp;
                         <input onclick="intro(id);" type="button" class="btn btn-info btn-xs" value="查看简介">&nbsp;&nbsp;&nbsp;&nbsp;
                         <input onclick="update(id)" type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;
                         <input onclick="dele(id);" type="button" class="btn btn-info btn-xs" value="删除">
@@ -591,8 +597,15 @@
             </nav>
 
         </div><%--单元格end--%>
+        <div class="col-sm-5">
+            <div id="main" style="width: 400px;height: 300px;">
+
+            </div>
+
+        </div>
 
         <div id="qualityDia" title="水质信息">
+            <div id="waterQualityDiv">
                 <table class="table table-bordered table-hover" id="waterQualityTab">
                     <tr class="success">
                         <th>所属测站</th>
@@ -617,34 +630,9 @@
                         <td><input type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;<input type="button" class="btn btn-info btn-xs" value="删除"></td>
                     </tr>
                 </table>
-        </div>
-        <div class="col-sm-6" id="details_div"><%--对应的水质信息--%>
 
-            <table class="table table-bordered table-hover">
-                <caption style="text-align: center;font-size: 24px">水质信息</caption>
-                <tr class="success">
-                    <th>所属测站</th>
-                    <th>PH</th>
-                    <th>溶解氧</th>
-                    <th>氨氮</th>
-                    <th>高猛酸钾盐指数</th>
-                    <th>总有机碳</th>
-                    <th>水质类别</th>
-                    <th>测量时间</th>
-                    <th>操作</th>
-                </tr>
-                <tr class="info">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><input type="button" class="btn btn-info btn-xs" value="修改">&nbsp;&nbsp;<input type="button" class="btn btn-info btn-xs" value="删除"></td>
-                </tr>
-            </table>
+            </div>
+
         </div>
 
     </div><%--row end--%>
@@ -662,6 +650,63 @@
 </div>
 <script src="../js/customizeAlertDialog/customizeAlert.js"></script>
 <script>
+
+    function viewStatistics(stationName)
+    {
+        //$("#main").css("background-color","white");
+
+        $.post("../StatisticsWaterQualityServlet",{stationName:stationName},function (data)
+        {
+            var a=data.a;
+            var b=data.b;
+            var c=data.c;
+            var d=data.d;
+            var e=data.e;
+            var f=data.f;
+            var g=data.g;
+
+            if(a==0&&b==0&&c==0&&d==0&&e==0&&f==0)
+            {
+                alert("数据库中尚未有该站点的数据！");
+            }
+
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('main'));
+                myChart.setOption({
+                    tooltip: {},
+                    title: {
+                        text: stationName,
+                        left: 'left',//主副标题的水平位置
+                        subtext:"历史水质统计图",
+                        subtextStyle: {//副标题的属性
+                            color: '#000000',
+                            // 同主标题
+                        },
+
+                    },
+                    series : [
+                        {
+                            color: ['#c5ffff','#34c3f6', '#03ff03', '#faff19', '#ff9000','#ff0000'],
+                            name: '水质类别',
+                            type: 'pie',    // 设置图表类型为饼图
+                            radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                            data:[          // 数据数组，name 为数据项名称，value 为数据项值
+                                {value:a, name:'I类水质'},
+                                {value:b, name:'II类水质'},
+                                {value:c, name:'III类水质'},
+                                {value:d, name:'IV类水质'},
+                                {value:e, name:'V类水质'},
+                                {value:f, name:'劣V类水质'}
+                            ]
+                        }
+                    ]
+                })
+
+        });
+
+
+    }
+
     $("#qualityDia").dialog
     (
         {
@@ -669,7 +714,8 @@
             height:500,
             width:900,
             modal: true,
-            autoOpen:false,//默认隐藏对话框
+            autoOpen:false//默认隐藏对话框
+
 
         }
 
@@ -700,6 +746,10 @@
         };
         return fmt;
     }
+
+
+
+
 </script>
 </body>
 </html>

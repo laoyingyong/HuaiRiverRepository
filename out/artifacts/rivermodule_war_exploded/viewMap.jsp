@@ -26,7 +26,7 @@
         #reset{
             left: 10px;
             top: 150px;
-            position: fixed;
+            position: absolute;
             z-index: 2000;
         }
 
@@ -80,7 +80,6 @@
         }
 
 
-        .ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
         .ui-widget, .ui-widget input, .ui-widget select{font-size:14px;font-family:"微软雅黑";}
         .ui-widget .ui-widget{font-size:14px; font-family:"微软雅黑"; color: #222222;}
 
@@ -90,20 +89,100 @@
     <script>
         $(function ()
         {
-            $.post("FindAlllStationServlet",function (data)
+            $(".ol-zoom-in").attr("title","放大");
+            $(".ol-zoom-out").attr("title","缩小");
+            $(".ol-full-screen-false").attr("title","全屏显示");
+            $("button[title='复位']").mouseover(function ()
             {
-                for(var i=0;i<data.length;i++)
-                {
-                    var obj = data[i];
-                    var stationName=obj.stationName;
-                    $("#waterQualitySelect").append('<option value="'+stationName+'">'+stationName+'</option>');
+                $(this).css("background-color","#4873A6");
 
-                }
+            });
+            $("button[title='复位']").mouseout(function ()
+            {
+                $(this).css("background-color","#7897BC");
 
             });
 
         });
 
+        //根据监测站名称查看最新的一条水质数据
+        function viewNewest(stationName)
+        {
+            $.post("/FindNewestServlet",{stationName:stationName},function (data)
+            {
+                var belongStation=data.belongStation;
+                var dateTime=data.dateTime;
+                var dateStr=dateFormat("YYYY-MM-dd HH:mm",new Date(dateTime));
+                var pH=data.pH;
+                var dO=data.dO;
+                var nH4=data.nH4;
+                var cODMn=data.cODMn;
+                var tOC=data.tOC;
+                var level=data.level;
+
+
+
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('main'));
+
+                // 指定图表的配置项和数据
+                var option = {
+                    backgroundColor: '#12cf96',
+                    title: {
+                        x:'center',
+                        text: belongStation+"最新水质数据",
+                        subtext:dateStr+"\t"+"水质类别："+level,
+                        subtextStyle:{
+
+                            color: '#000000'
+                        }
+                    },
+                    tooltip: {},
+                    legend:
+                        {
+                            data:[]
+                        },
+                    xAxis: {
+                        data: ["溶解氧","高猛酸钾","氨氮","总有机碳"]
+                    },
+                    yAxis: {
+                        name:"数值单位:mg/L",
+                        min:0,
+                        max:20
+
+                    },
+                    series: [{
+                        name: '数值',
+                        type: 'bar',
+                        data: [dO, cODMn, nH4, tOC],
+                        //配置样式
+                        itemStyle: {
+                            //通常情况下：
+                            normal:{
+                                //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+                                color: function (params){
+                                    var colorList = ['rgb(164,205,238)','rgb(42,170,227)','rgb(25,46,94)','rgb(195,229,235)'];
+                                    return colorList[params.dataIndex];
+                                }
+                            },
+                            //鼠标悬停时：
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+                    }]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+
+
+            });
+
+
+        }
 
 
 
@@ -214,9 +293,9 @@
             <label>是否删除该要素？</label><br />
         </div>
 
-        <div id="map"><%--地图容器--%>
+        <div id="map" style="height: 650px"><%--地图容器--%>
 
-            <!-- Popup -->
+            <!-- 监测站Popup -->
             <div id="popup" class="ol-popup" >
                 <a href="#" id="popup-closer" class="ol-popup-closer"></a>
                 <div id="popup-content">
@@ -228,9 +307,9 @@
 
 
 
-            <span id="reset"><button class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="right" title="复位" style="background-color: #7897BC"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></span>
-
-
+            <span id="reset"><button class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="right" title="复位" style="background-color: #7897BC;height:23px;width:23px"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></span>
+            <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+            <div id="main" style="width: 500px;height:250px;right: 0px;bottom: 0px;position: absolute;z-index: 2000"></div>
 
         </div><%--地图容器end--%>
 
@@ -349,7 +428,8 @@
              * 动态创建popup的具体内容
              * @param {string} title
              */
-            function addFeatrueInfo(info) {
+            function addFeatrueInfo(info)
+            {
                 //新增a元素
                 var elementA = document.createElement('a');
                 elementA.className = "markerInfo";
@@ -372,10 +452,13 @@
             /**
              * 动态设置元素文本内容（兼容）
              */
-            function setInnerText(element, text) {
-                if (typeof element.textContent == "string") {
+            function setInnerText(element, text)
+            {
+                if (typeof element.textContent == "string")
+                {
                     element.textContent = text;
-                } else {
+                } else
+                {
                     element.innerText = text;
                 }
             }
@@ -383,14 +466,20 @@
             /**
              * 为map添加点击事件监听，渲染弹出popup
              */
-            map.on('click', function (evt) {
+            map.on('click', function (evt)
+            {
                 var coordinate = evt.coordinate;
                 //判断当前单击处是否有要素，捕获到要素时弹出popup
                 var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) { return feature; });
-                if (feature) {
+                if (feature)
+                {
                     content.innerHTML = ''; //清空popup的内容容器
                     addFeatrueInfo(featuerInfo); //在popup中加载当前要素的具体信息
-                    if (popup.getPosition() == undefined) {
+
+                    viewNewest(stationName);
+
+                    if (popup.getPosition() == undefined)
+                    {
                         popup.setPosition(coordinate); //设置popup的位置
                     }
                 }
@@ -398,7 +487,8 @@
             /**
              * 为map添加鼠标移动事件监听，当指向标注时改变鼠标光标状态
              */
-            map.on('pointermove', function (e) {
+            map.on('pointermove', function (e)
+            {
                 var pixel = map.getEventPixel(e.originalEvent);
                 var hit = map.hasFeatureAtPixel(pixel);
                 map.getTargetElement().style.cursor = hit ? 'pointer' : '';
@@ -680,16 +770,25 @@
 
 
 
+    //实例化比例尺控件（ScaleLine）
+    var scaleLineControl = new ol.control.ScaleLine({
+        units: "metric" //设置比例尺单位，degrees、imperial、us、nautical、metric（度量单位）
+    });
 
     //实例化地图对象加载地图
     var googleLayer = new ol.layer.GoogleMapLayer({layerType: ol.source.GoogleLayerType.TERRAIN});//Google图层
     var map = new ol.Map({
+        logo: false,
         layers: [googleLayer,vectLayer,hotSpotsLayer],
         target: 'map',
         view: new ol.View({
             center:ol.proj.fromLonLat([115.81, 32.89]),
-            zoom: 6
-        })
+            zoom: 6,
+            minZoom:4,
+            maxZoom:20
+        }),
+        //加载控件到地图容器中
+        controls: ol.control.defaults().extend([scaleLineControl,new ol.control.FullScreen()])
     });
 
     var initialView = map.getView();//初始视图

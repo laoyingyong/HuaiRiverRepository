@@ -53,15 +53,15 @@
 
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><p class="navbar-text">当前时间：<span id="time_sp" style="color:dodgerblue"></span></p></li>
+                    <li><p class="navbar-text"><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;时间：<span id="time_sp" style="color:dodgerblue"></span></p></li>
                     <c:if test="${user!=null}">
-                        <li><p class="navbar-text"><span>当前用户：</span><a target="myframe" href="../userPage/currentUserInfo.jsp">${user.name}</a></p></li>
+                        <li><p class="navbar-text"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;<span>用户：</span><a target="myframe" href="../userPage/currentUserInfo.jsp">${user.name}</a></p></li>
                     </c:if>
                     <c:if test="${user==null}">
-                        <li><p class="navbar-text"><span>当前用户：</span>未登录</p></li>
+                        <li><p class="navbar-text"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;<span>用户：</span>未登录</p></li>
                     </c:if>
                     <c:if test="${user!=null}">
-                        <li><p class="navbar-text"><a href="${pageContext.request.contextPath}/LogoutServlet">注销</a></p></li>
+                        <li><p class="navbar-text"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;<a href="${pageContext.request.contextPath}/LogoutServlet">注销</a></p></li>
                     </c:if>
                     <c:if test="${user==null}">
                         <li><p class="navbar-text"><a href="${pageContext.request.contextPath}/login.jsp" style="color: yellow">点击登录</a></p></li>
@@ -85,13 +85,9 @@
                 <div class="leftsidebar_box"><%--侧边菜单栏--%>
                     <dl>
                         <dt class="first_dt" ><span class="glyphicon glyphicon-plus"></span>&nbsp;数据采集与录入<img  src="img/select_xl01.png"/></dt>
-                        <dd>基础信息数据</dd>
-                        <dd>地理信息数据</dd>
                         <dd><a href="rainFallPage/addRainFallInfo.jsp" target="myframe" style="color: white">降雨量数据</a></dd>
                         <dd><a href="waterLevelPage/addWaterLevelData.jsp" target="myframe" style="color: white">水位监测数据</a></dd>
                         <dd><a href="waterQualityPage/addWaterQualityData.jsp" target="myframe" style="color: white">水质监测数据</a></dd>
-
-
                     </dl>
                     <dl>
                         <dt><span class="glyphicon glyphicon-blackboard"></span>&nbsp;地理信息展示<img  src="img/select_xl01.png"/></dt>

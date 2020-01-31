@@ -138,7 +138,7 @@
                         '                    <td style="text-align: center">'+over+'</td>\n' +
                         '                    <td style="text-align: center">'+flow+'</td>\n' +
                         '                    <td style="text-align: center">'+dateTime+'</td>\n' +
-                        '<td style="text-align: center"><input type="button" onclick="update('+id+',\''+name+'\',\''+waterLevel+'\',\''+over+'\',\''+status+'\',\''+collectionDate+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
+                        '<td style="text-align: center"><input type="button" onclick="update('+id+',\''+riverName+'\',\''+siteName+'\',\''+waterLevel+'\',\''+over+'\',\''+flow+'\',\''+dateTime+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
                         '                </tr>';
 
                     tableStr=tableStr+tableItem;
@@ -249,7 +249,7 @@
                         '                    <td style="text-align: center">'+over+'</td>\n' +
                         '                    <td style="text-align: center">'+flow+'</td>\n' +
                         '                    <td style="text-align: center">'+dateTime+'</td>\n' +
-                        '<td style="text-align: center"><input type="button" onclick="update('+id+',\''+name+'\',\''+waterLevel+'\',\''+over+'\',\''+status+'\',\''+collectionDate+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
+                        '<td style="text-align: center"><input type="button" onclick="update('+id+',\''+riverName+'\',\''+siteName+'\',\''+waterLevel+'\',\''+over+'\',\''+flow+'\',\''+dateTime+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
                         '                </tr>';
 
                     tableStr=tableStr+tableItem;
@@ -262,27 +262,29 @@
         }//回调函数的结尾
 
         //更新按钮的回调函数
-        function update(id,name,waterLevel,over,status,collectionDate)
+        function update(id,riverName,siteName,waterLevel,over,flow,collectionDate)
         {
             var str=' <form id="confirmUpdateForm">\n' +
                 '            <table class="table table-bordered table-hover">\n' +
                 '                <caption style="text-align: center;font-size: 24px">修改数据</caption>\n' +
                 '                <tr class="success">\n' +
                 '                    <th style="text-align: center">id</th>\n' +
-                '                    <th style="text-align: center">地点名称</th>\n' +
+                '                    <th style="text-align: center">河流</th>\n' +
+                '                    <th style="text-align: center">站名</th>\n' +
                 '                    <th style="text-align: center">水位（m）</th>\n' +
                 '                    <th style="text-align: center">超过警戒线（m）</th>\n' +
-                '                    <th style="text-align: center">状态（OK/NO）</th>\n' +
-                '                    <th style="text-align: center">采集日期</th>\n' +
+                '                    <th style="text-align: center">流量</th>\n' +
+                '                    <th style="text-align: center">日期</th>\n' +
                 '                    <th style="text-align: center">操作</th>\n' +
                 '                </tr>\n' +
                 '                <tr class="info">\n' +
                 '                    <td style="text-align: center"><input id="id" name="id" style="width:120px" readonly value="'+id+'"></td>\n' +
-                '                    <td style="text-align: center"><input value="'+name+'" id="name" name" placeholder="王家坝控制站" style="width:120px"></td>\n' +
+                '                    <td style="text-align: center"><input value="'+riverName+'" id="riverName2"  style="width:120px"></td>\n' +
+                '                    <td style="text-align: center"><input value="'+siteName+'" id="siteName2"  style="width:120px"></td>\n' +
                 '                    <td style="text-align: center"><input value="'+waterLevel+'" id="shuiwei" type="number" step="0.01" name="shuiwei" placeholder="21.43" style="width:120px" ></td>\n' +
                 '                    <td style="text-align: center"><input value="'+over+'" id="chaoguo" type="number" step="0.01" name="chaoguo" placeholder="0" style="width:120px"></td>\n' +
-                '                    <td style="text-align: center"><input value="'+status+'" id="zhuangtai" name="zhuangtai" placeholder="OK" style="width:120px"></td>\n' +
-                '                    <td style="text-align: center"><input value="'+collectionDate+'" id="caijiriqi" name="caijiriqi" type="date"></td>\n' +
+                '                    <td style="text-align: center"><input value="'+flow+'" id="flow" type="number" step="0.1" name="zhuangtai"  style="width:120px"></td>\n' +
+                '                    <td style="text-align: center"><input value="'+collectionDate+'" id="caijiriqi" name="caijiriqi" type="text"></td>\n' +
                 '                    <td style="text-align: center"><input type="button" onclick="updateInfo()" value="确认修改" class="btn btn-info"></td>\n' +
                 '                </tr>\n' +
                 '            </table>\n' +
@@ -295,12 +297,13 @@
         function updateInfo()//确认修改按钮的回调函数
         {
             var id=$("#id").val();
-            var name=$("#name").val();
+            var riverName=$("#riverName2").val();
+            var siteName=$("#siteName2").val();
             var shuiwei=$("#shuiwei").val();
             var chaoguo=$("#chaoguo").val();
-            var zhuangtai=$("#zhuangtai").val();
+            var flow=$("#flow").val();
             var caijiriqi=$("#caijiriqi").val();
-            $.get("../UpdateWaterLevelData",{id:id,name:name,shuiwei:shuiwei,chaoguo:chaoguo,zhuangtai:zhuangtai,caijiriqi:caijiriqi} ,function (data)
+            $.get("../UpdateWaterLevelData",{id:id,riverName:riverName,siteName:siteName,shuiwei:shuiwei,chaoguo:chaoguo,flow:flow,caijiriqi:caijiriqi} ,function (data)
             {
                 alert(data.msg);
                 window.location.href="viewWaterLevelInfo.jsp";
@@ -317,6 +320,7 @@
                 $.post("../DeleteInfoServlet",{id:id},function (data)
                 {
                     alert(data.msg);
+                    window.location.href="viewWaterLevelInfo.jsp";
 
                 });
 
@@ -327,12 +331,14 @@
         //条件查询按钮的回调函数
         function searchByCondition()
         {
-            var name=$("#name2").val();
-            var status=$("#status2").val();
-            $.post("../ConditionQueryByPageServlet",{name:name,status:status,currentPage2:1,pageSize2:5},function (data)
+            var riverName=$("#riverName").val();
+            var siteName=$("#siteName").val();
+            var collectionDate=$("#collectionDate").val();
+            $.post("../ConditionQueryByPageServlet",{riverName:riverName,siteName:siteName,collectionDate:collectionDate,currentPage2:1,pageSize2:5},function (data)
             {
                 //alert(data);
                 var totalCount = data.totalCount;
+
                 if(totalCount==0)
                 {
                     alert("数据库中没有记录！");
@@ -344,11 +350,12 @@
                 var tableStr=' <caption style="text-align: center;font-size: 24px">查询结果</caption>\n' +
                     '                <tr class="success">\n' +
                     '                    <th style="text-align: center">id</th>\n' +
-                    '                    <th style="text-align: center">地点名称</th>\n' +
+                    '                    <th style="text-align: center">河流</th>\n' +
+                    '                    <th style="text-align: center">站名</th>\n' +
                     '                    <th style="text-align: center">水位（m）</th>\n' +
                     '                    <th style="text-align: center">超过警戒线（m）</th>\n' +
-                    '                    <th style="text-align: center">状态（OK/NO）</th>\n' +
-                    '                    <th style="text-align: center">采集日期</th>\n' +
+                    '                    <th style="text-align: center">流量</th>\n' +
+                    '                    <th style="text-align: center">日期</th>\n' +
                     '                    <th style="text-align: center">操作</th>\n' +
                     '                </tr>';
 
@@ -356,20 +363,23 @@
                 {
                     var obj = array[i];
                     var id = obj.id;
-                    var name = obj.name;
+                    var riverName2 = obj.riverName;
+                    var siteName2=obj.siteName;
                     var waterLevel = obj.waterLevel;
                     var over = obj.over;
-                    var status= obj.status;
-                    var collectionDate = obj.collectionDate;obj
+                    var flow= obj.flow;
+                    var collectionDate2 = obj.collectionDate;
+                    var dateStr=dateFormat("yyyy-MM-dd HH:mm",new Date(collectionDate2));
 
                     var item=' <tr class="info">\n' +
                         '                    <td style="text-align: center">'+id+'</td>\n' +
-                        '                    <td style="text-align: center">'+name+'</td>\n' +
+                        '                    <td style="text-align: center">'+riverName2+'</td>\n' +
+                        '                    <td style="text-align: center">'+siteName2+'</td>\n' +
                         '                    <td style="text-align: center">'+waterLevel+'</td>\n' +
                         '                    <td style="text-align: center">'+over+'</td>\n' +
-                        '                    <td style="text-align: center">'+status+'</td>\n' +
-                        '                    <td style="text-align: center">'+collectionDate+'</td>\n' +
-                        '<td style="text-align: center"><input type="button" onclick="update('+id+',\''+name+'\',\''+waterLevel+'\',\''+over+'\',\''+status+'\',\''+collectionDate+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
+                        '                    <td style="text-align: center">'+flow+'</td>\n' +
+                        '                    <td style="text-align: center">'+dateStr+'</td>\n' +
+                        '<td style="text-align: center"><input type="button" onclick="update('+id+',\''+riverName2+'\',\''+siteName2+'\',\''+waterLevel+'\',\''+over+'\',\''+flow+'\',\''+dateStr+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
                         '                </tr>';
 
                     tableStr+=item;
@@ -380,12 +390,46 @@
                 $("#waterLevelTable").html(tableStr);
 
 
-                var fenyelanStr=' <span style="font-size: 24px" id="total_sp">共'+totalCount+'条记录</span>&nbsp;&nbsp;<input class="btn btn-info" value="返回一览表" type="button" onclick="fuwei();">';
+                var fenyelanStr=' <li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage-1)+',5);">\n' +
+                    '                        <a href="#" aria-label="Previous">\n' +
+                    '                            <span aria-hidden="true">&laquo;</span>\n' +
+                    '                        </a>\n' +
+                    '                    </li>';
+
+                for(var i=1;i<=totalPage;i++)
+                {
+                    if(i==currentPage)
+                    {
+                        var middleStr='<li class="active" onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+i+',5);"><a href="#">'+i+'</a></li>';
+                        fenyelanStr+=middleStr;
+
+                    }
+                    else
+                    {
+                        var middleStr='<li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+i+',5);"><a href="#">'+i+'</a></li>';
+                        fenyelanStr+=middleStr;
+                    }
+
+
+                }
+
+                var lastStr='<li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage+1)+',5);">\n' +
+                    '                        <a href="#" aria-label="Next">\n' +
+                    '                            <span aria-hidden="true">&raquo;</span>\n' +
+                    '                        </a>\n' +
+                    '                    </li>\n' +
+                    '                    <span style="font-size: 24px" id="total_sp">共'+totalCount+'条记录，共'+totalPage+'页&nbsp;&nbsp;' +
+                    '<input type="button" class="btn btn-info btn-sm" value="返回一览表" onclick="fuwei();"></span>';
+
+
+
+                fenyelanStr+=lastStr;
                 $("#fenyelan").html(fenyelanStr);
 
 
 
-            });//异步请求
+            });//异步请求end
+
 
         }
 
@@ -394,6 +438,108 @@
             window.location.href='viewWaterLevelInfo.jsp';
 
         }
+
+        function findByPage2(riverName,siteName,collectionDate,currentPage,pageSize)
+        {
+            $.post("../ConditionQueryByPageServlet",{riverName:riverName,siteName:siteName,collectionDate:collectionDate,currentPage2:currentPage,pageSize2:pageSize},function (data)
+            {
+                var totalCount = data.totalCount;
+                alert(totalCount);
+
+                if(totalCount==0)
+                {
+                    alert("数据库中没有记录！");
+                }
+                var totalPage = data.totalPage;
+                var currentPage = data.currentPage;
+                var array = data.list;
+
+                var tableStr=' <caption style="text-align: center;font-size: 24px">查询结果</caption>\n' +
+                    '                <tr class="success">\n' +
+                    '                    <th style="text-align: center">id</th>\n' +
+                    '                    <th style="text-align: center">河流</th>\n' +
+                    '                    <th style="text-align: center">站名</th>\n' +
+                    '                    <th style="text-align: center">水位（m）</th>\n' +
+                    '                    <th style="text-align: center">超过警戒线（m）</th>\n' +
+                    '                    <th style="text-align: center">流量</th>\n' +
+                    '                    <th style="text-align: center">日期</th>\n' +
+                    '                    <th style="text-align: center">操作</th>\n' +
+                    '                </tr>';
+
+                for(var i=0;i<array.length;i++)
+                {
+                    var obj = array[i];
+                    var id = obj.id;
+                    var riverName2 = obj.riverName;
+                    var siteName2=obj.siteName;
+                    var waterLevel = obj.waterLevel;
+                    var over = obj.over;
+                    var flow= obj.flow;
+                    var collectionDate2 = obj.collectionDate;
+                    var dateStr=dateFormat("yyyy-MM-dd HH:mm",new Date(collectionDate2));
+
+                    var item=' <tr class="info">\n' +
+                        '                    <td style="text-align: center">'+id+'</td>\n' +
+                        '                    <td style="text-align: center">'+riverName2+'</td>\n' +
+                        '                    <td style="text-align: center">'+siteName2+'</td>\n' +
+                        '                    <td style="text-align: center">'+waterLevel+'</td>\n' +
+                        '                    <td style="text-align: center">'+over+'</td>\n' +
+                        '                    <td style="text-align: center">'+flow+'</td>\n' +
+                        '                    <td style="text-align: center">'+dateStr+'</td>\n' +
+                        '<td style="text-align: center"><input type="button" onclick="update('+id+',\''+riverName2+'\',\''+siteName2+'\',\''+waterLevel+'\',\''+over+'\',\''+flow+'\',\''+dateStr+'\');" value="修改" class="btn btn-info">&nbsp;&nbsp;&nbsp;&nbsp;<input onclick="dele('+id+');" type="button" value="删除" class="btn btn-info"></td>\n'+
+                        '                </tr>';
+
+                    tableStr+=item;
+                }
+
+                var endStr='  </table>';
+                tableStr+=endStr;
+                $("#waterLevelTable").html(tableStr);
+
+
+                var fenyelanStr=' <li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage-1)+',5);">\n' +
+                    '                        <a href="#" aria-label="Previous">\n' +
+                    '                            <span aria-hidden="true">&laquo;</span>\n' +
+                    '                        </a>\n' +
+                    '                    </li>';
+
+                for(var i=1;i<=totalPage;i++)
+                {
+                    if(i==currentPage)
+                    {
+                        var middleStr='<li class="active" onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+i+',5);"><a href="#">'+i+'</a></li>';
+                        fenyelanStr+=middleStr;
+
+                    }
+                    else
+                    {
+                        var middleStr='<li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+i+',5);"><a href="#">'+i+'</a></li>';
+                        fenyelanStr+=middleStr;
+                    }
+
+                }
+
+                var lastStr='<li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage+1)+',5);">\n' +
+                    '                        <a href="#" aria-label="Next">\n' +
+                    '                            <span aria-hidden="true">&raquo;</span>\n' +
+                    '                        </a>\n' +
+                    '                    </li>\n' +
+                    '                    <span style="font-size: 24px" id="total_sp">共'+totalCount+'条记录，共'+totalPage+'页&nbsp;&nbsp;' +
+                    '<input type="button" class="btn btn-info btn-sm" value="返回一览表" onclick="fuwei();"></span>';
+
+
+
+
+                fenyelanStr+=lastStr;
+                $("#fenyelan").html(fenyelanStr);
+
+            });
+
+
+        }
+
+
+
     </script>
 </head>
 <body style="background: url('../img/img01.jpg') repeat-x">
@@ -403,16 +549,16 @@
 
                 <form class="form-inline">
                     <div class="form-group">
-                        <label class="sr-only" for="name2">Email address</label>
-                        <input type="text" class="form-control" id="name2" name="name2" placeholder="河流">
+                        <label class="sr-only" for="riverName">Email address</label>
+                        <input type="text" class="form-control" id="riverName" name="name2" placeholder="河流、湖泊">
                     </div>
                     <div class="form-group">
-                        <label class="sr-only" for="status2">Password</label>
-                        <input type="text" class="form-control" id="status2" name="status2" placeholder="站名">
+                        <label class="sr-only" for="siteName">Password</label>
+                        <input type="text" class="form-control" id="siteName" name="status2" placeholder="站名">
                     </div>
                     <div class="form-group">
                         <label class="sr-only" for="collectionDate">Password</label>
-                        <input type="datetime-local" class="form-control" id="collectionDate" name="status2" placeholder="时间">
+                        <input type="text" class="form-control" id="collectionDate" name="status2" placeholder="时间">
                     </div>
                     <button type="button" onclick="searchByCondition();" class="btn btn-warning">搜索</button>
                 </form>
