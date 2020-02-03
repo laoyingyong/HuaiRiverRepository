@@ -1,6 +1,7 @@
 package service;
 
 import domain.PageBean;
+import domain.StationAndQuality;
 import domain.WaterQualityStation;
 
 import java.util.List;
@@ -19,4 +20,7 @@ public interface WaterQualityStationService
     public abstract int conditionalFindAllCount(Map<String, String[]> condition);
     public abstract boolean update(WaterQualityStation station);
     public abstract boolean delete(int id);
+    public abstract List<WaterQualityStation> findPollutedSite();
+    public  abstract WaterQualityStation findIntro(double longitude,double latitude);
+    public abstract StationAndQuality findStationAndQuality(double longitude, double latitude);
 }

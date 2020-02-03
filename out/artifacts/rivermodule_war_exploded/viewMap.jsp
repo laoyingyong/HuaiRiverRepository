@@ -127,7 +127,7 @@
 
                 // 指定图表的配置项和数据
                 var option = {
-                    backgroundColor: '#12cf96',
+                    backgroundColor: "rgba(255,255,255,0.7)",
                     title: {
                         x:'center',
                         text: belongStation+"最新水质数据",
@@ -194,16 +194,16 @@
         <div class="col-sm-12">
             <ul class="nav nav-pills">
                 <li role="presentation"><a href="javascript:shuiQing();">实时水情</a></li>
-                <li role="presentation"><a href="javascript:findSite();">水质站点查询</a></li>
+                <li role="presentation"><a href="javascript:findSite();">水质站点列表</a></li>
                 <li role="presentation"><a href="javascript:viewCurrentWaterQuality();">实时水质数据</a></li>
                 <li role="presentation" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    热区 <span class="caret"></span>
+                    警戒区 <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:void(0)" id="showReg">显示热区</a></li>
-                        <li><a href="javascript:void(0)" id="drawReg">绘制热区</a></li>
-                        <li><a href="javascript:void(0)" id="deleteReg">删除热区</a></li>
+                        <li><a href="javascript:void(0)" id="showReg">显示警戒区</a></li>
+                        <li><a href="javascript:void(0)" id="drawReg">绘制警戒区</a></li>
+                        <li><a href="javascript:void(0)" id="deleteReg">删除警戒区</a></li>
                     </ul>
                 </li>
                 <li role="presentation">
@@ -775,6 +775,24 @@
         units: "metric" //设置比例尺单位，degrees、imperial、us、nautical、metric（度量单位）
     });
 
+
+
+
+
+    var beijing = ol.proj.fromLonLat([117.2710932, 32.9527884]);
+    //示例标注点北京市的信息对象
+    var featuerInfo = {
+        geo: beijing,
+        att: {
+            title: "北京市(中华人民共和国首都)", //标注信息的标题内容
+            titleURL: "http://www.openlayers.org/", //标注详细信息链接
+            text: "北京（Beijing），简称京，中华人民共和国首都、直辖市，中国的政治、文化和国际交往中心……", //标注内容简介
+            imgURL: "../img/bangbu.png" //标注的图片
+        }
+    }
+
+
+
     //实例化地图对象加载地图
     var googleLayer = new ol.layer.GoogleMapLayer({layerType: ol.source.GoogleLayerType.TERRAIN});//Google图层
     var map = new ol.Map({
@@ -808,6 +826,337 @@
 
 
 
+
+
+
+
+
+
+    /**
+     * 创建标注样式函数,设置image为图标ol.style.Icon
+     * @param {ol.Feature} feature 要素
+     */
+    var createLabelStyle = function (feature) {
+        return new ol.style.Style({
+            image: new ol.style.Icon(/** @type {olx.style.IconOptions} */({
+                anchor: [0.5, 60],
+                anchorOrigin: 'top-right',
+                anchorXUnits: 'fraction',
+                anchorYUnits: 'pixels',
+                offsetOrigin: 'top-right',
+                // offset:[0,10],
+                // scale:0.5,  //图标缩放比例
+                opacity: 0.75,  //透明度
+                src: '../img/blueIcon.png' //图标的url
+            })),
+            text: new ol.style.Text({
+                textAlign: 'center', //位置
+                textBaseline: 'middle', //基准线
+                font: 'normal 14px 微软雅黑',  //文字样式
+                text: feature.get('name'),  //文本内容
+                fill: new ol.style.Fill({ color: '#aa3300' }), //文本填充样式（即文字颜色）
+                stroke: new ol.style.Stroke({ color: '#ffcc33', width: 2 })
+            })
+        });
+    }
+
+    //实例化Vector要素，通过矢量图层添加到地图容器中
+    var iconFeature = new ol.Feature({
+        geometry: new ol.geom.Point(beijing),
+        name: '北京市',  //名称属性
+        population: 2115 //大概人口数（万）
+    });
+    iconFeature.setStyle(createLabelStyle(iconFeature));
+    //矢量标注的数据源
+    var vectorSource = new ol.source.Vector({
+        features: [iconFeature]
+    });
+
+
+
+    $.post("../FindAlllStationServlet",function (data)
+    {
+        for(var i=0;i<data.length;i++)
+        {
+            var obj=data[i];
+            var longitude=obj.longitude;
+            var latitude=obj.latitude;
+            var stationName=obj.stationName;
+
+            //实例化Vector要素，通过矢量图层添加到地图容器中
+            var iconFeature2 = new ol.Feature({
+                geometry: new ol.geom.Point(ol.proj.fromLonLat([longitude,latitude])),
+                name: stationName,  //名称属性
+                population: 2115 //大概人口数（万）
+            });
+            iconFeature2.setStyle(createLabelStyle(iconFeature2));
+            //矢量标注的数据源
+            vectorSource.addFeature(iconFeature2)
+
+        }
+
+    });
+
+
+
+    //矢量标注图层
+    var vectorLayer = new ol.layer.Vector({
+        source: vectorSource
+    });
+    map.addLayer(vectorLayer);
+
+    /**
+     * 实现popup的html元素
+     */
+    var container = document.getElementById('popup');
+    var content = document.getElementById('popup-content');
+    var closer = document.getElementById('popup-closer');
+
+    /**
+     * 在地图容器中创建一个Overlay
+     */
+    var popup = new ol.Overlay(/** @type {olx.OverlayOptions} */({
+        element: container,
+        autoPan: true,
+        positioning: 'bottom-center',
+        stopEvent: false,
+        autoPanAnimation: {
+            duration: 250
+        }
+    }));
+    map.addOverlay(popup);
+
+    /**
+     * 添加关闭按钮的单击事件（隐藏popup）
+     * @return {boolean} Don't follow the href.
+     */
+    closer.onclick = function () {
+        popup.setPosition(undefined);  //未定义popup位置
+        closer.blur(); //失去焦点
+        return false;
+    };
+
+    /**
+     * 动态创建popup的具体内容
+     * @param {string} title
+     */
+    function addFeatrueInfo(info) {
+        //新增a元素
+        var elementA = document.createElement('a');
+        elementA.className = "markerInfo";
+        elementA.href = info.att.titleURL;
+        //elementA.innerText = info.att.title;
+        setInnerText(elementA, info.att.title);
+        content.appendChild(elementA); // 新建的div元素添加a子节点
+        //新增div元素
+        var elementDiv = document.createElement('div');
+        elementDiv.className = "markerText";
+        //elementDiv.innerText = info.att.text;
+        setInnerText(elementDiv, info.att.text);
+        content.appendChild(elementDiv); // 为content添加div子节点
+        //新增img元素
+        var elementImg = document.createElement('img');
+        elementImg.className = "markerImg";
+        elementImg.src = info.att.imgURL;
+        content.appendChild(elementImg); // 为content添加img子节点
+    }
+    /**
+     * 动态设置元素文本内容（兼容）
+     */
+    function setInnerText(element, text) {
+        if (typeof element.textContent == "string") {
+            element.textContent = text;
+        } else {
+            element.innerText = text;
+        }
+    }
+
+    /**
+     * 为map添加点击事件监听，渲染弹出popup
+     */
+    map.on('click', function (evt) {
+        var coordinate = evt.coordinate;
+        var zuobiao4326=ol.proj.transform(coordinate, 'EPSG:3857' ,'EPSG:4326');
+        var jingdu=zuobiao4326[0];
+        var weidu=zuobiao4326[1];
+
+        //判断当前单击处是否有要素，捕获到要素时弹出popup
+        var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) { return feature; });
+        if (feature)
+        {
+
+
+
+            $.post("../FindStationAndQualityServlet",{jingdu:jingdu,weidu:weidu},function (data)
+            {
+                var stationName=data.station.stationName;
+                var introduction=data.station.introduction;
+
+
+                if(data.quality==null)
+                {
+                    alert("尚未有该站点的监测数据！")
+                }
+                var belongStation;
+                var dateTime;
+                var dateStr;
+                var dO;
+                var nH4;
+                var cODMn;
+                var tOC;
+                var level;
+
+                if(data.quality!=null)
+                {
+                    belongStation=data.quality.belongStation;
+                    dateTime=data.quality.dateTime;
+                    dateStr=dateFormat("YYYY-MM-dd HH:mm",new Date(dateTime));
+                    var pH=data.quality.pH;
+                    dO=data.quality.dO;
+                    nH4=data.quality.nH4;
+                    cODMn=data.quality.cODMn;
+                    tOC=data.quality.tOC;
+                    level=data.quality.level;
+
+                }
+
+
+
+
+                // 基于准备好的dom，初始化echarts实例
+                var myChart = echarts.init(document.getElementById('main'));
+
+                // 指定图表的配置项和数据
+                var option = {
+                    backgroundColor: "rgba(255,255,255,0.7)",
+                    title: {
+                        x:'center',
+                        text: belongStation+"最新水质数据",
+                        subtext:dateStr+"\t"+"水质类别："+level,
+                        subtextStyle:{
+
+                            fontSize:20,
+                            color: '#000000'
+                        }
+                    },
+                    tooltip: {},
+                    legend:
+                        {
+                            data:[]
+                        },
+                    xAxis: {
+                        data: ["溶解氧","高猛酸钾","氨氮","总有机碳"]
+                    },
+                    yAxis: {
+                        name:"数值单位:mg/L",
+                        min:0,
+                        max:20
+
+                    },
+                    series: [{
+                        name: '数值',
+                        type: 'bar',
+                        data: [dO, cODMn, nH4, tOC],
+                        //配置样式
+                        itemStyle: {
+                            //通常情况下：
+                            normal:{
+                                //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+                                color: function (params){
+                                    var colorList = ['rgb(164,205,238)','rgb(42,170,227)','rgb(25,46,94)','rgb(195,229,235)'];
+                                    return colorList[params.dataIndex];
+                                }
+                            },
+                            //鼠标悬停时：
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
+                    }]
+                };
+
+                if(level==="I")
+                {
+                    option.title.subtextStyle.color="#c5ffff";
+                }
+
+                if(level==="II")
+                {
+                    option.title.subtextStyle.color="#34c3f6";
+                }
+                if(level==="III")
+                {
+                    option.title.subtextStyle.color="#03ff03";
+                }
+                if(level==="IV")
+                {
+                    option.title.subtextStyle.color="#faff19";
+                }
+                if(level==="V")
+                {
+                    option.title.subtextStyle.color="#ff9000";
+                }
+                if(level==="劣V")
+                {
+                    option.title.subtextStyle.color="#ff0000";
+                }
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+
+
+                featuerInfo.att.text=introduction;//正文
+                featuerInfo.att.title=stationName;//标题
+
+
+                content.innerHTML = ''; //清空popup的内容容器
+                addFeatrueInfo(featuerInfo); //在popup中加载当前要素的具体信息
+                /*if (popup.getPosition() == undefined)
+                {
+                    popup.setPosition(coordinate); //设置popup的位置
+                }*/
+                popup.setPosition(coordinate); //设置popup的位置
+
+
+
+
+            });/*post end*/
+
+
+
+        }
+    });
+    /**
+     * 为map添加鼠标移动事件监听，当指向标注时改变鼠标光标状态
+     */
+    map.on('pointermove', function (e) {
+        var pixel = map.getEventPixel(e.originalEvent);
+        var hit = map.hasFeatureAtPixel(pixel);
+        map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * 在地图容器中创建一个Overlay
      */
@@ -825,6 +1174,7 @@
      */
     function selectRegData()
     {
+
 
         $.post("../FindAllGraphServlet",function (data)
         {

@@ -108,7 +108,7 @@
                     </dl>
                     <dl>
                         <dt><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;应急决策处理<img src="img/select_xl01.png"/></dt>
-                        <dd>应急决策分析</dd>
+                        <dd> <a href="emergencyPage/emergencyDecision.jsp" target="myframe" style="color: white">应急决策分析</a></dd>
                         <dd>应急处理流程</dd>
                         <dd>应急方案生成</dd>
                         <dd>应急决策总结</dd>

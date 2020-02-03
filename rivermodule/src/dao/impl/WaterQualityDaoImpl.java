@@ -103,5 +103,19 @@ public class WaterQualityDaoImpl implements WaterQualityDao
         return waterQuality;
     }
 
+    @Override
+    public List<WaterQuality> findPollutedWater()
+    {
+        List<WaterQuality> list=null;
+        try {
+            String sql="SELECT * FROM water_quality WHERE  \n" +
+                    "(LEVEL='IV' OR LEVEL='V' OR LEVEL='劣V') AND TO_DAYS(NOW())- TO_DAYS(DATETIME)<= 1 ORDER BY DATETIME DESC ";
+            list = template.query(sql, new BeanPropertyRowMapper<WaterQuality>(WaterQuality.class));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
 
 }

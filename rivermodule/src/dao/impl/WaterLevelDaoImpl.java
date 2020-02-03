@@ -152,7 +152,7 @@ public class WaterLevelDaoImpl implements WaterLevelDao
         List<WaterLevel> objList = null;
         try {
             objList = template.query(sql, new BeanPropertyRowMapper<WaterLevel>(WaterLevel.class), valueList.toArray());
-        } catch (DataAccessException e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
 
@@ -191,7 +191,12 @@ public class WaterLevelDaoImpl implements WaterLevelDao
         System.out.println(sql);
         System.out.println(valueList);
 
-        Integer integer = template.queryForObject(sql, Integer.class, valueList.toArray());
+        int integer = 0;
+        try {
+            integer = template.queryForObject(sql, Integer.class, valueList.toArray());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
 
         return integer;

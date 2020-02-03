@@ -68,7 +68,33 @@
 
                 }
 
-                for(var i=1;i<=totalPage;i++)//中间分页栏的部分
+
+                var beginNum;//分页条第一个数字
+                var endNum;//分页条最后一个数字
+                if(totalPage<10)//如果总页数小于10页
+                {
+                    beginNum=1;
+                    endNum=totalPage;
+                }
+                else//如果总页数大于等于10页
+                {
+                    beginNum=currentPage-5;
+                    endNum=currentPage+4;
+                    if(beginNum<1)//currentPage-5可能会是一个小于等于0的数，也就是用户在浏览1,2,3,4,5页时的情况
+                    {
+                        beginNum=1;//纠正回来
+                        endNum=beginNum+9;
+                    }
+                    if(endNum>totalPage)//用户在浏览倒数1,2,3,4页时的情况
+                    {
+                        endNum=totalPage;//纠正回来，让分页条最后一个数字为总的页数
+                        beginNum=endNum-9;
+                    }
+
+                }
+
+
+                for(var i=beginNum;i<=endNum;i++)//中间分页栏的部分
                 {
                     if(i==currentPage)
                     {
@@ -179,7 +205,33 @@
                         '                    </li>';
 
                 }
-                for(var i=1;i<=totalPage;i++)
+
+
+                var beginNum;//分页条第一个数字
+                var endNum;//分页条最后一个数字
+                if(totalPage<10)//如果总页数小于10页
+                {
+                    beginNum=1;
+                    endNum=totalPage;
+                }
+                else//如果总页数大于等于10页
+                {
+                    beginNum=currentPage-5;
+                    endNum=currentPage+4;
+                    if(beginNum<1)//currentPage-5可能会是一个小于等于0的数，也就是用户在浏览1,2,3,4,5页时的情况
+                    {
+                        beginNum=1;//纠正回来
+                        endNum=beginNum+9;
+                    }
+                    if(endNum>totalPage)//用户在浏览倒数1,2,3,4页时的情况
+                    {
+                        endNum=totalPage;//纠正回来，让分页条最后一个数字为总的页数
+                        beginNum=endNum-9;
+                    }
+
+                }
+
+                for(var i=beginNum;i<=endNum;i++)
                 {
                     if(i==currentPage)
                     {
@@ -390,13 +442,51 @@
                 $("#waterLevelTable").html(tableStr);
 
 
-                var fenyelanStr=' <li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage-1)+',5);">\n' +
-                    '                        <a href="#" aria-label="Previous">\n' +
-                    '                            <span aria-hidden="true">&laquo;</span>\n' +
-                    '                        </a>\n' +
-                    '                    </li>';
+                if(currentPage==1)
+                {
+                    var fenyelanStr=' <li class="disabled" onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage-1)+',5);">\n' +
+                        '                        <a href="#" aria-label="Previous">\n' +
+                        '                            <span aria-hidden="true">&laquo;</span>\n' +
+                        '                        </a>\n' +
+                        '                    </li>';
 
-                for(var i=1;i<=totalPage;i++)
+                }
+                else
+                {
+                    var fenyelanStr=' <li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage-1)+',5);">\n' +
+                        '                        <a href="#" aria-label="Previous">\n' +
+                        '                            <span aria-hidden="true">&laquo;</span>\n' +
+                        '                        </a>\n' +
+                        '                    </li>';
+
+                }
+
+
+                var beginNum;//分页条第一个数字
+                var endNum;//分页条最后一个数字
+                if(totalPage<10)//如果总页数小于10页
+                {
+                    beginNum=1;
+                    endNum=totalPage;
+                }
+                else//如果总页数大于等于10页
+                {
+                    beginNum=currentPage-5;
+                    endNum=currentPage+4;
+                    if(beginNum<1)//currentPage-5可能会是一个小于等于0的数，也就是用户在浏览1,2,3,4,5页时的情况
+                    {
+                        beginNum=1;//纠正回来
+                        endNum=beginNum+9;
+                    }
+                    if(endNum>totalPage)//用户在浏览倒数1,2,3,4页时的情况
+                    {
+                        endNum=totalPage;//纠正回来，让分页条最后一个数字为总的页数
+                        beginNum=endNum-9;
+                    }
+
+                }
+
+                for(var i=beginNum;i<=endNum;i++)
                 {
                     if(i==currentPage)
                     {
@@ -413,14 +503,27 @@
 
                 }
 
-                var lastStr='<li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage+1)+',5);">\n' +
-                    '                        <a href="#" aria-label="Next">\n' +
-                    '                            <span aria-hidden="true">&raquo;</span>\n' +
-                    '                        </a>\n' +
-                    '                    </li>\n' +
-                    '                    <span style="font-size: 24px" id="total_sp">共'+totalCount+'条记录，共'+totalPage+'页&nbsp;&nbsp;' +
-                    '<input type="button" class="btn btn-info btn-sm" value="返回一览表" onclick="fuwei();"></span>';
+                if(currentPage==totalPage)
+                {
+                    var lastStr='<li class="disabled" onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage+1)+',5);">\n' +
+                        '                        <a href="#" aria-label="Next">\n' +
+                        '                            <span aria-hidden="true">&raquo;</span>\n' +
+                        '                        </a>\n' +
+                        '                    </li>\n' +
+                        '                    <span style="font-size: 24px" id="total_sp">共'+totalCount+'条记录，共'+totalPage+'页&nbsp;&nbsp;' +
+                        '<input type="button" class="btn btn-info btn-sm" value="返回一览表" onclick="fuwei();"></span>';
+                }
 
+                else
+                {
+                    var lastStr='<li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage+1)+',5);">\n' +
+                        '                        <a href="#" aria-label="Next">\n' +
+                        '                            <span aria-hidden="true">&raquo;</span>\n' +
+                        '                        </a>\n' +
+                        '                    </li>\n' +
+                        '                    <span style="font-size: 24px" id="total_sp">共'+totalCount+'条记录，共'+totalPage+'页&nbsp;&nbsp;' +
+                        '<input type="button" class="btn btn-info btn-sm" value="返回一览表" onclick="fuwei();"></span>';
+                }
 
 
                 fenyelanStr+=lastStr;
@@ -444,7 +547,7 @@
             $.post("../ConditionQueryByPageServlet",{riverName:riverName,siteName:siteName,collectionDate:collectionDate,currentPage2:currentPage,pageSize2:pageSize},function (data)
             {
                 var totalCount = data.totalCount;
-                alert(totalCount);
+
 
                 if(totalCount==0)
                 {
@@ -497,13 +600,51 @@
                 $("#waterLevelTable").html(tableStr);
 
 
-                var fenyelanStr=' <li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage-1)+',5);">\n' +
-                    '                        <a href="#" aria-label="Previous">\n' +
-                    '                            <span aria-hidden="true">&laquo;</span>\n' +
-                    '                        </a>\n' +
-                    '                    </li>';
+                if(currentPage==1)
+                {
+                    var fenyelanStr=' <li class="disabled" onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage-1)+',5);">\n' +
+                        '                        <a href="#" aria-label="Previous">\n' +
+                        '                            <span aria-hidden="true">&laquo;</span>\n' +
+                        '                        </a>\n' +
+                        '                    </li>';
 
-                for(var i=1;i<=totalPage;i++)
+                }
+                else
+                {
+                    var fenyelanStr=' <li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage-1)+',5);">\n' +
+                        '                        <a href="#" aria-label="Previous">\n' +
+                        '                            <span aria-hidden="true">&laquo;</span>\n' +
+                        '                        </a>\n' +
+                        '                    </li>';
+
+                }
+
+
+                var beginNum;//分页条第一个数字
+                var endNum;//分页条最后一个数字
+                if(totalPage<10)//如果总页数小于10页
+                {
+                    beginNum=1;
+                    endNum=totalPage;
+                }
+                else//如果总页数大于等于10页
+                {
+                    beginNum=currentPage-5;
+                    endNum=currentPage+4;
+                    if(beginNum<1)//currentPage-5可能会是一个小于等于0的数，也就是用户在浏览1,2,3,4,5页时的情况
+                    {
+                        beginNum=1;//纠正回来
+                        endNum=beginNum+9;
+                    }
+                    if(endNum>totalPage)//用户在浏览倒数1,2,3,4页时的情况
+                    {
+                        endNum=totalPage;//纠正回来，让分页条最后一个数字为总的页数
+                        beginNum=endNum-9;
+                    }
+
+                }
+
+                for(var i=beginNum;i<=endNum;i++)
                 {
                     if(i==currentPage)
                     {
@@ -519,13 +660,27 @@
 
                 }
 
-                var lastStr='<li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage+1)+',5);">\n' +
-                    '                        <a href="#" aria-label="Next">\n' +
-                    '                            <span aria-hidden="true">&raquo;</span>\n' +
-                    '                        </a>\n' +
-                    '                    </li>\n' +
-                    '                    <span style="font-size: 24px" id="total_sp">共'+totalCount+'条记录，共'+totalPage+'页&nbsp;&nbsp;' +
-                    '<input type="button" class="btn btn-info btn-sm" value="返回一览表" onclick="fuwei();"></span>';
+                if(currentPage==totalPage)
+                {
+                    var lastStr='<li class="disabled" onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage+1)+',5);">\n' +
+                        '                        <a href="#" aria-label="Next">\n' +
+                        '                            <span aria-hidden="true">&raquo;</span>\n' +
+                        '                        </a>\n' +
+                        '                    </li>\n' +
+                        '                    <span style="font-size: 24px" id="total_sp">共'+totalCount+'条记录，共'+totalPage+'页&nbsp;&nbsp;' +
+                        '<input type="button" class="btn btn-info btn-sm" value="返回一览表" onclick="fuwei();"></span>';
+                }
+
+                else
+                {
+                    var lastStr='<li onclick="findByPage2(\''+riverName+'\',\''+siteName+'\',\''+collectionDate+'\','+(currentPage+1)+',5);">\n' +
+                        '                        <a href="#" aria-label="Next">\n' +
+                        '                            <span aria-hidden="true">&raquo;</span>\n' +
+                        '                        </a>\n' +
+                        '                    </li>\n' +
+                        '                    <span style="font-size: 24px" id="total_sp">共'+totalCount+'条记录，共'+totalPage+'页&nbsp;&nbsp;' +
+                        '<input type="button" class="btn btn-info btn-sm" value="返回一览表" onclick="fuwei();"></span>';
+                }
 
 
 

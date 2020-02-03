@@ -120,5 +120,10 @@ public class WaterQualityServiceImpl implements WaterQualityService
         return dao.findNewestRecord(stationName);
     }
 
+    @Override
+    public List<WaterQuality> findPollutedWater() {
+        return dao.findPollutedWater();
+    }
+
 
 }

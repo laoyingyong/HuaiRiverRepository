@@ -1,6 +1,8 @@
 package dao.impl;
 
 import dao.WaterQualityStationDao;
+import domain.StationAndQuality;
+import domain.WaterQuality;
 import domain.WaterQualityStation;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -245,5 +247,75 @@ public class WaterQualityStationDaoImpl implements WaterQualityStationDao
             return false;
         }
 
+    }
+
+    @Override
+    public List<WaterQualityStation> findPollutedSite()
+    {
+        List<WaterQualityStation> list=null;
+        try
+        {
+            String sql="SELECT * FROM water_quality_station WHERE stationName IN\n" +
+                    "(SELECT DISTINCT belongStation FROM water_quality WHERE (LEVEL='IV' OR LEVEL='V' OR LEVEL='劣V') \n" +
+                    "AND TO_DAYS(NOW())-TO_DAYS(DATETIME)<=1)";
+            list = template.query(sql, new BeanPropertyRowMapper<WaterQualityStation>(WaterQualityStation.class));
+        } catch (Exception e)
+        {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    @Override
+    public WaterQualityStation findIntro(double longitude, double latitude)
+    {
+        WaterQualityStation station= null;
+        try {
+            String sql="SELECT * FROM water_quality_station WHERE ABS(longitude-?)<0.1 AND ABS(latitude-?)<0.1;";
+            List<WaterQualityStation> list = template.query(sql, new BeanPropertyRowMapper<WaterQualityStation>(WaterQualityStation.class), longitude, latitude);
+            if(list!=null)
+            {station = list.get(0);}
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return station;
+    }
+
+    @Override
+    public StationAndQuality findStationAndQuality(double longitude, double latitude)
+    {
+        StationAndQuality stationAndQuality= null;
+        try {
+            String sql1="SELECT * FROM water_quality_station WHERE ABS(longitude-?)<0.1 AND ABS(latitude-?)<0.1";
+            String sql2="SELECT * FROM water_quality WHERE belongStation IN\n" +
+                    " (SELECT stationName FROM water_quality_station WHERE ABS(longitude-?)<0.1 AND ABS(latitude-?)<0.1)\n" +
+                    "  ORDER BY DATETIME DESC LIMIT 1;";
+            List<WaterQualityStation> list = template.query(sql1, new BeanPropertyRowMapper<WaterQualityStation>(WaterQualityStation.class),longitude,latitude);
+
+            WaterQualityStation station=null;
+            if(list.size()!=0&&list!=null)
+            {
+               station=list.get(0);
+            }
+
+            List<WaterQuality> list2 = template.query(sql2, new BeanPropertyRowMapper<WaterQuality>(WaterQuality.class), longitude, latitude);
+
+            WaterQuality waterQuality=null;
+            if(list2!=null&&list2.size()!=0)
+            {
+                waterQuality=list2.get(0);
+            }
+
+            stationAndQuality = new StationAndQuality();
+            if(list!=null&&list2!=null)
+            {
+                stationAndQuality.setStation(station);
+                stationAndQuality.setQuality(waterQuality);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return stationAndQuality;
     }
 }

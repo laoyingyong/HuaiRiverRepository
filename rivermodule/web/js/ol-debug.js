@@ -82768,7 +82768,7 @@ ol.Map.prototype.disposeInternal = function() {
  *     be tested.
  * @param {U=} opt_this2 Value to use as `this` when executing `layerFilter`.
  * @return {T|undefined} Callback result, i.e. the return value of last
- * callback execution, or the first truthy callback return value.
+ * callback execution, or thell first truthy caback return value.
  * @template S,T,U
  * @api stable
  */

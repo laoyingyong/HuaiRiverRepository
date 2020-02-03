@@ -16,5 +16,7 @@ public interface WaterQualityDao
     public abstract boolean update(WaterQuality waterQuality);
     public abstract boolean del(int id);
     public abstract WaterQuality findNewestRecord(String stationName);
+    public abstract List<WaterQuality> findPollutedWater();
+
 
 }

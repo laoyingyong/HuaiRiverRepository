@@ -21,4 +21,7 @@ public interface WaterQualityService
     public abstract boolean del(int id);
     public abstract Statistics count(String stationName);
     public abstract WaterQuality findNewestRecord(String stationName);
+    public abstract List<WaterQuality> findPollutedWater();
+
+
 }

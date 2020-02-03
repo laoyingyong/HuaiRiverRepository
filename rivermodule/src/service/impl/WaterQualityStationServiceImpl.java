@@ -3,6 +3,7 @@ package service.impl;
 import dao.WaterQualityStationDao;
 import dao.impl.WaterQualityStationDaoImpl;
 import domain.PageBean;
+import domain.StationAndQuality;
 import domain.WaterQualityStation;
 import service.WaterQualityStationService;
 
@@ -105,5 +106,21 @@ public class WaterQualityStationServiceImpl implements WaterQualityStationServic
     {
         boolean b = dao.delete(id);
         return b;
+    }
+
+    @Override
+    public List<WaterQualityStation> findPollutedSite()
+    {
+        return dao.findPollutedSite();
+    }
+
+    @Override
+    public WaterQualityStation findIntro(double longitude, double latitude) {
+        return dao.findIntro(longitude,latitude);
+    }
+
+    @Override
+    public StationAndQuality findStationAndQuality(double longitude, double latitude) {
+        return dao.findStationAndQuality(longitude,latitude);
     }
 }
