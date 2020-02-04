@@ -22,6 +22,8 @@ public interface WaterQualityService
     public abstract Statistics count(String stationName);
     public abstract WaterQuality findNewestRecord(String stationName);
     public abstract List<WaterQuality> findPollutedWater();
+    public abstract List<WaterQuality> findByNameAndTime(String name,String startTime,String endTime,String level);
+    public abstract List<WaterQuality> findByStationName(String name);
 
 
 }

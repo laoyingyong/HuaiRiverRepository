@@ -125,5 +125,16 @@ public class WaterQualityServiceImpl implements WaterQualityService
         return dao.findPollutedWater();
     }
 
+    @Override
+    public List<WaterQuality> findByNameAndTime(String name, String startTime, String endTime,String level) {
+        return dao.findByNameAndTime(name,startTime,endTime,level);
+    }
+
+    @Override
+    public List<WaterQuality> findByStationName(String name)
+    {
+        return dao.findByStationName(name);
+    }
+
 
 }

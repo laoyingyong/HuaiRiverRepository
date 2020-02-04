@@ -87,6 +87,13 @@
 
     </style>
     <script>
+
+
+        function closeResult()
+        {
+            $("#reslut").css("display","none");
+        }
+
         $(function ()
         {
             $(".ol-zoom-in").attr("title","放大");
@@ -143,25 +150,32 @@
                             data:[]
                         },
                     xAxis: {
-                        data: ["溶解氧","高猛酸钾","氨氮","总有机碳"]
+
+                        data: ["溶解氧","高猛酸钾","氨氮","总有机碳","PH"]
                     },
-                    yAxis: {
+                    yAxis:[{
                         name:"数值单位:mg/L",
                         min:0,
                         max:20
 
-                    },
+                    },{
+                        name:"PH",
+                        min:0,
+                        max:11,
+                        maxInterval:1
+
+                    }] ,
                     series: [{
                         name: '数值',
                         type: 'bar',
-                        data: [dO, cODMn, nH4, tOC],
+                        data: [dO, cODMn, nH4, tOC,pH],
                         //配置样式
                         itemStyle: {
                             //通常情况下：
                             normal:{
                                 //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
                                 color: function (params){
-                                    var colorList = ['rgb(164,205,238)','rgb(42,170,227)','rgb(25,46,94)','rgb(195,229,235)'];
+                                    var colorList = ['rgb(164,205,238)','rgb(42,170,227)','rgb(25,46,94)','rgb(195,229,235)','rgb(195,0,235)'];
                                     return colorList[params.dataIndex];
                                 }
                             },
@@ -185,6 +199,100 @@
         }
 
 
+        function searchStation()
+        {
+            $("#reslut").css("display","block");
+            var cezhanName=$("#cezhanName").val();
+            var startTime=$("#startTime").val();
+            var endTime=$("#endTime").val();
+            var water_level=selectLevel();
+            $.post("/FindByNameAndTimeServlet",{cezhanName:cezhanName,startTime:startTime,endTime:endTime,water_level:water_level},function (data)
+            {
+                var count=data.length;
+                var mainStr='<table class="table table-bordered" id="shuiZhiTable">\n' +
+                    ' <caption style="font-size: 24px;text-align: center">查询结果(共'+count+'条记录)' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="closeResult();" class="btn btn-danger btn-sm">关闭</button></caption>\n'+
+                    '                <tr class="success">\n' +
+                    '                    <th>测站名</th>\n' +
+                    '                    <th>测量时间</th>\n' +
+                    '                    <th>pH</th>\n' +
+                    '                    <th>溶解氧</th>\n' +
+                    '                    <th>氨氮</th>\n' +
+                    '                    <th>高猛酸钾盐指数</th>\n' +
+                    '                    <th>总有机碳</th>\n' +
+                    '                    <th>水质类别</th>\n' +
+                    '                </tr>';
+                for(var i=0;i<data.length;i++)
+                {
+                    var obj=data[i];
+                    var belongStation=obj.belongStation;
+                    var dateTime=obj.dateTime;
+                    var dateStr=dateFormat("YYYY-MM-dd HH:mm",new Date(dateTime));
+                    var pH=obj.pH;
+                    var dO=obj.dO;
+                    var nH4=obj.nH4;
+                    var cODMn=obj.cODMn;
+                    var tOC=obj.tOC;
+                    var level=obj.level;
+
+                    var tdStr;
+                    if(level==="III")
+                    {
+                        tdStr=' <td style="background-color: #03ff03">'+level+'</td>';
+                    }
+                    else if(level==="II")
+                    {
+                        tdStr=' <td style="background-color: #34c3f6">'+level+'</td>';
+                    }
+                    else if(level==="IV")
+                    {
+                        tdStr=' <td style="background-color: #faff19">'+level+'</td>';
+                    }
+                    else if(level==="I")
+                    {
+                        tdStr=' <td style="background-color: #c5ffff">'+level+'</td>';
+                    }
+                    else if(level==="V")
+                    {
+                        tdStr=' <td style="background-color: #ff9000">'+level+'</td>';
+                    }
+                    else if(level==="劣V")
+                    {
+                        tdStr=' <td style="background-color: #ff0000">'+level+'</td>';
+                    }
+                    else
+                    {
+                        tdStr=' <td style="background-color: #ffffff">'+level+'</td>';
+                    }
+
+
+                    var itemStr=' <tr class="info">\n' +
+                        '                    <td>'+belongStation+'</td>\n' +
+                        '                    <td>'+dateStr+'</td>\n' +
+                        '                    <td>'+pH+'</td>\n' +
+                        '                    <td>'+dO+'</td>\n' +
+                        '                    <td>'+nH4+'</td>\n' +
+                        '                    <td>'+cODMn+'</td>\n' +
+                        '                    <td>'+tOC+'</td>\n' +
+                        tdStr +
+                        '                </tr>';
+                    mainStr+= itemStr;
+                }
+                var endStr=' </table>';
+                mainStr+=endStr;
+                $("#reslut").html(mainStr);
+
+
+            });
+
+        }
+
+
+        function selectLevel()
+        {
+            var value=$("#water_level_select").val();
+            return value;
+        }
 
     </script>
 </head>
@@ -218,6 +326,36 @@
                         <li><a href="javascript:osm();">OSM地图</a></li>
                     </ul>
 
+                </li>
+
+                <li role="presentation">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label class="sr-only" for="cezhanName">Email address</label>
+                            <input type="text" class="form-control" id="cezhanName" name="name2" placeholder="请输入监测站名称" STYLE="width: 140px;height: 28px">
+                        </div>
+                        <div class="form-group">
+                           <input type="datetime-local" id="startTime">
+                        </div>
+                        <div class="form-group">
+                            至
+                        </div>
+                        <div class="form-group">
+                            <input type="datetime-local" id="endTime">
+                        </div>
+                        <div class="form-group">
+                            <select style="height: 28px" id="water_level_select" onchange="selectLevel();">
+                                <option>--水质类别--</option>
+                                <option value="I">I</option>
+                                <option value="II">II</option>
+                                <option value="III">III</option>
+                                <option value="IV">IV</option>
+                                <option value="V">V</option>
+                                <option value="劣V">劣V</option>
+                            </select>
+                        </div>
+                        <button type="button"  onclick="searchStation();" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;搜索</button>
+                    </form>
                 </li>
             </ul>
 
@@ -309,7 +447,8 @@
 
             <span id="reset"><button class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="right" title="复位" style="background-color: #7897BC;height:23px;width:23px"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></span>
             <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-            <div id="main" style="width: 500px;height:250px;right: 0px;bottom: 0px;position: absolute;z-index: 2000"></div>
+            <div id="main" style="width: 500px;height:250px;right: 0px;bottom: 0px;position: absolute;z-index: 2000;"></div>
+            <div id="reslut" style="width: 700px;height:300px;right: 0px;top: 100px;position: absolute;z-index: 2000;overflow-y: scroll;display: none"></div>
 
         </div><%--地图容器end--%>
 
@@ -363,7 +502,7 @@
                         // offset:[0,10],
                         // scale:0.5,  //图标缩放比例
                         opacity: 0.75,  //透明度
-                        src: 'img/blueIcon.png' //图标的url
+                        src: 'img/blueIcon3.png' //图标的url
                     })),
                     text: new ol.style.Text({
                         textAlign: 'center', //位置
@@ -478,10 +617,11 @@
 
                     viewNewest(stationName);
 
-                    if (popup.getPosition() == undefined)
+                    /*if (popup.getPosition() == undefined)
                     {
                         popup.setPosition(coordinate); //设置popup的位置
-                    }
+                    }*/
+                    popup.setPosition(coordinate); //设置popup的位置
                 }
             });
             /**
@@ -543,7 +683,7 @@
     function viewCurrentWaterQuality()
     {
         $("#wQuality").dialog("open");
-        $.post("ViewCurrentWaterQualityServlet",function (data)
+        $.post("/ViewCurrentWaterQualityServlet",function (data)
         {
 
 
@@ -619,7 +759,183 @@
 
             var endStr=' </table>\n';
             tableStr+=endStr;
-            $("#shuiZhiTable").html(tableStr);
+            $("#wQuality").html(tableStr);
+
+        });
+
+    }
+
+    function viewPie(stationName)
+    {
+
+        $.post("./StatisticsWaterQualityServlet",{stationName:stationName},function (data)
+        {
+            var a=data.a;
+            var b=data.b;
+            var c=data.c;
+            var d=data.d;
+            var e=data.e;
+            var f=data.f;
+            var g=data.g;
+
+            if(a==0&&b==0&&c==0&&d==0&&e==0&&f==0)
+            {
+                alert("数据库中尚未有该站点的数据！");
+            }
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+            myChart.setOption({
+                backgroundColor:'rgba(255, 255, 255, 0.7)',
+                legend:{orient:"vertical",left:"70%",y:"center",data:["I类水质","II类水质","III类水质","IV类水质","V类水质","劣V类水质"]},
+                toolbox:{feature:{ saveAsImage:{ type:'png'}}},
+                tooltip: {},
+                title: {
+                    text: stationName,
+                    left: 'center',//主副标题的水平位置
+                    subtext:"历史水质统计图",
+                    subtextStyle: {//副标题的属性
+                        color: '#000000',
+                        // 同主标题
+                    },
+
+                },
+                series : [
+                    {
+
+                        center:["30%","50%"],
+                        label:{ formatter:"{b}:{c}({d}%)"},
+                        color: ['#c5ffff','#34c3f6', '#03ff03', '#faff19', '#ff9000','#ff0000'],
+                        name: '水质类别',
+                        type: 'pie',    // 设置图表类型为饼图
+                        radius: '30%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                        data:[          // 数据数组，name 为数据项名称，value 为数据项值
+                            {value:a, name:'I类水质'},
+                            {value:b, name:'II类水质'},
+                            {value:c, name:'III类水质'},
+                            {value:d, name:'IV类水质'},
+                            {value:e, name:'V类水质'},
+                            {value:f, name:'劣V类水质'}
+                        ]
+                    }
+                ]
+            },true)
+
+        });
+
+    }
+
+
+    function viewLine(stationName)
+    {
+        $.post("/FindLineServlet",{stationName:stationName},function (data)
+        {
+            var count=data.length;
+            if(count==0)
+            {
+                alert("数据库中尚未有该站点的监测数据！");
+            }
+            var phArray=new Array();
+            var dOArray=new Array();
+            var nH4Array=new Array();
+            var cODMnArray=new Array();
+            var tOCArray=new Array();
+            var timeArray=new Array();
+            var belongStation;
+            for(var i=0;i<data.length;i++)
+            {
+
+                var obj=data[i];
+                var pH=obj.pH;
+                var dO=obj.dO;
+                var nH4=obj.nH4;
+                var cODMn=obj.cODMn;
+                var tOC=obj.tOC;
+                var dateTime=obj.dateTime;
+                var dateStr=dateFormat("YYYY-MM-dd HH:mm",new Date(dateTime));
+                belongStation=obj.belongStation;
+
+                phArray.push(pH);
+                dOArray.push(dO);
+                nH4Array.push(nH4);
+                cODMnArray.push(cODMn);
+                tOCArray.push(tOC);
+                timeArray.push(dateStr);
+            }
+
+
+            var myChart = echarts.init(document.getElementById('main'));
+            var option = {
+                backgroundColor:'rgba(255, 255, 255, 0.7)',
+                title: {
+                    text: belongStation+"水质变化曲线图",
+                    textStyle:{ fontSize:18},
+                    top:20,
+                    left:"center"
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['PH', '溶解氧', '氨氮', '高猛酸钾', '总有机碳']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: timeArray
+
+                },
+                yAxis: {
+                    type: 'value',
+                    name:"单位mg/L"+"\n"+"(PH除外)"
+                },
+                series: [
+                    {
+                        name: 'PH',
+                        type: 'line',
+                        stack: '总量',
+                        data: phArray
+                    },
+                    {
+                        name: '溶解氧',
+                        type: 'line',
+                        stack: '总量',
+                        data: dOArray
+                    },
+                    {
+                        name: '氨氮',
+                        type: 'line',
+                        stack: '总量',
+                        data: nH4Array
+                    },
+                    {
+                        name: '高猛酸钾',
+                        type: 'line',
+                        stack: '总量',
+                        data: cODMnArray
+                    },
+                    {
+                        name: '总有机碳',
+                        type: 'line',
+                        stack: '总量',
+                        data:tOCArray
+                    }
+                ]
+            };
+
+            myChart.setOption(option,true);
+
 
         });
 
@@ -643,7 +959,9 @@
                var stationName=obj.stationName;
                var hangStr='<tr class="info">\n' +
                    '                        <td>'+stationName+'</td>\n' +
-                   '                        <td><button class="btn btn-info btn-xs" onclick="viewDetails(\''+stationName+'\');">查看详情</button></td>\n' +
+                   '                        <td><button class="btn btn-info btn-xs" onclick="viewDetails(\''+stationName+'\');">查看位置</button>' +
+                   '&nbsp;<button onclick="viewPie(\''+stationName+'\');" class="btn btn-info btn-xs">水质饼图</button>&nbsp;' +
+                   '<button onclick="viewLine(\''+stationName+'\');" class="btn btn-info btn-xs">水质折线图</button></td>\n' +
                    '                    </tr>';
                tableStr+=hangStr;
             }
@@ -830,25 +1148,28 @@
 
 
 
-
+    var haha={
+        anchor: [0.5, 60],
+        anchorOrigin: 'top-right',
+        anchorXUnits: 'fraction',
+        anchorYUnits: 'pixels',
+        offsetOrigin: 'top-right',
+        // offset:[0,10],
+        // scale:0.5,  //图标缩放比例
+        opacity: 0.75,  //透明度
+        src: '../img/blueIcon.png' //图标的url
+        //src: imgsrc //图标的url
+    };
 
     /**
      * 创建标注样式函数,设置image为图标ol.style.Icon
      * @param {ol.Feature} feature 要素
      */
-    var createLabelStyle = function (feature) {
-        return new ol.style.Style({
-            image: new ol.style.Icon(/** @type {olx.style.IconOptions} */({
-                anchor: [0.5, 60],
-                anchorOrigin: 'top-right',
-                anchorXUnits: 'fraction',
-                anchorYUnits: 'pixels',
-                offsetOrigin: 'top-right',
-                // offset:[0,10],
-                // scale:0.5,  //图标缩放比例
-                opacity: 0.75,  //透明度
-                src: '../img/blueIcon.png' //图标的url
-            })),
+    var createLabelStyle = function createLabelStyle (feature)
+    {
+        return new ol.style.Style(
+        {
+            image: new ol.style.Icon(/** @type {olx.style.IconOptions} */(haha)),
             text: new ol.style.Text({
                 textAlign: 'center', //位置
                 textBaseline: 'middle', //基准线
@@ -859,6 +1180,8 @@
             })
         });
     }
+
+
 
     //实例化Vector要素，通过矢量图层添加到地图容器中
     var iconFeature = new ol.Feature({
@@ -889,6 +1212,8 @@
                 name: stationName,  //名称属性
                 population: 2115 //大概人口数（万）
             });
+
+            //haha.src="../img/blueIconThree.png";
             iconFeature2.setStyle(createLabelStyle(iconFeature2));
             //矢量标注的数据源
             vectorSource.addFeature(iconFeature2)
@@ -1005,21 +1330,22 @@
                 var cODMn;
                 var tOC;
                 var level;
+                var pH;
 
                 if(data.quality!=null)
                 {
                     belongStation=data.quality.belongStation;
                     dateTime=data.quality.dateTime;
                     dateStr=dateFormat("YYYY-MM-dd HH:mm",new Date(dateTime));
-                    var pH=data.quality.pH;
+                    pH=data.quality.pH;
                     dO=data.quality.dO;
                     nH4=data.quality.nH4;
                     cODMn=data.quality.cODMn;
                     tOC=data.quality.tOC;
                     level=data.quality.level;
 
-                }
 
+                }
 
 
 
@@ -1028,6 +1354,13 @@
 
                 // 指定图表的配置项和数据
                 var option = {
+                    toolbox:{
+                        show:true,
+                        feature:
+                            {
+                                saveAsImage:{type:"png"}
+                            }
+                    },
                     backgroundColor: "rgba(255,255,255,0.7)",
                     title: {
                         x:'center',
@@ -1044,26 +1377,27 @@
                         {
                             data:[]
                         },
-                    xAxis: {
-                        data: ["溶解氧","高猛酸钾","氨氮","总有机碳"]
-                    },
-                    yAxis: {
-                        name:"数值单位:mg/L",
+                    xAxis: [{
+                        data: ["溶解氧","高猛酸钾","氨氮","总有机碳","PH"]
+                    }],
+                    yAxis:[ {
+                        name:"单位:mg/L"+"\n"+"（ph除外）",
                         min:0,
                         max:20
 
-                    },
+                    }],
                     series: [{
-                        name: '数值',
+                        /*name: '数值',*/
                         type: 'bar',
-                        data: [dO, cODMn, nH4, tOC],
+                        yAxisIndex: '0',
+                        data: [dO, cODMn, nH4, tOC,pH],
                         //配置样式
                         itemStyle: {
                             //通常情况下：
                             normal:{
                                 //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
                                 color: function (params){
-                                    var colorList = ['rgb(164,205,238)','rgb(42,170,227)','rgb(25,46,94)','rgb(195,229,235)'];
+                                    var colorList = ['rgb(164,205,238)','rgb(42,170,227)','rgb(25,46,94)','rgb(195,229,235)','rgb(195,0,235)'];
                                     return colorList[params.dataIndex];
                                 }
                             },
@@ -1112,10 +1446,7 @@
 
                 content.innerHTML = ''; //清空popup的内容容器
                 addFeatrueInfo(featuerInfo); //在popup中加载当前要素的具体信息
-                /*if (popup.getPosition() == undefined)
-                {
-                    popup.setPosition(coordinate); //设置popup的位置
-                }*/
+
                 popup.setPosition(coordinate); //设置popup的位置
 
 
@@ -1485,7 +1816,7 @@
         {
             closeText:"关闭",
             height:500,
-            width:350,
+            width:500,
             modal: true,
             autoOpen:false,//默认隐藏对话框
             show:

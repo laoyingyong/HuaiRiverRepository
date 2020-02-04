@@ -1,5 +1,6 @@
 package dao;
 
+import domain.StationAndQuality;
 import domain.Statistics;
 import domain.WaterQuality;
 
@@ -17,6 +18,8 @@ public interface WaterQualityDao
     public abstract boolean del(int id);
     public abstract WaterQuality findNewestRecord(String stationName);
     public abstract List<WaterQuality> findPollutedWater();
+    public abstract List<WaterQuality> findByNameAndTime(String name,String startTime,String endTime,String level);
+    public abstract List<WaterQuality> findByStationName(String name);
 
 
 }

@@ -598,7 +598,7 @@
 
         </div><%--单元格end--%>
         <div class="col-sm-5">
-            <div id="main" style="width: 400px;height: 300px;">
+            <div id="main" style="width: 500px;height: 500px;">
 
             </div>
 
@@ -671,8 +671,10 @@
             }
 
                 // 基于准备好的dom，初始化echarts实例
-                var myChart = echarts.init(document.getElementById('main'));
-                myChart.setOption({
+                var myChart2 = echarts.init(document.getElementById('main'));
+                myChart2.setOption({
+                    legend:{orient:"vertical",left:"70%",y:"center",data:["I类水质","II类水质","III类水质","IV类水质","V类水质","劣V类水质"]},
+                    toolbox:{feature:{ saveAsImage:{ type:'png'}}},
                     tooltip: {},
                     title: {
                         text: stationName,
@@ -686,10 +688,13 @@
                     },
                     series : [
                         {
+
+                            center:["30%","50%"],
+                            label:{ formatter:"{b}:{c}({d}%)"},
                             color: ['#c5ffff','#34c3f6', '#03ff03', '#faff19', '#ff9000','#ff0000'],
                             name: '水质类别',
                             type: 'pie',    // 设置图表类型为饼图
-                            radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                            radius: '30%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
                             data:[          // 数据数组，name 为数据项名称，value 为数据项值
                                 {value:a, name:'I类水质'},
                                 {value:b, name:'II类水质'},

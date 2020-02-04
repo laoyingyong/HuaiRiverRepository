@@ -1,6 +1,7 @@
 package dao.impl;
 
 import dao.WaterQualityDao;
+import domain.StationAndQuality;
 import domain.Statistics;
 import domain.WaterQuality;
 import org.springframework.dao.DataAccessException;
@@ -8,6 +9,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import util.JDBCUtils;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -115,6 +117,57 @@ public class WaterQualityDaoImpl implements WaterQualityDao
             System.out.println(e);
         }
         return list;
+    }
+
+    @Override
+    public List<WaterQuality> findByNameAndTime(String name, String startTime, String endTime,String level)
+    {
+        StringBuilder stringBuilder=new StringBuilder("SELECT * FROM water_quality WHERE 1=1 ");
+        LinkedList<String> list=new LinkedList<>();
+        if(name!=null&&!name.equals(""))
+        {
+            stringBuilder.append(" AND belongStation LIKE ? ");
+            list.add("%"+name+"%");
+        }
+        if(startTime!=null&&!startTime.equals("")&&!startTime.equals(":00"))
+        {
+            stringBuilder.append(" AND DATETIME >=? ");
+            list.add(startTime);
+        }
+        if(endTime!=null&&!endTime.equals("")&&!endTime.equals(":00"))
+        {
+            stringBuilder.append(" AND DATETIME <=? ");
+            list.add(endTime);
+        }
+        if(level!=null&&!level.equals("")&&!level.equals("--水质类别--"))
+        {
+            stringBuilder.append(" AND level =? ");
+            list.add(level);
+        }
+        stringBuilder.append(" ORDER BY DATETIME DESC ");
+        String sql=stringBuilder.toString();
+        System.out.println(sql);
+        Object[] objects =list.toArray();
+        List<WaterQuality> query = null;
+        try {
+            query = template.query(sql, new BeanPropertyRowMapper<WaterQuality>(WaterQuality.class), objects);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return query;
+    }
+
+    @Override
+    public List<WaterQuality> findByStationName(String name)
+    {
+        List<WaterQuality> query = null;
+        try {
+            String sql="SELECT * FROM water_quality WHERE belongStation=? ORDER BY DATETIME";
+            query = template.query(sql, new BeanPropertyRowMapper<WaterQuality>(WaterQuality.class), name);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return query;
     }
 
 
