@@ -16,5 +16,6 @@ public interface WaterLevelService
     public abstract boolean deleteInfo(int id);
     public abstract PageBean<WaterLevel> conditionalQueryByPage(int currentPage,int pageSize, Map<String, String[]> condition);
     public abstract int conditionalFindAllCount(Map<String, String[]> condition);
+    public abstract List<WaterLevel> findBySiteName(String siteName);
 
 }

@@ -19,11 +19,37 @@
     <script src="../js/jquery-ui.js"></script>
 
 
+
     <link href="../css/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/ol.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/jquery-ui.min.css"/>
     <link rel="stylesheet" href="../css/jquery-ui.min.css"/>
     <script>
+
+
+        var con=true;
+        function startMeasure()
+        {
+            if(con)
+            {
+                map.addInteraction(draw);
+                createMeasureTooltip(); //创建测量工具提示框
+                createHelpTooltip(); //创建帮助提示框
+
+                $("#startMeasure").text('停止测量');
+                $('#startMeasure').css("background-color","#C9302C");
+            }
+            else
+            {
+                map.removeInteraction(draw);
+                $("#startMeasure").text('开始测量');
+                $(helpTooltipElement).css("display","none");
+                $('#startMeasure').css("background-color","#31B0D5");
+            }
+            con=!con;//取反
+        }
+
+
         $(function ()
         {
             $(".ol-zoom-in").attr("title","放大");
@@ -44,6 +70,11 @@
 
 
         });
+
+        function closeHistory()
+        {
+            $('#decisionDiv').css("display","none");
+        }
     </script>
     <style>
         #reset{
@@ -101,7 +132,63 @@
         #popup-content .markerInfo {
             font-weight:bold;
         }
+
+
+        /**
+       * 提示框的样式信息
+       */
+        .tooltip {
+            position : relative;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+            color: white;
+            padding: 4px 8px;
+            opacity: 0.7;
+            white-space: nowrap;
+        }
+        .tooltip-measure {
+            opacity: 1;
+            font-weight: bold;
+        }
+        .tooltip-static {
+            background-color: #ffcc33;
+            color: black;
+            border: 1px solid white;
+        }
+        .tooltip-measure:before,
+        .tooltip-static:before {
+            border-top: 6px solid rgba(0, 0, 0, 0.5);
+            border-right: 6px solid transparent;
+            border-left: 6px solid transparent;
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            margin-left: -7px;
+            left: 50%;
+        }
+        .tooltip-static:before {
+            border-top-color: #ffcc33;
+        }
+
+
     </style>
+    <script>
+        function downloadFile()
+        {
+            $.get("../DownloadFileServlet",{filename:"a.txt"},function (data)
+            {
+                alert(data);
+
+            });
+
+        }
+
+        function guanbi()
+        {
+            $("#waterDiv").css("display","none");
+
+        }
+    </script>
 
 </head>
 <body>
@@ -135,6 +222,19 @@
                   </ul>
 
               </li>
+              <li role="presentation"><a href="../DownloadFileServlet?filename=应急方案.txt">下载文件</a></li>
+              <li role="presentation">
+                  <div id="menu" style="margin-top: 10px">
+                      <label style="float: left">测量: &nbsp;</label>
+                      <select id="type" style="float: left">
+                          <option value="length">长度</option>
+                          <option value="area">面积</option>
+                      </select>
+                      <input type="checkbox" id="geodesic" style="float: left;margin-left: 5px"/>&nbsp;<label style="float: left">几何法</label>
+                      <button id="startMeasure" class="btn btn-xs btn-info" onclick="startMeasure();">开始测量</button>
+                  </div>
+
+              </li>
 
           </ul>
 
@@ -157,10 +257,125 @@
             </div>
 
             <div id="emergencyDiv" title="应急处理方法" >
+                <div id="polluteDiv">
+                    <table class="table table-bordered">
+                        <caption style="font-size: 24px;text-align: center;">请输入本次水污染事件中，主要污染物的各个指标</caption>
+                        <tr>
+                            <th>污染物类型</th>
+                            <th>污染物来源</th>
+                            <th>污染物超标倍数</th>
+                            <th>与下游取水口距离(km)</th>
+                            <th>污染物毒性</th>
+                            <th>污染物危险性</th>
+                            <th>污染物稳定性</th>
+                            <th>污染物溶解性</th>
+                            <th>污染物挥发性</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select id="type_select">
+                                    <option value="危险化学品" >危险化学品</option>
+                                    <option value="重金属">重金属</option>
+                                    <option value="石油类">石油类</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="source_select">
+                                    <option value="管道泄漏" selected="selected">管道泄漏</option>
+                                    <option value="生产事故">生产事故</option>
+                                    <option value="超标排放">超标排放</option>
+                                    <option value="运输事故">运输事故</option>
+                                    <option value="其他原因">其他原因</option>
+                                </select>
+                            </td>
+                            <td>
+                               <input type="number" step="0.01" style="width: 50px" id="multiple"/>
+                            </td>
+                            <td>
+                                <input type="number" style="width: 50px;" id="distance"/>
+                            </td>
+                            <td>
+                                <select id="toxicity_select">
+                                    <option value="微毒" selected="selected">微毒</option>
+                                    <option value="低毒">低毒</option>
+                                    <option value="中等毒">中等毒</option>
+                                    <option value="高毒">高毒</option>
+                                    <option value="剧毒">剧毒</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="danger_select">
+                                    <option value="可燃" selected="selected">可燃</option>
+                                    <option value="易燃">易燃</option>
+                                    <option value="易燃易爆">易燃易爆</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="stability_select">
+                                    <option value="不稳定" selected="selected">不稳定</option>
+                                    <option value="中等">中等</option>
+                                    <option value="稳定">稳定</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="solubility_select">
+                                    <option value="不溶于水" selected="selected">不溶于水</option>
+                                    <option value="微溶于水">微溶于水</option>
+                                    <option value="易溶于水">易溶于水</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="volatility_select">
+                                    <option value="不易挥发" selected="selected">不易挥发</option>
+                                    <option value="中等挥发">中等挥发</option>
+                                    <option value="易挥发">易挥发</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                </div>
 
             </div>
 
             <div id="map" style="height: 650px"><%--地图容器--%>
+                <div id="decisionDiv" style="display: none;overflow-y:scroll;border-radius:10px;box-shadow:0px 0px 20px 5px gray;width: 900px;height: 300px;left: 150px;bottom: 0px;position: absolute;z-index: 2000;background-color:rgba(255,255,255,0.7) ">
+                    <table class="table table-bordered">
+                        <caption style="font-size: 24px;text-align: center">历史相似案例</caption>
+                        <tr class="success">
+                            <th>案例</th>
+                            <th>污染物名称</th>
+                            <th>类型</th>
+                            <th>来源</th>
+                            <th>超标倍数</th>
+                            <th>与下游取水口距离（km）</th>
+                            <th>毒性</th>
+                            <th>危险性</th>
+                            <th>稳定性</th>
+                            <th>溶解性</th>
+                            <th>挥发性</th>
+                            <th>应急处置技术</th>
+                            <th>相似度</th>
+                        </tr>
+                        <tr class="info">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+
+                </div>
 
                 <div id="popup" class="ol-popup" >
                     <a href="#" id="popup-closer" class="ol-popup-closer"></a>
@@ -171,7 +386,8 @@
                 <div id="mypopup"  ></div><%--热区的popup--%>
 
 
-                <div id="waterDiv">
+                <div id="waterDiv" style="right:0px;box-shadow:0px 0px 20px 5px gray;border-radius:10px;
+                bottom:0px;overflow-y: scroll;width: 700px;height: 300px;position: absolute;z-index: 2000;display: none;background-color: rgba(255,255,255,0.7)">
                 </div>
                 <%--复位--%>
                 <span id="reset"><button class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="right" title="复位" style="background-color: #7897BC;height:23px;width:23px"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></span>
@@ -290,6 +506,297 @@
         //加载控件到地图容器中
         controls: ol.control.defaults().extend([scaleLineControl,new ol.control.FullScreen()])
     });
+
+
+
+
+
+
+
+
+
+
+    //加载测量的绘制矢量层
+    var source = new ol.source.Vector(); //图层数据源
+    var vector = new ol.layer.Vector({
+        source: source,
+        style: new ol.style.Style({ //图层样式
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)' //填充颜色
+            }),
+            stroke: new ol.style.Stroke({
+                color: '#ffcc33',  //边框颜色
+                width: 2   // 边框宽度
+            }),
+            image: new ol.style.Circle({
+                radius: 7,
+                fill: new ol.style.Fill({
+                    color: '#ffcc33'
+                })
+            })
+        })
+    });
+    map.addLayer(vector);
+
+    var wgs84Sphere = new ol.Sphere(6378137); //定义一个球对象
+    /**
+     * 当前绘制的要素（Currently drawn feature.）
+     * @type {ol.Feature}
+     */
+    var sketch;
+    /**
+     * 帮助提示框对象（The help tooltip element.）
+     * @type {Element}
+     */
+    var helpTooltipElement;
+    /**
+     *帮助提示框显示的信息（Overlay to show the help messages.）
+     * @type {ol.Overlay}
+     */
+    var helpTooltip;
+    /**
+     * 测量工具提示框对象（The measure tooltip element. ）
+     * @type {Element}
+     */
+    var measureTooltipElement;
+    /**
+     *测量工具中显示的测量值（Overlay to show the measurement.）
+     * @type {ol.Overlay}
+     */
+    var measureTooltip;
+    /**
+     *  当用户正在绘制多边形时的提示信息文本
+     * @type {string}
+     */
+    var continuePolygonMsg = '单击继续绘制多边形，双击结束绘制……';
+    /**
+     * 当用户正在绘制线时的提示信息文本
+     * @type {string}
+     */
+    var continueLineMsg = '单击继续绘线，双击结束绘制……';
+
+    /**
+     * 鼠标移动事件处理函数
+     * @param {ol.MapBrowserEvent} evt
+     */
+    var pointerMoveHandler = function(evt)
+    {
+        if (evt.dragging) {
+            return;
+        }
+        /** @type {string} */
+        var helpMsg = '单击开始绘制……';//当前默认提示信息
+        //判断绘制几何类型设置相应的帮助提示信息
+        if (sketch)
+        {
+            var geom = (sketch.getGeometry());
+            if (geom instanceof ol.geom.Polygon)
+            {
+                helpMsg = continuePolygonMsg; //绘制多边形时提示相应内容
+            } else if (geom instanceof ol.geom.LineString)
+            {
+                helpMsg = continueLineMsg; //绘制线时提示相应内容
+            }
+        }
+        helpTooltipElement.innerHTML = helpMsg; //将提示信息设置到对话框中显示
+        helpTooltip.setPosition(evt.coordinate);//设置帮助提示框的位置
+        $(helpTooltipElement).removeClass('hidden');//移除帮助提示框的隐藏样式进行显示
+    };
+    map.on('pointermove', pointerMoveHandler); //地图容器绑定鼠标移动事件，动态显示帮助提示框内容
+    //地图绑定鼠标移出事件，鼠标移出时为帮助提示框设置隐藏样式
+    $(map.getViewport()).on('mouseout', function()
+    {
+        $(helpTooltipElement).addClass('hidden');
+    });
+
+    var geodesicCheckbox = document.getElementById('geodesic');//测地学方式对象
+    var typeSelect = document.getElementById('type');//测量类型对象
+    var draw; // global so we can remove it later
+    /**
+     * 加载交互绘制控件函数
+     */
+    function addInteraction()
+    {
+        var type = (typeSelect.value == 'area' ? 'Polygon' : 'LineString');
+        draw = new ol.interaction.Draw({
+            source: source,//测量绘制层数据源
+            type: /** @type {ol.geom.GeometryType} */ (type),  //几何图形类型
+            style: new ol.style.Style({//绘制几何图形的样式
+                fill: new ol.style.Fill({
+                    color: 'rgba(255, 255, 255, 0.2)'
+                }),
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(0, 0, 0, 0.5)',
+                    lineDash: [10, 10],
+                    width: 2
+                }),
+                image: new ol.style.Circle({
+                    radius: 5,
+                    stroke: new ol.style.Stroke({
+                        color: 'rgba(0, 0, 0, 0.7)'
+                    }),
+                    fill: new ol.style.Fill({
+                        color: 'rgba(255, 255, 255, 0.2)'
+                    })
+                })
+            })
+        });
+        //map.addInteraction(draw);
+        //createMeasureTooltip(); //创建测量工具提示框
+        //createHelpTooltip(); //创建帮助提示框
+
+        var listener;
+        //绑定交互绘制工具开始绘制的事件
+        draw.on('drawstart',
+            function (evt) {
+                // set sketch
+                sketch = evt.feature; //绘制的要素
+
+                /** @type {ol.Coordinate|undefined} */
+                var tooltipCoord = evt.coordinate;// 绘制的坐标
+                //绑定change事件，根据绘制几何类型得到测量长度值或面积值，并将其设置到测量工具提示框中显示
+                listener = sketch.getGeometry().on('change', function (evt) {
+                    var geom = evt.target;//绘制几何要素
+                    var output;
+                    if (geom instanceof ol.geom.Polygon) {
+                        output = formatArea(/** @type {ol.geom.Polygon} */(geom));//面积值
+                        tooltipCoord = geom.getInteriorPoint().getCoordinates();//坐标
+                    } else if (geom instanceof ol.geom.LineString) {
+                        output = formatLength( /** @type {ol.geom.LineString} */(geom));//长度值
+                        tooltipCoord = geom.getLastCoordinate();//坐标
+                    }
+                    measureTooltipElement.innerHTML = output;//将测量值设置到测量工具提示框中显示
+                    measureTooltip.setPosition(tooltipCoord);//设置测量工具提示框的显示位置
+                });
+            }, this);
+        //绑定交互绘制工具结束绘制的事件
+        draw.on('drawend',
+            function (evt) {
+                measureTooltipElement.className = 'tooltip tooltip-static'; //设置测量提示框的样式
+                measureTooltip.setOffset([0, -7]);
+                // unset sketch
+                sketch = null; //置空当前绘制的要素对象
+                // unset tooltip so that a new one can be created
+                measureTooltipElement = null; //置空测量工具提示框对象
+                createMeasureTooltip();//重新创建一个测试工具提示框显示结果
+                ol.Observable.unByKey(listener);
+            }, this);
+    }
+
+
+    /**
+     *创建一个新的帮助提示框（tooltip）
+     */
+    function createHelpTooltip() {
+        if (helpTooltipElement) {
+            helpTooltipElement.parentNode.removeChild(helpTooltipElement);
+        }
+        helpTooltipElement = document.createElement('div');
+        helpTooltipElement.className = 'tooltip hidden';
+        helpTooltip = new ol.Overlay({
+            element: helpTooltipElement,
+            offset: [15, 0],
+            positioning: 'center-left'
+        });
+        map.addOverlay(helpTooltip);
+    }
+    /**
+     *创建一个新的测量工具提示框（tooltip）
+     */
+    function createMeasureTooltip()
+    {
+        if (measureTooltipElement)
+        {
+            measureTooltipElement.parentNode.removeChild(measureTooltipElement);
+        }
+        measureTooltipElement = document.createElement('div');
+        measureTooltipElement.className = 'tooltip tooltip-measure';
+        measureTooltip = new ol.Overlay({
+            element: measureTooltipElement,
+            offset: [0, -15],
+            positioning: 'bottom-center'
+        });
+        map.addOverlay(measureTooltip);
+    }
+
+    /**
+     * 让用户切换选择测量类型（长度/面积）
+     * @param {Event} e Change event.
+     */
+    typeSelect.onchange = function (e)
+    {
+        map.removeInteraction(draw); //移除绘制图形
+        addInteraction();//添加绘图进行测量
+
+
+        map.addInteraction(draw);
+        createMeasureTooltip(); //创建测量工具提示框
+        createHelpTooltip(); //创建帮助提示框
+
+    };
+
+    /**
+     * 测量长度输出
+     * @param {ol.geom.LineString} line
+     * @return {string}
+     */
+    var formatLength = function (line) {
+        var length;
+        if (geodesicCheckbox.checked) { //若使用测地学方法测量
+            var coordinates = line.getCoordinates();//解析线的坐标
+            length = 0;
+            var sourceProj = map.getView().getProjection(); //地图数据源投影坐标系
+            //通过遍历坐标计算两点之前距离，进而得到整条线的长度
+            for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
+                var c1 = ol.proj.transform(coordinates[i], sourceProj, 'EPSG:4326');
+                var c2 = ol.proj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
+                length += wgs84Sphere.haversineDistance(c1, c2);
+            }
+        } else {
+            length = Math.round(line.getLength() * 100) / 100; //直接得到线的长度
+        }
+        var output;
+        if (length > 100) {
+            output = (Math.round(length / 1000 * 100) / 100) + ' ' + 'km'; //换算成KM单位
+        } else {
+            output = (Math.round(length * 100) / 100) + ' ' + 'm'; //m为单位
+        }
+        return output;//返回线的长度
+    };
+    /**
+     * 测量面积输出
+     * @param {ol.geom.Polygon} polygon
+     * @return {string}
+     */
+    var formatArea = function (polygon) {
+        var area;
+        if (geodesicCheckbox.checked) {//若使用测地学方法测量
+            var sourceProj = map.getView().getProjection();//地图数据源投影坐标系
+            var geom = /** @type {ol.geom.Polygon} */(polygon.clone().transform(sourceProj, 'EPSG:4326')); //将多边形要素坐标系投影为EPSG:4326
+            var coordinates = geom.getLinearRing(0).getCoordinates();//解析多边形的坐标值
+            area = Math.abs(wgs84Sphere.geodesicArea(coordinates)); //获取面积
+        } else {
+            area = polygon.getArea();//直接获取多边形的面积
+        }
+        var output;
+        if (area > 10000) {
+            output = (Math.round(area / 1000000 * 100) / 100) + ' ' + 'km<sup>2</sup>'; //换算成KM单位
+        } else {
+            output = (Math.round(area * 100) / 100) + ' ' + 'm<sup>2</sup>';//m为单位
+        }
+        return output; //返回多边形的面积
+    };
+
+    addInteraction(); //调用加载绘制交互控件方法，添加绘图进行测量
+
+
+
+
+
+
+
+
+
 
 
 
@@ -816,11 +1323,11 @@
 
 
 
-    // 初始化绘制热区要素信息设置对话框
+
     $("#emergencyDiv").dialog(
         {
             height:400,
-            width:500,
+            width:900,
             modal: true,  // 创建模式对话框
             autoOpen: false, //默认隐藏对话框
             //对话框打开时默认设置
@@ -832,8 +1339,73 @@
                 {
                     "应急方案生成": function ()
                     {
+                        var type=$("#type_select option:selected").val();
+                        var source=$("#source_select option:selected").val();
+                        var multiple=$("#multiple").val();
+                        var distance=$("#distance").val();
+                        var toxicity=$("#toxicity_select option:selected").val();
+                        var danger=$("#danger_select option:selected").val();
+                        var stability=$("#stability_select option:selected").val();
+                        var solubility=$("#solubility_select option:selected").val();
+                        var volatility=$("#volatility_select option:selected").val();
 
-                        $(this).dialog('close'); //关闭对话框
+                        $.post("../EmergencyDecisionServlet",{type:type,source:source,multiple:multiple,
+                            distance:distance,toxicity:toxicity,danger:danger,stability:stability,
+                            solubility:solubility,volatility:volatility},function (data)
+                        {
+                            var count=data.length;
+                            var tableStr=' <table class="table table-bordered table-hover">\n' +
+                                '                        <caption style="background: rgba(255, 255, 255, 0.9);font-size: 24px;text-align: right">共查出'+count+'条历史相似案例，供您决策&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                '<button class="btn btn-info btn-danger" onclick="closeHistory();">关闭</button></caption>\n' +
+                                '                        <tr class="success">\n' +
+                                '                            <th>案例</th>\n' +
+                                '                            <th>污染物名称</th>\n' +
+                                '                            <th>类型</th>\n' +
+                                '                            <th>来源</th>\n' +
+                                '                            <th>超标倍数</th>\n' +
+                                '                            <th>与下游取水口距离（km）</th>\n' +
+                                '                            <th>毒性</th>\n' +
+                                '                            <th>危险性</th>\n' +
+                                '                            <th>稳定性</th>\n' +
+                                '                            <th>溶解性</th>\n' +
+                                '                            <th>挥发性</th>\n' +
+                                '                            <th>应急处置技术</th>\n' +
+                                '                            <th>相似度</th>\n' +
+                                '                        </tr>';
+                            var bestMethod;
+                            for (var i=0;i<data.length;i++)
+                            {
+
+                                var bestObj=data[0];
+                                bestMethod=bestObj.technology;
+                                var obj=data[i];
+                                var itemStr='<tr class="info">\n' +
+                                    '                            <td>'+'案例'+obj.id+'</td>\n' +
+                                    '                            <td>'+obj.name+'</td>\n' +
+                                    '                            <td>'+obj.type+'</td>\n' +
+                                    '                            <td>'+obj.source+'</td>\n' +
+                                    '                            <td>'+obj.multiple+'</td>\n' +
+                                    '                            <td>'+obj.distance+'</td>\n' +
+                                    '                            <td>'+obj.toxicity+'</td>\n' +
+                                    '                            <td>'+obj.danger+'</td>\n' +
+                                    '                            <td>'+obj.stability+'</td>\n' +
+                                    '                            <td>'+obj.solubility+'</td>\n' +
+                                    '                            <td>'+obj.volatility+'</td>\n' +
+                                    '                            <td style="background-color: #03ff03">'+obj.technology+'</td>\n' +
+                                    '                            <td>'+obj.sim+'</td>\n' +
+                                    '                        </tr>';
+                                tableStr+=itemStr;
+                            }
+                            var endStr='</table>';
+                            tableStr+=endStr;
+                           $("#decisionDiv").css("display","block");
+                           $("#decisionDiv").html(tableStr);
+                           alert("根据历史经验，推荐使用此处理技术："+bestMethod);
+                        });
+
+                       // $(this).dialog('close'); //关闭对话框
                     },
                     "取消": function ()
                     {
@@ -853,12 +1425,15 @@
     //水质异常站点按钮的回调函数
     function findPollutedSite()
     {
+        $("#waterDiv").css("display","block");
 
         $.post("../FindPollutedWaterServlet",function (data)
         {
-            var divStr='<div  style="z-index: 2000;position: absolute;right: 0px;bottom: 0px;width: 600px;height: 400px;background-color: #ffffff;opacity: 0.9">\n' +
-                '                    <table class="table table-bordered">\n' +
-                '                        <caption style="font-size: 20px;text-align: center">近两天的异常数据(IV:轻度污染，V:中度污染，劣V：重度污染)</caption>\n' +
+            var divStr=
+                '                    <table class="table table-bordered table-hover">\n' +
+                '                        <caption style="font-size: 20px;text-align: right;background-color: rgba(255,255,255,0.7)">' +
+                '近两天的异常数据(IV:轻度污染，V:中度污染，劣V：重度污染)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                '<button class="btn btn-xs btn-danger" onclick="guanbi();">关闭</button></caption>\n' +
                 '                        <tr class="success">\n' +
                 '                            <th>站点名</th>\n' +
                 '                            <th>时间</th>\n' +
@@ -927,8 +1502,8 @@
                 divStr+=itemStr;
 
             }
-            var endStr=' </table>\n' +
-                '                </div>';
+            var endStr=' </table>' ;
+
             divStr+=endStr;
             $("#waterDiv").html(divStr);
 

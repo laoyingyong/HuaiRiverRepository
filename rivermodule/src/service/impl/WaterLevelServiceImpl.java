@@ -94,4 +94,9 @@ public class WaterLevelServiceImpl implements WaterLevelService
         int i = dao.conditionalFindAllCount(condition);
         return i;
     }
+
+    @Override
+    public List<WaterLevel> findBySiteName(String siteName) {
+        return dao.findBySiteName(siteName);
+    }
 }

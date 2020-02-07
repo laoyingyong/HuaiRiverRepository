@@ -98,10 +98,10 @@
                         <dd>多尺度表达</dd>
                     </dl>
                     <dl>
-                        <dt><span class="glyphicon glyphicon-equalizer"></span>&nbsp;数据查询与分析<img src="img/select_xl01.png"/></dt>
-                        <dd ><a href="waterQualityStationPage/viewWaterQualityData.jsp" target="myframe" style="color: white">水质信息查询</a></dd>
-                        <dd> <a href="waterLevelPage/viewWaterLevelInfo.jsp" target="myframe" style="color: white">水位信息查询</a></dd>
-                        <dd id="rain_fall"><a href="rainFallPage/viewRainInfo.jsp" target="myframe" style="color: white">降雨信息查询</a></dd>
+                        <dt><span class="glyphicon glyphicon-equalizer"></span>&nbsp;数据修改与删除<img src="img/select_xl01.png"/></dt>
+                        <dd ><a href="waterQualityStationPage/viewWaterQualityData.jsp" target="myframe" style="color: white">水质信息管理</a></dd>
+                        <dd> <a href="waterLevelPage/viewWaterLevelInfo.jsp" target="myframe" style="color: white">水位信息管理</a></dd>
+                        <dd id="rain_fall"><a href="rainFallPage/viewRainInfo.jsp" target="myframe" style="color: white">降雨信息管理</a></dd>
                         <dd>数据获取</dd>
                         <dd>分析评价</dd>
                         <dd>生成报告</dd>

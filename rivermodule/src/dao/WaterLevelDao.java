@@ -15,4 +15,5 @@ public interface WaterLevelDao
     public abstract boolean deleteInfo(int id);
     public abstract List<WaterLevel> conditionalQueryByPage(int start, int pageSize, Map<String,String[]> condition);
     public abstract int conditionalFindAllCount(Map<String, String[]> condition);
+    public abstract List<WaterLevel> findBySiteName(String siteName);
 }

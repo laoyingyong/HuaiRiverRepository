@@ -201,4 +201,17 @@ public class WaterLevelDaoImpl implements WaterLevelDao
 
         return integer;
     }
+
+    @Override
+    public List<WaterLevel> findBySiteName(String siteName)
+    {
+        List<WaterLevel> query = null;
+        try {
+            String sql="SELECT *  FROM water_level WHERE siteName=? ORDER BY collectionDate";
+            query = template.query(sql, new BeanPropertyRowMapper<WaterLevel>(WaterLevel.class), siteName);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return query;
+    }
 }

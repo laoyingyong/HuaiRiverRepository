@@ -88,6 +88,89 @@
     </style>
     <script>
 
+        //查看水位变化曲线图的回调函数
+        function viewLevelChange(siteName)
+        {
+            $.post("./FindBySiteNameServlet",{siteName:siteName},function (data)
+            {
+                var timeArray=new Array();
+                var levelArray=new Array();
+                var flowArray=new Array();
+                for(var i=0;i<data.length;i++)
+                {
+                    var obj=data[i];
+                    //var zhanName=obj.siteName;
+                    var waterLevel=obj.waterLevel;
+                    var flow=obj.flow;
+                    var collectionDate=obj.collectionDate;
+                    var dateStr=dateFormat("YYYY-MM-dd HH:mm",new Date(collectionDate));
+
+                    timeArray.push(dateStr);
+                    levelArray.push(waterLevel);
+                    flowArray.push(flow);
+
+                }
+
+                var myChart = echarts.init(document.getElementById('main'));
+                var option = {
+                    backgroundColor:'rgba(255, 255, 255, 0.7)',
+                    title: {
+                        text:siteName+ "监测站水位变化曲线图",
+                        textStyle:{ fontSize:18},
+                        top:20,
+                        left:"center"
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['水位', '流量']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: timeArray
+
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name:"水位单位(m)\n     流量单位m^3/s",
+                        nameTextStyle:{ align:"right"}
+                    },
+                    series: [
+                        {
+                            name: '水位',
+                            type: 'line',
+                            stack: '总量',
+                            data: levelArray
+                        },
+                        {
+                            name: '流量',
+                            type: 'line',
+                            stack: '总量',
+                            data: flowArray
+                        },
+
+                    ]
+                };
+
+                myChart.setOption(option,true);
+
+            });
+
+        }
+
 
         function closeResult()
         {
@@ -209,8 +292,9 @@
             $.post("/FindByNameAndTimeServlet",{cezhanName:cezhanName,startTime:startTime,endTime:endTime,water_level:water_level},function (data)
             {
                 var count=data.length;
-                var mainStr='<table class="table table-bordered" id="shuiZhiTable">\n' +
-                    ' <caption style="font-size: 24px;text-align: center">查询结果(共'+count+'条记录)' +
+                var mainStr='<table class="table table-bordered table-hover" id="shuiZhiTable">\n' +
+                    ' <caption style="font-size: 24px;text-align: right;background-color: rgba(255,255,255,0.7)">查询结果(共'+count+'条记录)' +
+                    '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
                     '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="closeResult();" class="btn btn-danger btn-sm">关闭</button></caption>\n'+
                     '                <tr class="success">\n' +
                     '                    <th>测站名</th>\n' +
@@ -365,6 +449,7 @@
     </div><%--row end--%>
     <div class="row">
         <div id="dd" title="实时水情">
+            <div id="shuiqingDiv">
             <table class="table table-bordered" id="shuiQingTable">
                 <tr class="success">
                     <th>河流</th>
@@ -375,6 +460,7 @@
                     <th>超警戒/汛限水位</th>
                 </tr>
             </table>
+            </div>
         </div>
 
         <div id="wQuality" title="淮河流域实时水质数据">
@@ -448,7 +534,7 @@
             <span id="reset"><button class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="right" title="复位" style="background-color: #7897BC;height:23px;width:23px"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button></span>
             <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
             <div id="main" style="width: 500px;height:250px;right: 0px;bottom: 0px;position: absolute;z-index: 2000;"></div>
-            <div id="reslut" style="width: 700px;height:300px;right: 0px;top: 100px;position: absolute;z-index: 2000;overflow-y: scroll;display: none"></div>
+            <div id="reslut" style="border-radius:10px;box-shadow:0px 0px 20px 5px gray;width: 700px;height:300px;right: 0px;top: 100px;position: absolute;z-index: 2000;overflow-y: scroll;display: none;background-color: rgba(255,255,255,0.7)"></div>
 
         </div><%--地图容器end--%>
 
@@ -687,7 +773,7 @@
         {
 
 
-            var tableStr='<table class="table table-bordered" id="shuiZhiTable">\n' +
+            var tableStr='<table class="table table-bordered table-hover" id="shuiZhiTable">\n' +
                 '                    <tr class="success">\n' +
                 '                        <th>测站名</th>\n' +
                 '                        <th>测量时间</th>\n' +
@@ -742,7 +828,7 @@
                     tdStr=' <td style="background-color: #ffffff">'+level+'</td>';
                 }
 
-                rowStr='<tr">\n' +
+                rowStr='<tr class="info">\n' +
                     '                        <td>'+belongStation+'</td>\n' +
                     '                        <td>'+timeStr+'</td>\n' +
                     '                        <td>'+pH+'</td>\n' +
@@ -786,16 +872,17 @@
             // 基于准备好的dom，初始化echarts实例
             var myChart = echarts.init(document.getElementById('main'));
             myChart.setOption({
+                tooltip:{formatter:"{b}:{c}"+"，"+"占比{d}%"},
                 backgroundColor:'rgba(255, 255, 255, 0.7)',
                 legend:{orient:"vertical",left:"70%",y:"center",data:["I类水质","II类水质","III类水质","IV类水质","V类水质","劣V类水质"]},
                 toolbox:{feature:{ saveAsImage:{ type:'png'}}},
-                tooltip: {},
                 title: {
                     text: stationName,
                     left: 'center',//主副标题的水平位置
                     subtext:"历史水质统计图",
                     subtextStyle: {//副标题的属性
                         color: '#000000',
+                        fontSize:15
                         // 同主标题
                     },
 
@@ -980,7 +1067,7 @@
         $.post("CurrentWaterLevelServlet",function (data)
         {
 
-            var tableStr=' <table class="table table-bordered" id="shuiQingTable">\n' +
+            var tableStr=' <table class="table table-bordered table-hover" id="shuiQingTable">\n' +
                 '                   <tr class="success">\n' +
                 '                       <th>河流</th>\n' +
                 '                       <th>站名</th>\n' +
@@ -988,6 +1075,7 @@
                 '                       <th>水位</th>\n' +
                 '                       <th>流量</th>\n' +
                 '                       <th>超警戒/汛限水位</th>\n' +
+                '                       <th>操作</th>\n' +
                 '                   </tr>';
 
             for(var i=0;i<data.length;i++)
@@ -1008,13 +1096,14 @@
                     '                       <td>'+waterLevel+'</td>\n' +
                     '                       <td>'+flow+'</td>\n' +
                     '                       <td>'+over+'</td>\n' +
+                    '                       <td><button class="btn btn-sm btn-info" onclick="viewLevelChange(\''+stationName+'\');">水位变化曲线图</button></td>\n' +
                     '                   </tr>';
                 tableStr+=hangStr;
 
             }
             var endStr=' </table>\n';
             tableStr+=endStr;
-            $("#shuiQingTable").html(tableStr);
+            $("#shuiqingDiv").html(tableStr);
 
 
 

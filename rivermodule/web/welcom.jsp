@@ -36,7 +36,9 @@
 </head>
 <body style="background: url('img/img01.jpg') repeat-x;padding-top: 52px">
 <div id="particles-js" style="height: 550px;z-index: 2000;">
-    <h3 style="margin-left: 450px">欢迎使用淮河水量水质监测系统</h3>
+    <div style="">
+        <h3 style="margin-left: 450px;text-shadow:1px 1px 5px red,2px 2px 5px orange">欢迎使用淮河水量水质监测系统</h3>
+    </div>
 </div>
 
 <footer class="footer">
