@@ -1286,14 +1286,22 @@
 
 
 
-    $.post("../FindAlllStationServlet",function (data)
+    $.post("../IndexingServlet",function (data)
     {
         for(var i=0;i<data.length;i++)
         {
             var obj=data[i];
-            var longitude=obj.longitude;
-            var latitude=obj.latitude;
-            var stationName=obj.stationName;
+            var station=obj.station;
+            var quality=obj.quality;
+
+            var longitude=station.longitude;
+            var latitude=station.latitude;
+            var stationName=station.stationName;
+
+            var level=null;
+            if(quality!=null)
+            {level=quality.level;}
+            
 
             //实例化Vector要素，通过矢量图层添加到地图容器中
             var iconFeature2 = new ol.Feature({
@@ -1302,7 +1310,20 @@
                 population: 2115 //大概人口数（万）
             });
 
-            //haha.src="../img/blueIconThree.png";
+            if(level!=null&&level=="II")
+            {haha.src="../img/blueIconTwo.png";}
+            else if(level!=null&&level=="I")
+            {haha.src="../img/blueIconOne.png";}
+            else if(level!=null&&level=="III")
+            {haha.src="../img/blueIconThree.png";}
+            else if(level!=null&&level=="IV")
+            {haha.src="../img/blueIconFour.png";}
+            else if(level!=null&&level=="V")
+            {haha.src="../img/blueIconWu.png";}
+            else if(level!=null&&level=="劣V")
+            {haha.src="../img/blueIconFive.png";}
+            else
+            {haha.src="../img/blueIconNull.png";}
             iconFeature2.setStyle(createLabelStyle(iconFeature2));
             //矢量标注的数据源
             vectorSource.addFeature(iconFeature2)
@@ -1526,7 +1547,7 @@
                     option.title.subtextStyle.color="#ff0000";
                 }
                 // 使用刚指定的配置项和数据显示图表。
-                myChart.setOption(option);
+                myChart.setOption(option,true);
 
 
                 featuerInfo.att.text=introduction;//正文

@@ -24,4 +24,6 @@ public interface WaterQualityStationDao
     public  abstract WaterQualityStation findIntro(double longitude,double latitude);
 
     public abstract StationAndQuality findStationAndQuality(double longitude,double latitude);
+
+    public abstract List<StationAndQuality> indexing();
 }

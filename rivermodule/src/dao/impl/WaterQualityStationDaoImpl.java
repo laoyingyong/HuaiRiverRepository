@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import util.JDBCUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -317,5 +318,35 @@ public class WaterQualityStationDaoImpl implements WaterQualityStationDao
             System.out.println(e);
         }
         return stationAndQuality;
+    }
+
+    @Override
+    public List<StationAndQuality> indexing()
+    {
+        List<StationAndQuality> result=new LinkedList<>();
+        String sql="select * from water_quality_station";
+        List<WaterQualityStation> stationList = template.query(sql, new BeanPropertyRowMapper<WaterQualityStation>(WaterQualityStation.class));
+        for (WaterQualityStation station : stationList)
+        {
+            String stationName = station.getStationName();
+            String sql2="SELECT * FROM water_quality WHERE belongStation=? ORDER BY DATETIME DESC LIMIT 1";
+            List<WaterQuality> qualityList = null;
+            try {
+                qualityList = template.query(sql2, new BeanPropertyRowMapper<WaterQuality>(WaterQuality.class),stationName);
+            } catch (Exception e)
+            {
+                System.out.println(e);
+            }
+
+            WaterQuality waterQuality=null;
+            if(qualityList!=null&&qualityList.size()!=0)
+            {waterQuality = qualityList.get(0);}
+
+            StationAndQuality stationAndQuality=new StationAndQuality();
+            stationAndQuality.setStation(station);
+            stationAndQuality.setQuality(waterQuality);
+            result.add(stationAndQuality);
+        }
+        return result;
     }
 }

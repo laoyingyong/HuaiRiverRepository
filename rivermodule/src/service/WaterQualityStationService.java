@@ -23,4 +23,5 @@ public interface WaterQualityStationService
     public abstract List<WaterQualityStation> findPollutedSite();
     public  abstract WaterQualityStation findIntro(double longitude,double latitude);
     public abstract StationAndQuality findStationAndQuality(double longitude, double latitude);
+    public abstract List<StationAndQuality> indexing();
 }

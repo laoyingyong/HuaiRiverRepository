@@ -91,27 +91,17 @@
                     </dl>
                     <dl>
                         <dt><span class="glyphicon glyphicon-blackboard"></span>&nbsp;地理信息展示<img  src="img/select_xl01.png"/></dt>
-                        <dd>监测可视化</dd>
-                        <dd><a target="myframe" href="viewMap.jsp" style="color: white">地图浏览</a></dd>
-                        <dd>水质空间数据分析</dd>
-                        <dd>空间属性查询</dd>
-                        <dd>多尺度表达</dd>
+                        <dd><a target="myframe" href="viewMap.jsp" style="color: white">地理信息展示</a></dd>
                     </dl>
                     <dl>
-                        <dt><span class="glyphicon glyphicon-equalizer"></span>&nbsp;数据修改与删除<img src="img/select_xl01.png"/></dt>
+                        <dt><span class="glyphicon glyphicon-equalizer"></span>&nbsp;数据管理<img src="img/select_xl01.png"/></dt>
                         <dd ><a href="waterQualityStationPage/viewWaterQualityData.jsp" target="myframe" style="color: white">水质信息管理</a></dd>
                         <dd> <a href="waterLevelPage/viewWaterLevelInfo.jsp" target="myframe" style="color: white">水位信息管理</a></dd>
                         <dd id="rain_fall"><a href="rainFallPage/viewRainInfo.jsp" target="myframe" style="color: white">降雨信息管理</a></dd>
-                        <dd>数据获取</dd>
-                        <dd>分析评价</dd>
-                        <dd>生成报告</dd>
                     </dl>
                     <dl>
                         <dt><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;应急决策处理<img src="img/select_xl01.png"/></dt>
-                        <dd> <a href="emergencyPage/emergencyDecision.jsp" target="myframe" style="color: white">应急决策分析</a></dd>
-                        <dd>应急处理流程</dd>
-                        <dd>应急方案生成</dd>
-                        <dd>应急决策总结</dd>
+                        <dd> <a href="emergencyPage/emergencyDecision.jsp" target="myframe" style="color: white">应急决策处理</a></dd>
                     </dl>
 
                     <dl>

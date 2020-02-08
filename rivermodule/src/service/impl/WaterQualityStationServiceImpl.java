@@ -123,4 +123,10 @@ public class WaterQualityStationServiceImpl implements WaterQualityStationServic
     public StationAndQuality findStationAndQuality(double longitude, double latitude) {
         return dao.findStationAndQuality(longitude,latitude);
     }
+
+    @Override
+    public List<StationAndQuality> indexing()
+    {
+        return dao.indexing();
+    }
 }
