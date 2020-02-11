@@ -214,4 +214,17 @@ public class WaterLevelDaoImpl implements WaterLevelDao
         }
         return query;
     }
+
+    @Override
+    public List<WaterLevel> findWeekData()
+    {
+        List<WaterLevel> query = null;
+        try {
+            String sql="SELECT * FROM water_level WHERE TO_DAYS(NOW())-TO_DAYS(collectionDate)<=6 ORDER BY collectionDate DESC;";
+            query = template.query(sql, new BeanPropertyRowMapper<WaterLevel>(WaterLevel.class));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return query;
+    }
 }

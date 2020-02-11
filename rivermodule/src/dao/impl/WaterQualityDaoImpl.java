@@ -170,5 +170,18 @@ public class WaterQualityDaoImpl implements WaterQualityDao
         return query;
     }
 
+    @Override
+    public List<WaterQuality> findWeekData()
+    {
+        List<WaterQuality> query = null;
+        try {
+            String sql="SELECT * FROM water_quality WHERE TO_DAYS(NOW())-TO_DAYS(DATETIME)<=6 ORDER BY DATETIME DESC";
+            query = template.query(sql, new BeanPropertyRowMapper<WaterQuality>(WaterQuality.class));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return query;
+    }
+
 
 }

@@ -188,13 +188,30 @@
 
 
     <div class="row" style="padding-top:50px">
-        <div class="col-sm-3 col-sm-offset-4">
+        <div class="col-sm-3 ">
             <table class="table table-bordered">
                 <caption style="text-align: center;font-size: 24px">一键添加多条水质数据</caption>
-                <tr class="info">
+                <tr>
                     <td><button onclick="addSomeWaterQuality();" class="btn btn-info"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;从“中国环境监测总站”同步数据到数据库</button></td>
                 </tr>
             </table>
+
+        </div>
+
+        <div class="col-sm-5 col-sm-offset-3">
+            <form method="post" enctype="multipart/form-data" action="../UploadServlet">
+            <table class="table table-bordered">
+                <caption style="text-align: center;font-size: 24px">文件上传方式</caption>
+                <tr>
+                    <td>
+                        <input type="file" class="btn-info btn" name="file">
+                    </td>
+                    <td>
+                        <input type="submit" value="开始上传水质数据" class="btn btn-info" style="float: left">
+                    </td>
+                </tr>
+            </table>
+            </form>
 
         </div>
 

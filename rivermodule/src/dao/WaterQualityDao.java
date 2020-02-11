@@ -20,6 +20,7 @@ public interface WaterQualityDao
     public abstract List<WaterQuality> findPollutedWater();
     public abstract List<WaterQuality> findByNameAndTime(String name,String startTime,String endTime,String level);
     public abstract List<WaterQuality> findByStationName(String name);
+    public abstract List<WaterQuality> findWeekData();
 
 
 }

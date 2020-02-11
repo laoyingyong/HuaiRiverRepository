@@ -77,6 +77,7 @@
         }
     </script>
     <style>
+
         #reset{
             left: 25px;
             top: 100px;
@@ -173,6 +174,10 @@
 
     </style>
     <script>
+
+        $(function ()
+        {
+        });
         function downloadFile()
         {
             $.get("../DownloadFileServlet",{filename:"a.txt"},function (data)
@@ -222,7 +227,17 @@
                   </ul>
 
               </li>
-              <li role="presentation"><a href="../DownloadFileServlet?filename=应急方案.txt">下载文件</a></li>
+              <li role="presentation">
+
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                      下载数据 <span class="caret"></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li> <a href="../DownloadFileServlet?filename=水位数据.txt">下载水位数据</a></li>
+                      <li><a href="../DownloadFileServlet2?filename=水质数据.txt">下载水质数据</a></li>
+                  </ul>
+
+              </li>
               <li role="presentation">
                   <div id="menu" style="margin-top: 10px">
                       <label style="float: left">测量: &nbsp;</label>

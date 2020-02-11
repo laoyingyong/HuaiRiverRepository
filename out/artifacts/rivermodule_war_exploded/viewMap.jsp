@@ -1301,7 +1301,7 @@
             var level=null;
             if(quality!=null)
             {level=quality.level;}
-            
+
 
             //实例化Vector要素，通过矢量图层添加到地图容器中
             var iconFeature2 = new ol.Feature({

@@ -136,5 +136,11 @@ public class WaterQualityServiceImpl implements WaterQualityService
         return dao.findByStationName(name);
     }
 
+    @Override
+    public List<WaterQuality> findWeekData()
+    {
+        return dao.findWeekData();
+    }
+
 
 }

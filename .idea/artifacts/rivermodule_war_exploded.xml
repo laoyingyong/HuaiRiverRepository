@@ -2,12 +2,17 @@
   <artifact type="exploded-war" name="rivermodule:war exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="rivermodule/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="rivermodule" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="lib" />
+          <element id="library" level="project" name="jsoup-1.11.2" />
+          <element id="library" level="project" name="fastjson-1.2.47" />
+        </element>
       </element>
+      <element id="javaee-facet-resources" facet="rivermodule/web/Web" />
     </root>
   </artifact>
 </component>

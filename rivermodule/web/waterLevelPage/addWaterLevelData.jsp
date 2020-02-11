@@ -81,6 +81,30 @@
             <button class="btn btn-info" onclick="addWaterLevel();"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;从淮河水文局同步数据到数据库</button>
         </div>
 
+
+    </div>
+    <div class="row" style="margin-top: 50px">
+        <div class="col-sm-5">
+            <form method="post" action="../UploadServlet2" enctype="multipart/form-data">
+                <table class="table table-bordered">
+                    <caption style="text-align: center;font-size: 24px" >文件上传方式</caption>
+                    <tr>
+                        <td>
+                            <input type="file" name="file" class="btn btn-info" >
+
+                        </td>
+                        <td>
+                            <input type="submit" value="开始上传水位数据" class="btn btn-info">
+                        </td>
+                    </tr>
+
+                </table>
+
+
+            </form>
+
+        </div>
+
     </div>
 </div>
 

@@ -99,4 +99,9 @@ public class WaterLevelServiceImpl implements WaterLevelService
     public List<WaterLevel> findBySiteName(String siteName) {
         return dao.findBySiteName(siteName);
     }
+
+    @Override
+    public List<WaterLevel> findWeekData() {
+        return dao.findWeekData();
+    }
 }
