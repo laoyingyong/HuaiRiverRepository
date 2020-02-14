@@ -37,18 +37,30 @@ public class WaterLevelDaoImpl implements WaterLevelDao
     @Override
     public boolean addWaterLevelInfo(WaterLevel waterLevel)
     {
-        int update=0;
+        String sq="select * from water_level where siteName=? and collectionDate=?";
+        List<WaterLevel> query=null;
         try {
-            String sql="insert into water_level (id,riverName,siteName,collectionDate,waterLevel,flow,over) values(null,?,?,?,?,?,?)";
-            update = template.update(sql, waterLevel.getRiverName(),
-                    waterLevel.getSiteName(),
-                    waterLevel.getCollectionDate(),
-                    waterLevel.getWaterLevel(),
-                    waterLevel.getFlow(),
-                    waterLevel.getOver());
-        } catch (DataAccessException e) {
+            query = template.query(sq, new BeanPropertyRowMapper<WaterLevel>(WaterLevel.class), waterLevel.getSiteName(), waterLevel.getCollectionDate());
+        } catch (Exception e) {
             System.out.println(e);
         }
+        int update=0;
+        if(query==null||query.size()==0)
+        {
+            try {
+                String sql="insert into water_level (id,riverName,siteName,collectionDate,waterLevel,flow,over) values(null,?,?,?,?,?,?)";
+                update = template.update(sql, waterLevel.getRiverName(),
+                        waterLevel.getSiteName(),
+                        waterLevel.getCollectionDate(),
+                        waterLevel.getWaterLevel(),
+                        waterLevel.getFlow(),
+                        waterLevel.getOver());
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+        }
+
         if(update!=0)
         {
             return true;

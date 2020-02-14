@@ -8,48 +8,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fbe4875f-6cb9-4ff5-add2-683cf4c6c4f9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/rivermodule_war_exploded.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/rivermodule_war_exploded.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/untitle_war_exploded.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/dao/WaterLevelDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/dao/WaterLevelDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/dao/WaterQualityDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/dao/WaterQualityDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/dao/impl/WaterLevelDaoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/dao/impl/WaterLevelDaoImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/dao/impl/WaterQualityDaoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/dao/impl/WaterQualityDaoImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/service/WaterLevelService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/service/WaterLevelService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/service/WaterQualityService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/service/WaterQualityService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/service/impl/WaterLevelServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/service/impl/WaterLevelServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/service/impl/WaterQualityServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/service/impl/WaterQualityServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/web/servlet/others/DownloadFileServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/web/servlet/others/DownloadFileServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/WEB-INF/classes/应急方案.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/emergencyPage/emergencyDecision.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/emergencyPage/emergencyDecision.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/viewMap.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/viewMap.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/waterQualityPage/addWaterQualityData.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/rivermodule_war_exploded/waterQualityPage/addWaterQualityData.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rivermodule/dao/WaterLevelDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rivermodule/dao/WaterLevelDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rivermodule/dao/WaterQualityDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rivermodule/dao/WaterQualityDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rivermodule/dao/impl/WaterLevelDaoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rivermodule/dao/impl/WaterLevelDaoImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rivermodule/dao/impl/WaterQualityDaoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rivermodule/dao/impl/WaterQualityDaoImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rivermodule/service/WaterLevelService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rivermodule/service/WaterLevelService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rivermodule/service/WaterQualityService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rivermodule/service/WaterQualityService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rivermodule/service/impl/WaterLevelServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rivermodule/service/impl/WaterLevelServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rivermodule/service/impl/WaterQualityServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rivermodule/service/impl/WaterQualityServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rivermodule/web/servlet/others/DownloadFileServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rivermodule/web/servlet/others/DownloadFileServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rivermodule/应急方案.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/rivermodule.iml" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/rivermodule.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/src/dao/WaterLevelDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/src/dao/WaterLevelDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/src/dao/WaterQualityDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/src/dao/WaterQualityDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rivermodule/src/dao/impl/WaterLevelDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/src/dao/impl/WaterLevelDaoImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rivermodule/src/dao/impl/WaterQualityDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/src/dao/impl/WaterQualityDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/src/service/WaterLevelService.java" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/src/service/WaterLevelService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/src/service/WaterQualityService.java" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/src/service/WaterQualityService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/src/service/impl/WaterLevelServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/src/service/impl/WaterLevelServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/src/service/impl/WaterQualityServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/src/service/impl/WaterQualityServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/src/web/servlet/others/DownloadFileServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/src/web/servlet/others/DownloadFileServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/src/应急方案.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/web/emergencyPage/emergencyDecision.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/web/emergencyPage/emergencyDecision.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/web/viewMap.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/web/viewMap.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/web/waterLevelPage/addWaterLevelData.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/web/waterLevelPage/addWaterLevelData.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rivermodule/web/waterQualityPage/addWaterQualityData.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/rivermodule/web/waterQualityPage/addWaterQualityData.jsp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -61,7 +22,7 @@
     <session id="957545075">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="49" />
+          <entry key="project.closed" value="51" />
           <entry key="project.open.time.0" value="1" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.2" value="2" />
@@ -76,12 +37,12 @@
           <entry key="project.open.time.42" value="3" />
           <entry key="project.open.time.43" value="2" />
           <entry key="project.open.time.44" value="5" />
-          <entry key="project.open.time.45" value="6" />
+          <entry key="project.open.time.45" value="7" />
           <entry key="project.open.time.46" value="1" />
           <entry key="project.open.time.47" value="3" />
           <entry key="project.open.time.48" value="4" />
           <entry key="project.open.time.49" value="1" />
-          <entry key="project.open.time.50" value="2" />
+          <entry key="project.open.time.50" value="3" />
           <entry key="project.open.time.53" value="1" />
           <entry key="project.open.time.54" value="1" />
           <entry key="project.open.time.57" value="1" />
@@ -89,14 +50,14 @@
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="51" />
+          <entry key="project.opened" value="53" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="class" value="4" />
           <entry key="css" value="19" />
-          <entry key="java" value="458" />
+          <entry key="java" value="463" />
           <entry key="jpg" value="2" />
           <entry key="js" value="37" />
           <entry key="jsp" value="200" />
@@ -111,7 +72,7 @@
           <entry key="CLASS" value="4" />
           <entry key="CSS" value="19" />
           <entry key="Image" value="35" />
-          <entry key="JAVA" value="458" />
+          <entry key="JAVA" value="463" />
           <entry key="JSP" value="200" />
           <entry key="JavaScript" value="37" />
           <entry key="PLAIN_TEXT" value="2" />
@@ -123,7 +84,7 @@
         <counts>
           <entry key="css" value="169" />
           <entry key="dummy" value="46" />
-          <entry key="java" value="28158" />
+          <entry key="java" value="28607" />
           <entry key="js" value="222" />
           <entry key="jsp" value="44605" />
           <entry key="txt" value="11" />
@@ -133,7 +94,7 @@
         <counts>
           <entry key="CSS" value="169" />
           <entry key="HTML" value="15" />
-          <entry key="JAVA" value="28156" />
+          <entry key="JAVA" value="28605" />
           <entry key="JSP" value="44590" />
           <entry key="JavaScript" value="222" />
           <entry key="PLAIN_TEXT" value="57" />
@@ -145,68 +106,55 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rivermodule/web/waterQualityPage/addWaterQualityData.jsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="206" column="74" selection-start-line="206" selection-start-column="74" selection-end-line="206" selection-end-column="74" />
-              <folding>
-                <element signature="e#169#176#1" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rivermodule/src/web/servlet/others/UploadServlet.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1732">
-              <caret line="116" column="44" selection-start-line="116" selection-start-column="44" selection-end-line="116" selection-end-column="44" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rivermodule/web/waterLevelPage/addWaterLevelData.jsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="147">
-              <caret line="87" column="57" selection-start-line="87" selection-start-column="57" selection-end-line="87" selection-end-column="57" />
-              <folding>
-                <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#caption#0;n#table#0;n#form#0;n#div#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/rivermodule/src/web/servlet/others/UploadServlet2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1805">
+            <state relative-caret-position="338">
               <caret line="116" column="51" selection-start-line="116" selection-start-column="51" selection-end-line="116" selection-end-column="51" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rivermodule/web/userPage/currentUserInfo.jsp">
+        <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/WaterQualityStationDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="74" column="36" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="36" />
-              <folding>
-                <element signature="n#style#0;n#caption#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="257">
+              <caret line="27" column="55" lean-forward="true" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="55" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rivermodule/web/otherPage/message2.jsp">
+        <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/impl/WaterQualityDaoImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="22" column="56" selection-start-line="22" selection-start-column="56" selection-end-line="22" selection-end-column="56" />
-              <folding>
-                <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="152">
+              <caret line="39" column="39" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/WaterQualityDao.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="304">
+              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/WaterLevelDao.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="152">
+              <caret line="12" column="34" lean-forward="true" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/impl/WaterLevelDaoImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="703">
+              <caret line="48" column="9" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -216,28 +164,20 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="285">
               <caret line="15" column="55" selection-start-line="15" selection-start-column="55" selection-end-line="15" selection-end-column="55" />
-              <folding>
-                <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rivermodule/web/list.jsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1410" />
-          </provider>
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rivermodule/web/index.jsp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
+            <state relative-caret-position="570">
               <caret line="30" column="73" selection-start-line="30" selection-start-column="6" selection-end-line="30" selection-end-column="73" />
-              <folding>
-                <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -340,12 +280,10 @@
         <option value="$PROJECT_DIR$/rivermodule/src/web/servlet/waterQualityStation/IndexingServlet.java" />
         <option value="$PROJECT_DIR$/rivermodule/web/viewMap.jsp" />
         <option value="$PROJECT_DIR$/rivermodule/src/dao/WaterLevelDao.java" />
-        <option value="$PROJECT_DIR$/rivermodule/src/dao/impl/WaterLevelDaoImpl.java" />
         <option value="$PROJECT_DIR$/rivermodule/src/service/WaterLevelService.java" />
         <option value="$PROJECT_DIR$/rivermodule/src/service/impl/WaterLevelServiceImpl.java" />
         <option value="$PROJECT_DIR$/rivermodule/src/web/servlet/others/DownloadFileServlet.java" />
         <option value="$PROJECT_DIR$/rivermodule/src/dao/WaterQualityDao.java" />
-        <option value="$PROJECT_DIR$/rivermodule/src/dao/impl/WaterQualityDaoImpl.java" />
         <option value="$PROJECT_DIR$/rivermodule/src/service/WaterQualityService.java" />
         <option value="$PROJECT_DIR$/rivermodule/src/service/impl/WaterQualityServiceImpl.java" />
         <option value="$PROJECT_DIR$/rivermodule/web/emergencyPage/emergencyDecision.jsp" />
@@ -356,6 +294,8 @@
         <option value="$PROJECT_DIR$/rivermodule/web/otherPage/message2.jsp" />
         <option value="$PROJECT_DIR$/rivermodule/web/waterLevelPage/addWaterLevelData.jsp" />
         <option value="$PROJECT_DIR$/rivermodule/src/web/servlet/others/UploadServlet2.java" />
+        <option value="$PROJECT_DIR$/rivermodule/src/dao/impl/WaterQualityDaoImpl.java" />
+        <option value="$PROJECT_DIR$/rivermodule/src/dao/impl/WaterLevelDaoImpl.java" />
       </list>
     </option>
   </component>
@@ -386,6 +326,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -397,6 +338,19 @@
               <item name="RiverProject" type="b2602c69:ProjectViewProjectNode" />
               <item name="rivermodule" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RiverProject" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rivermodule" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="dao" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RiverProject" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rivermodule" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="dao" type="462c0819:PsiDirectoryNode" />
+              <item name="impl" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="RiverProject" type="b2602c69:ProjectViewProjectNode" />
@@ -458,7 +412,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -696,11 +649,13 @@
       <workItem from="1581307559669" duration="1471000" />
       <workItem from="1581392095512" duration="6785000" />
       <workItem from="1581406629819" duration="6599000" />
+      <workItem from="1581564055608" duration="1207000" />
+      <workItem from="1581652920039" duration="3149000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="621869000" />
+    <option name="totallyTimeSpent" value="626225000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -715,14 +670,14 @@
     <frame x="-7" y="-7" width="1550" height="878" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.84316355" visible="true" weight="0.21447721" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8404826" visible="true" weight="0.21983914" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info id="Capture Tool" order="6" />
-      <window_info id="Web" order="7" sideWeight="0.15683647" side_tool="true" visible="true" weight="0.21447721" />
+      <window_info id="Web" order="7" sideWeight="0.15951742" side_tool="true" visible="true" weight="0.21983914" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.06434316" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.38069704" />
@@ -928,13 +883,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/WaterQualityStationDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="426">
-          <caret line="27" column="55" lean-forward="true" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rivermodule/src/service/WaterQualityStationService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="380">
@@ -1013,32 +961,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/impl/WaterLevelDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="389">
-          <caret line="224" column="17" lean-forward="true" selection-start-line="224" selection-start-column="17" selection-end-line="224" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/WaterLevelDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="18" column="52" lean-forward="true" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rivermodule/src/水位数据.txt" />
     <entry file="file://$PROJECT_DIR$/rivermodule/src/web/servlet/others/DownloadFileServlet.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="35" column="78" selection-start-line="35" selection-start-column="78" selection-end-line="35" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/WaterQualityDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="22" column="54" selection-start-line="22" selection-start-column="3" selection-end-line="22" selection-end-column="54" />
         </state>
       </provider>
     </entry>
@@ -1060,9 +987,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="627">
           <caret line="51" column="84" selection-start-line="51" selection-start-column="84" selection-end-line="51" selection-end-column="84" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1070,13 +994,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="703">
           <caret line="42" selection-start-line="42" selection-end-line="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/impl/WaterQualityDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3211">
-          <caret line="179" column="17" selection-start-line="179" selection-start-column="17" selection-end-line="179" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -1091,10 +1008,58 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1729">
           <caret line="104" column="33" selection-start-line="104" selection-start-column="33" selection-end-line="104" selection-end-column="33" />
-          <folding>
-            <element signature="e#2870#2871#0" expanded="true" />
-            <element signature="e#2911#2912#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/web/waterQualityPage/addWaterQualityData.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3914">
+          <caret line="206" column="74" selection-start-line="206" selection-start-column="74" selection-end-line="206" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/src/web/servlet/others/UploadServlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1862">
+          <caret line="116" column="44" selection-start-line="116" selection-start-column="44" selection-end-line="116" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/web/waterLevelPage/addWaterLevelData.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1653">
+          <caret line="87" column="57" selection-start-line="87" selection-start-column="57" selection-end-line="87" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/web/userPage/currentUserInfo.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1406">
+          <caret line="74" column="36" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/web/otherPage/message2.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="22" column="56" selection-start-line="22" selection-start-column="56" selection-end-line="22" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/web/message.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="55" selection-start-line="15" selection-start-column="55" selection-end-line="15" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/web/list.jsp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/web/index.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="30" column="73" selection-start-line="30" selection-start-column="6" selection-end-line="30" selection-end-column="73" />
         </state>
       </provider>
     </entry>
@@ -1105,83 +1070,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/web/list.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1410" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/web/index.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="30" column="73" selection-start-line="30" selection-start-column="6" selection-end-line="30" selection-end-column="73" />
-          <folding>
-            <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/web/message.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" column="55" selection-start-line="15" selection-start-column="55" selection-end-line="15" selection-end-column="55" />
-          <folding>
-            <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/web/userPage/currentUserInfo.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="74" column="36" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="36" />
-          <folding>
-            <element signature="n#style#0;n#caption#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/web/otherPage/message2.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="22" column="56" selection-start-line="22" selection-start-column="56" selection-end-line="22" selection-end-column="56" />
-          <folding>
-            <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/src/web/servlet/others/UploadServlet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1732">
-          <caret line="116" column="44" selection-start-line="116" selection-start-column="44" selection-end-line="116" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/web/waterQualityPage/addWaterQualityData.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="206" column="74" selection-start-line="206" selection-start-column="74" selection-end-line="206" selection-end-column="74" />
-          <folding>
-            <element signature="e#169#176#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/rivermodule/web/waterLevelPage/addWaterLevelData.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="87" column="57" selection-start-line="87" selection-start-column="57" selection-end-line="87" selection-end-column="57" />
-          <folding>
-            <element signature="n#style#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#caption#0;n#table#0;n#form#0;n#div#0;n#div#2;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rivermodule/src/web/servlet/others/UploadServlet2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1805">
+        <state relative-caret-position="338">
           <caret line="116" column="51" selection-start-line="116" selection-start-column="51" selection-end-line="116" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/WaterQualityStationDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="27" column="55" lean-forward="true" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/impl/WaterQualityDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="39" column="39" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/WaterQualityDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/WaterLevelDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="12" column="34" lean-forward="true" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rivermodule/src/dao/impl/WaterLevelDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="703">
+          <caret line="48" column="9" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
         </state>
       </provider>
     </entry>

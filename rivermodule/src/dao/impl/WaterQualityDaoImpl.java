@@ -1,5 +1,6 @@
 package dao.impl;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import dao.WaterQualityDao;
 import domain.StationAndQuality;
 import domain.Statistics;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import util.JDBCUtils;
 
+import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,15 +26,31 @@ public class WaterQualityDaoImpl implements WaterQualityDao
     public boolean add(WaterQuality waterQuality)
     {
 
-        int update=0;
+        String sq="select * from water_quality where belongStation=? and datetime =?";
+        List<WaterQuality> query=null;
         try {
-            String sql="insert into water_quality (belongStation,dateTime,pH,DO,NH4,CODMn,TOC,level) values (?,?,?,?,?,?,?,?)";
-            update = template.update(sql, waterQuality.getBelongStation(),
-                    waterQuality.getDateTime(), waterQuality.getpH(), waterQuality.getdO(), waterQuality.getnH4(),
-                    waterQuality.getcODMn(), waterQuality.gettOC(), waterQuality.getLevel());
-        } catch (DataAccessException e) {
-            e.printStackTrace();
+             query = template.query(sq, new BeanPropertyRowMapper<WaterQuality>(WaterQuality.class),waterQuality.getBelongStation(),waterQuality.getDateTime());
+        } catch (Exception e) {
+            System.out.println(e);
         }
+        System.out.println(query);
+
+
+        int update=0;
+        if(query==null||query.size()==0)//如果数据不存在，才允许插入数据，保证数据的唯一性
+        {
+            try {
+                String sql="insert into water_quality (belongStation,dateTime,pH,DO,NH4,CODMn,TOC,level) values (?,?,?,?,?,?,?,?)";
+                update = template.update(sql, waterQuality.getBelongStation(),
+                        waterQuality.getDateTime(), waterQuality.getpH(), waterQuality.getdO(), waterQuality.getnH4(),
+                        waterQuality.getcODMn(), waterQuality.gettOC(), waterQuality.getLevel());
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+
+        }
+
         if(update==0)
         {
             return false;
