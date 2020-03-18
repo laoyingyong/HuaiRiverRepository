@@ -115,9 +115,6 @@ public class ViewCurrentWaterQualityServlet extends HttpServlet
             }
 
 
-
-
-
         } catch (Exception e)
         {
             System.out.println(e);

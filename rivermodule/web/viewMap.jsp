@@ -1200,11 +1200,21 @@
 
 
 
+    var layer = new ol.layer.Vector({
+        title: 'add Layer',
+        source: new ol.source.Vector({
+            projection: 'EPSG:3857',
+            url: "huai.json",
+            format: new ol.format.GeoJSON()
+        })
+    });
+
+
     //实例化地图对象加载地图
     var googleLayer = new ol.layer.GoogleMapLayer({layerType: ol.source.GoogleLayerType.TERRAIN});//Google图层
     var map = new ol.Map({
         logo: false,
-        layers: [googleLayer,vectLayer,hotSpotsLayer],
+        layers: [googleLayer,vectLayer,hotSpotsLayer,layer],
         target: 'map',
         view: new ol.View({
             center:ol.proj.fromLonLat([115.81, 32.89]),
@@ -1215,6 +1225,22 @@
         //加载控件到地图容器中
         controls: ol.control.defaults().extend([scaleLineControl,new ol.control.FullScreen()])
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     var initialView = map.getView();//初始视图
     var initialZoom = initialView.getZoom();

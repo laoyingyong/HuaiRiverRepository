@@ -54,7 +54,8 @@ public class CheckCodeServlet extends HttpServlet {
 		g.setColor(Color.GREEN);
 		//随机生成坐标点
 		Random ran=new Random();
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 10; i++)
+		{
 			int x1 = ran.nextInt(width);
 			int x2 = ran.nextInt(width);
 
@@ -72,12 +73,14 @@ public class CheckCodeServlet extends HttpServlet {
 	/**
 	 * 产生4位随机字符串 
 	 */
-	private String getCheckCode() {
+	private String getCheckCode()
+	{
 		String base = "0123456789ABCDEFGHIJKLMNOPQUVWXYZabcdefghijklmnopquvwxyz";
 		int size = base.length();
 		Random r = new Random();
 		StringBuffer sb = new StringBuffer();
-		for(int i=1;i<=4;i++){
+		for(int i=1;i<=4;i++)
+		{
 			//产生0到size-1的随机值
 			int index = r.nextInt(size);
 			//在base字符串中获取下标为index的字符
